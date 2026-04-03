@@ -20,9 +20,15 @@ function EditBlog() {
   const { id } = useParams();
 
   const editorRef = useRef(null);
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isUnderlined, setIsUnderlined] = useState(false);
+ const [isBold, setIsBold] = useState(false);
+   const [isOrderedList, setIsOrderedList] = useState(false);
+   const [isUnorderedList, setIsUnorderedList] = useState(false);
+   const [isItalic, setIsItalic] = useState(false);
+   const [isUnderlined, setIsUnderlined] = useState(false);
+   const [isHighlighted, setIsHighlighted] = useState(false);
+   const [isFontSizeSelected, setIsFontSizeSelected] = useState(false);
+   const [IsFontFamilySet, setIsFontFamilySet] = useState(false);
+   const [viewTextEditor, setViewTextEditor] = useState(false);
   // keep editor's innerHTML in sync with state (useful if you programmatically set content)
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== postBody) {
@@ -57,10 +63,23 @@ function EditBlog() {
     setIsBold(document.queryCommandState("bold"));
     setIsItalic(document.queryCommandState("italic"));
     setIsUnderlined(document.queryCommandState("underline"));
+    setIsOrderedList(document.queryCommandState("insertOrderedList"));
+    setIsUnorderedList(document.queryCommandState("insertUnorderedList"));
+    setIsHighlighted(document.queryCommandState("hiliteColor"));
+    setIsFontSizeSelected(document.queryCommandState("fontSize"));
+    setIsFontFamilySet(document.queryCommandState("fontFamily"));
   };
   const applyBold = (e) => {
     e.preventDefault();
     applyCommand("bold");
+  };
+  const applyUnorderedList = (e) => {
+    e.preventDefault();
+    applyCommand("insertUnorderedList");
+  };
+  const applyOrderedList = (e) => {
+    e.preventDefault();
+    applyCommand("insertOrderedList");
   };
   const applyItalic = (e) => {
     e.preventDefault();
@@ -69,6 +88,25 @@ function EditBlog() {
   const applyUnderline = (e) => {
     e.preventDefault();
     applyCommand("underline");
+  };
+  const applyHighlight = (color) => {
+    if (!selectionInsideEditor()) return;
+    document.execCommand("hiliteColor", false, color);
+    const html = editorRef.current ? editorRef.current.innerHTML : "";
+    setPost((prev) => ({ ...prev, postBody: html }));
+  };
+  const applyFontSize = (size) => {
+    if (!selectionInsideEditor()) return;
+    document.execCommand("fontSize", false, size);
+
+    const html = editorRef.current ? editorRef.current.innerHTML : "";
+    setPost((prev) => ({ ...prev, postBody: html }));
+  };
+  const applyFontFamily = (font) => {
+    document.execCommand("fontName", false, font);
+
+    const html = editorRef.current ? editorRef.current.innerHTML : "";
+    setPost((prev) => ({ ...prev, postBody: html }));
   };
   const handleInput = () => {
     const html = editorRef.current ? editorRef.current.innerHTML : "";
@@ -128,7 +166,8 @@ function EditBlog() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      alert("Blog edited!");
+      const confirmMessage= window.confirm("Blog edited! Are you sure to submit?");
+      if(!confirmMessage) return;
       navigate("/viewBlogs");
     }} catch (error) {
       alert(
@@ -243,45 +282,144 @@ function EditBlog() {
                   onChange={(e) => onInputChange(e)}
                 />
               </div>
-              <div style={{ marginLeft: "8%", marginTop: "8px" }}>
-                <button
-                  className={`shadow border rounded ${isBold ? "active" : ""}`}
-                  style={{
-                    fontFamily: "cursive",
-                    fontWeight: "bold",
-                    margin: "2px",
-                    marginLeft: "80%",
-                  }}
-                  onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-                  onClick={applyBold}
-                  type="button"
-                >
-                  B
-                </button>
-                <button
-                  className={`shadow border rounded ${isItalic ? "active" : ""}`}
-                  style={{
-                    fontFamily: "cursive",
-                    fontStyle: "italic",
-                    margin: "2px",
-                  }}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={applyItalic}
-                  type="button"
-                >
-                  I
-                </button>
-                <button
-                  className={`shadow border rounded ${isUnderlined ? "active" : ""}`}
-                  style={{ fontFamily: "cursive", textDecoration: "underline" }}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={applyUnderline}
-                  type="button"
-                >
-                  U
-                </button>
-              </div>
-
+              {!viewTextEditor?<button className="btn btn-primary" 
+        style={{fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+              marginLeft:"70%"}}
+        onClick={()=> setViewTextEditor(true)}>View Style Palette</button>:
+        <div style={{ marginLeft: "8%", marginTop: "8px" }}>
+          <select
+            className={`shadow border rounded ${isFontSizeSelected ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+              marginLeft:"30%",
+              marginBottom:"5%"
+            }}
+            onChange={(e) => applyFontSize(e.target.value)}
+          >
+            <option value="">Font Size</option>
+            <option value="4">Text</option>
+            <option value="5">Sub-Header</option>
+            <option value="6">Header</option>
+            <option value="7">Title</option>
+          </select>
+          <select className={`shadow border rounded ${IsFontFamilySet ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+            }}
+            onChange={(e) => applyFontFamily(e.target.value)}>
+              <option value="">Font Family</option>
+            <option value="Times New Roman">Times</option>
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier</option>
+            <option value="Cursive">Cursive</option>
+            <option value="sans-serif">Sans-serif</option>
+            <option value="Montserrat">Montserrat</option>
+            <option value="Poppins">Poppins</option>
+          </select>
+          <button
+            className={`shadow border rounded ${isBold ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyBold}
+            type="button"
+          >
+            B
+          </button>
+          <button
+            className={`shadow border rounded ${isItalic ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontStyle: "italic",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={applyItalic}
+            type="button"
+          >
+            I
+          </button>
+          <button
+            className={`shadow border rounded ${isUnderlined ? "active" : ""}`}
+            style={{ fontFamily: "Times New Roman", textDecoration: "underline" }}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={applyUnderline}
+            type="button"
+          >
+            U
+          </button>
+          <button
+            className={`shadow border rounded ${isUnorderedList ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyUnorderedList}
+            type="button"
+          >
+            •
+          </button>
+          <button
+            className={`shadow border rounded ${isOrderedList ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyOrderedList}
+            type="button"
+          >
+            1.
+          </button>
+          <button
+            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => applyHighlight("LemonChiffon")}
+            type="button"
+          >
+            🟡
+          </button>
+          <button
+            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => applyHighlight("red")}
+            type="button"
+          >
+            🟥
+          </button>
+          <button
+            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => applyHighlight("skyblue")}
+            type="button"
+          >
+            💙
+          </button>
+        </div>
+        }
               <button className="btn btn-outline-primary m-3" type="submit">
                 Submit
               </button>

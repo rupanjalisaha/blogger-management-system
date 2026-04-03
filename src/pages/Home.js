@@ -61,6 +61,9 @@ export default function Home() {
         <p style={{ color: "red", fontWeight: "bold" }}>
           * Edit & Delete is only possible for own account
         </p>
+        <p style={{ color: "blue", fontWeight: "bold", textDecoration: "underline" }}>
+          Admin rights are managed by admins only, contact admin to request for admin privileges.
+        </p>
         <div className="py-4">
           <table className="table border shadow">
             <thead>

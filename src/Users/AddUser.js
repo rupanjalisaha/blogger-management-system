@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { getImageById } from "../services/imageService";
+import ProfileImageUpload from "../Utils/profileImageUpload";
 
 export default function AddUser() {
   const [user, setUser] = useState({
@@ -10,15 +12,17 @@ export default function AddUser() {
     fullName: "",
     category: "",
     message: "",
-    role: "",
+    role:"",
   });
+
   const { username, password, email, fullName, category, message, role } = user;
+  
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.id]: e.target.value });
   };
   const navigate = useNavigate();
   var errorMessage = "";
-  
+
   const roleOptions = [
     { label: "Select an option", value: "" },
     { label: "USER", value: "ROLE_USER" },
@@ -46,27 +50,30 @@ export default function AddUser() {
     { label: "Children's Books", value: "Children's Books" },
     { label: "Young Adult", value: "Young Adult" },
     { label: "Other", value: "Other" },
-  ]
+  ];
   const [showPassword, setShowPassword] = useState(false);
-  
+
   if (password && password.length < 8) {
     errorMessage = "Password must be at least 8 characters long.";
-  }
-  else if (password && !/(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}/.test(password)) {
-    errorMessage = "Password must contain at least one uppercase letter, one number, and one special character.";
-  }
-  else if (password && /1234|abcd|qwer|1111|0000/.test(password)) {
+  } else if (
+    password &&
+    !/(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}/.test(password)
+  ) {
+    errorMessage =
+      "Password must contain at least one uppercase letter, one number, and one special character.";
+  } else if (password && /1234|abcd|qwer|1111|0000/.test(password)) {
     errorMessage = "Please choose a stronger password.";
   }
 
-  if(username && username.length < 3){
+  if (username && username.length < 3) {
     errorMessage = "Username must be at least 3 characters long.";
   } else if (username && username.length > 20) {
     errorMessage = "Username cannot exceed 20 characters.";
   } else if (username && /\s/.test(username)) {
     errorMessage = "Username cannot contain spaces.";
-  }else if (username && !/^[a-zA-Z0-9._-]+$/.test(username)) {
-    errorMessage = "Username can only contain letters, numbers, dots, underscores, and hyphens.";
+  } else if (username && !/^[a-zA-Z0-9._-]+$/.test(username)) {
+    errorMessage =
+      "Username can only contain letters, numbers, dots, underscores, and hyphens.";
   }
 
   if (email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
@@ -78,21 +85,26 @@ export default function AddUser() {
   } else if (fullName && !/^[a-zA-Z\s]+$/.test(fullName)) {
     errorMessage = "Name can only contain letters and spaces.";
   }
-  
+
+  const isAdminCredentials = user.username === "admin";
+  if(isAdminCredentials) {
+    errorMessage = "Provided username and password are reserved. Please choose different credentials.";
+  }
   const publicDomains = [
     "gmail.com",
     "yahoo.com",
     "outlook.com",
     "hotmail.com",
-    "mac.com"  ];
-  const validateEmailDomain = (email)=>{
+    "mac.com",
+  ];
+  const validateEmailDomain = (email) => {
     const domain = email.split("@")[1];
-    if(publicDomains.includes(domain)){
+    if (publicDomains.includes(domain)) {
       return true;
     }
     return false;
-  }
-  if(email && !validateEmailDomain(email)){
+  };
+  if (email && !validateEmailDomain(email)) {
     errorMessage = `Email domain ${email.split("@")[1]} is not accepted. Please refer to console for accepted domains.`;
     console.log(`Rejected email domain: ${email.split("@")[1]} Accepted List:{"gmail.com",
     "yahoo.com",
@@ -103,11 +115,18 @@ export default function AddUser() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      if(!errorMessage){
-      await axios.post("http://localhost:8080/UVB/register", user);
-      alert("User added successfully!");
-      navigate("/login");
-    }} catch (error) {
+      if (!errorMessage) {
+        const response = await axios.post("http://localhost:8080/UVB/register", user);
+        if(response.data) {
+          console.log("User added successfully:", response.data);
+          localStorage.setItem("bloggerId", response.data.bloggerId);
+          alert("User added successfully!");
+          navigate("/login");
+        } else {
+          alert("Failed to add user. Please try again.");
+        }
+      }
+    } catch (error) {
       console.error("Login failed:", error);
       alert("Failed to add user. Please check the console for error details.");
     }
@@ -206,12 +225,14 @@ export default function AddUser() {
               </label>
               <select
                 id="category"
-                value={category} 
-                required// Controls the selected value
-                onChange={(e) => setUser({ ...user, [e.target.id]: e.target.value })} // Updates the state on change
+                value={category}
+                required // Controls the selected value
+                onChange={(e) =>
+                  setUser({ ...user, [e.target.id]: e.target.value })
+                } // Updates the state on change
                 className="form-control"
               >
-                {categoryOptions.map((option) => ( 
+                {categoryOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
@@ -233,7 +254,7 @@ export default function AddUser() {
             </div>
             <div className="mb-3">
               <label htmlFor="role" className="form-label fs-5">
-                Select your role
+                Your role
               </label>
 
               <select
@@ -251,7 +272,8 @@ export default function AddUser() {
               </select>
               {<p>{role}</p>}
             </div>
-            <button className="btn btn-outline-primary m-3" type="submit">
+            
+            <button className="btn btn-outline-primary m-3" type="submit" disabled={isAdminCredentials}>
               Register
             </button>
             <Link className="btn btn-outline-primary" to="/login">

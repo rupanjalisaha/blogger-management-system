@@ -4,6 +4,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Navbar from "../layout/Navbar";
+import { getImageById } from "../services/imageService";
+import ProfileImageUpload from "../Utils/profileImageUpload";
 export default function EditUser() {
   const [user, setUser] = useState({
     username: "",
@@ -15,7 +17,18 @@ export default function EditUser() {
     role: "",
   });
   const { username, password, email, fullName, category, message, role } = user;
-
+  const [imageUrl, setImageUrl] = useState(null);
+  const bloggerId = localStorage.getItem("bloggerId");
+  const [image, setImage] = useState({
+    fileName: "",
+    fileType: "",
+    imageData: null,
+    bloggerName: "",
+  });
+  const { id } = useParams();
+  useEffect(() => {
+    loadUser();
+  }, []);
   var errorMessage = "";
   if (password && password.length < 8) {
     errorMessage = "Password must be at least 8 characters long.";
@@ -29,14 +42,15 @@ export default function EditUser() {
     errorMessage = "Please choose a stronger password.";
   }
 
-  if(username && username.length < 3){
+  if (username && username.length < 3) {
     errorMessage = "Username must be at least 3 characters long.";
   } else if (username && username.length > 20) {
     errorMessage = "Username cannot exceed 20 characters.";
   } else if (username && /\s/.test(username)) {
     errorMessage = "Username cannot contain spaces.";
-  }else if (username && !/^[a-zA-Z0-9._-]+$/.test(username)) {
-    errorMessage = "Username can only contain letters, numbers, dots, underscores, and hyphens.";
+  } else if (username && !/^[a-zA-Z0-9._-]+$/.test(username)) {
+    errorMessage =
+      "Username can only contain letters, numbers, dots, underscores, and hyphens.";
   }
   if (email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
     errorMessage = "Please enter a valid email address.";
@@ -52,6 +66,7 @@ export default function EditUser() {
   })
 /*   const{profileImage} = userImage;
  */
+  const [submitted,setSubmitted] = useState(false);
   const publicDomains = [
     "gmail.com",
     "yahoo.com",
@@ -74,23 +89,41 @@ export default function EditUser() {
     "hotmail.com",
     "mac.com"}.`);
   }
-  let navigate = useNavigate();
-  const { id } = useParams();
 
+  const isSameUser = user.username === localStorage.getItem("username");
+  let navigate = useNavigate();
   const onInputChange = (e) => {
-    if (user.username === localStorage.getItem("username")) {
+    if (!isSameUser) {
+      alert("Not Allowed");
+      return;
+    } else if (isSameUser) {
       setUser({ ...user, [e.target.id]: e.target.value });
-    } else {
-      alert(
-        "You can only edit your own profile details. Please log in with the correct account.",
-      );
     }
   };
-  const isSameUser = user.username === localStorage.getItem("username");
   useEffect(() => {
-    loadUser();
+    if (bloggerId) {
+      fetchImage(bloggerId);
+    }
   }, []);
 
+  const fetchImage = async (id) => {
+    try {
+      const response = await getImageById(id);
+      const url = URL.createObjectURL(response.data);
+      setImageUrl(url);
+      setImage(response.data);
+      console.log("Fetched image with ID:", id);
+    } catch (err) {
+      console.error("Error fetching image", err);
+    }
+  };
+
+  const handleUploadSuccess = (data) => {
+    if (data.imageId) {
+      console.log("Image uploaded with ID:", data.imageId);
+      fetchImage(data.imageId);
+    }
+  };
   /* const onImageUpload=async(e)=>{
     setUserImage({...userImage,[e.target.id]:e.target.value});
   }
@@ -98,51 +131,58 @@ export default function EditUser() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (errorMessage) {
-        await axios.put(`http://localhost:8080/UVB/user/${id}`, user, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }).then((response) => {
-          if (response.status === 200) {
-            alert("User details updated successfully!");
-            navigate("/details");
-          } else {
-            alert("Failed to update user details. Please try again.");
-          }});
+      if (!errorMessage) {
+        await axios
+          .put(`http://localhost:8080/UVB/user/${id}`, user, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              alert("User details updated successfully!");
+              setSubmitted(true);
+              navigate("/details");
+            } else {
+              alert("Failed to update user details. Please try again.");
+            }
+          });
+      } else if (
+        user.username !== localStorage.getItem("username") &&
+        localStorage.getItem("username") !== "admin"
+      ) {
+        errorMessage =
+          "You can only edit your own profile details. Please log in with the correct account.";
+        alert(
+          `Current Username ${user.username} does not match the logged in username ${localStorage.getItem("username")} Please log in again.`,
+        );
+      } else {
+        navigate("/details");
       }
-        else if (user.username !== localStorage.getItem("username") && localStorage.getItem("username") !== "admin") {
-          errorMessage =
-            "You can only edit your own profile details. Please log in with the correct account.";
-          alert(
-            `Current Username ${user.username} does not match the logged in username ${localStorage.getItem("username")} Please log in again.`,
-          );
-        } 
-        else {
-          navigate("/details");
-        }
-      } catch (error) {
+    } catch (error) {
       console.error("Error updating user:", error);
       alert("Failed to update user. Please try again.");
     }
   };
+  const [defaultRole, setDefaultRole] = useState(null);
   const loadUser = async () => {
-    try{
-    const result = await axios.get(
-      `http://localhost:8080/UVB/user/bloggerDetails/${id}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+    try {
+      const result = await axios.get(
+        `http://localhost:8080/UVB/user/bloggerDetails/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
-      },
-    );
-    setUser(result.data);
-  } catch (error) {
-    console.error("Error loading user details:", error);
-    alert("Failed to load user details. Please try again.");
-  }
+      );
+      setUser(result.data);
+      setDefaultRole(result.data.roles[0].name);
+    } catch (error) {
+      console.error("Error loading user details:", error);
+      alert("Failed to load user details. Please try again.");
+    }
   };
   const categoryOptions = [
     { label: "Select an option", value: `{user.category}` },
@@ -171,10 +211,6 @@ export default function EditUser() {
   const isAdmin = localStorage.getItem("username") === "admin";
   const roleOptions = [
     {
-      label: "Select an option",
-      value: `{user.role}`,
-    },
-    {
       label: "USER",
       value: "ROLE_USER",
     },
@@ -183,6 +219,22 @@ export default function EditUser() {
       value: "ROLE_ADMIN",
     },
   ];
+  const handleDeleteProfileImage = async(profileId)=>{
+    try{
+    const response = await axios.delete(`http://localhost:8080/UVB/bloggers/deleteProfileImage/${profileId}`,{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    alert(response.data.message);
+    window.location.reload();
+  }catch(error){
+    alert("Failed to delete profile image", error.message);
+  }
+  }
+  if(!isAdmin){
+    user.role=defaultRole;
+  }
   return (
     <>
       <Navbar />
@@ -207,7 +259,7 @@ export default function EditUser() {
               </div>
 
               <div className="mb-3">
-                <label htmlFor="password" className="form-label fs-5">
+                <label htmlFor="email" className="form-label fs-5">
                   Email
                 </label>
                 <input
@@ -269,15 +321,17 @@ export default function EditUser() {
                   onChange={(e) => onInputChange(e)}
                 />
               </div>
-              {isAdmin && (
-                <div className="mb-3">
+              {isAdmin &&
+              <div className="mb-3">
                   <label htmlFor="role" className="form-label fs-5">
                     Role
                   </label>
                   <select
                     id="role"
-                    value={role} // Controls the selected value
-                    onChange={(e) => setUser({ ...user, [e.target.id]: e.target.value })} // Updates the state on change
+                    value={role}// Controls the selected value
+                    onChange={(e) =>
+                      setUser({ ...user, [e.target.id]: e.target.value })
+                    } // Updates the state on change
                     className="form-control"
                   >
                     {roleOptions.map((option) => (
@@ -288,11 +342,34 @@ export default function EditUser() {
                   </select>
                   {<p>{role}</p>}
                 </div>
-              )}
-              <button
-                className="btn btn-outline-primary m-3"
-                type="submit"
-              >
+              }
+                
+              <div className="mb-3">
+                <label htmlFor="profileImage" className="form-label fs-5">
+                  Profile Image
+                </label>
+                
+                {imageUrl &&(
+                  <div className="mb-3">
+                    <img
+                      typeof={image.fileType}
+                      src={imageUrl}
+                      alt="profile"
+                      width="350px"
+                      height="450px"
+                      style={{ borderRadius: "5%" }}
+                    ></img>
+                  </div>
+                )}
+                {/* Upload Component */}
+                <ProfileImageUpload
+                  bloggerId={bloggerId}
+                  onUploadSuccess={handleUploadSuccess}
+                  username={user.username}
+                />
+              </div>
+              <button className="btn btn-outline-primary m-3" onClick={()=>handleDeleteProfileImage(user.id)}disabled={!isSameUser}>Delete Profile Image</button>
+              <button className="btn btn-outline-primary m-3" type="submit" disabled={!isSameUser && !isAdmin}>
                 Submit
               </button>
               <Link className="btn btn-outline-danger" to="/details">

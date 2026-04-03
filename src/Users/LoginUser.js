@@ -26,7 +26,8 @@ function LoginUser() {
       );
       console.log(response.data);
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("username", username);
+      localStorage.setItem("username", response.data.username);
+      localStorage.setItem("bloggerId", response.data.bloggerId);
       setIsAuth(true);
       navigate("/details");
     } catch (error) {

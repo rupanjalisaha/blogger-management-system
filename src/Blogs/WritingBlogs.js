@@ -16,8 +16,14 @@ export default function BlogPage() {
   const { genre, postBody, postTitle, writerUsername } = post;
   const editorRef = useRef(null);
   const [isBold, setIsBold] = useState(false);
+  const [isOrderedList, setIsOrderedList] = useState(false);
+  const [isUnorderedList, setIsUnorderedList] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderlined, setIsUnderlined] = useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const [isFontSizeSelected, setIsFontSizeSelected] = useState(false);
+  const [IsFontFamilySet, setIsFontFamilySet] = useState(false);
+  const [viewTextEditor, setViewTextEditor] = useState(false);
   // keep editor's innerHTML in sync with state (useful if you programmatically set content)
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== postBody) {
@@ -28,7 +34,7 @@ export default function BlogPage() {
 
   var errorMessage = "";
 
-  if(!genre || !postTitle || !postBody){
+  if (!genre || !postTitle || !postBody) {
     errorMessage = "All fields are required to submit a blog.";
   }
   const onInputChange = (e) => {
@@ -38,12 +44,20 @@ export default function BlogPage() {
 
   if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length < 200) {
     errorMessage = "* Article content must be at least 200 characters long";
-  }else if (postBody && /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(postBody)) {
-    errorMessage = "Article content contains disallowed scripts. Please remove any <script> tags";
-  }else if (postTitle && postTitle.length < 5) {
+  } else if (
+    postBody &&
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(postBody)
+  ) {
+    errorMessage =
+      "Article content contains disallowed scripts. Please remove any <script> tags";
+  } else if (postTitle && postTitle.length < 5) {
     errorMessage = "Title must be at least 5 characters long";
-  }else if (postTitle && /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(postTitle)) {
-    errorMessage = "Title contains disallowed scripts. Please remove any <script> tags";
+  } else if (
+    postTitle &&
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(postTitle)
+  ) {
+    errorMessage =
+      "Title contains disallowed scripts. Please remove any <script> tags";
   }
   // helper to ensure selection is inside editor
   const selectionInsideEditor = () => {
@@ -73,10 +87,23 @@ export default function BlogPage() {
     setIsBold(document.queryCommandState("bold"));
     setIsItalic(document.queryCommandState("italic"));
     setIsUnderlined(document.queryCommandState("underline"));
+    setIsOrderedList(document.queryCommandState("insertOrderedList"));
+    setIsUnorderedList(document.queryCommandState("insertUnorderedList"));
+    setIsHighlighted(document.queryCommandState("hiliteColor"));
+    setIsFontSizeSelected(document.queryCommandState("fontSize"));
+    setIsFontFamilySet(document.queryCommandState("fontFamily"));
   };
   const applyBold = (e) => {
     e.preventDefault();
     applyCommand("bold");
+  };
+  const applyUnorderedList = (e) => {
+    e.preventDefault();
+    applyCommand("insertUnorderedList");
+  };
+  const applyOrderedList = (e) => {
+    e.preventDefault();
+    applyCommand("insertOrderedList");
   };
   const applyItalic = (e) => {
     e.preventDefault();
@@ -85,6 +112,25 @@ export default function BlogPage() {
   const applyUnderline = (e) => {
     e.preventDefault();
     applyCommand("underline");
+  };
+  const applyHighlight = (color) => {
+    if (!selectionInsideEditor()) return;
+    document.execCommand("hiliteColor", false, color);
+    const html = editorRef.current ? editorRef.current.innerHTML : "";
+    setPost((prev) => ({ ...prev, postBody: html }));
+  };
+  const applyFontSize = (size) => {
+    if (!selectionInsideEditor()) return;
+    document.execCommand("fontSize", false, size);
+
+    const html = editorRef.current ? editorRef.current.innerHTML : "";
+    setPost((prev) => ({ ...prev, postBody: html }));
+  };
+  const applyFontFamily = (font) => {
+    document.execCommand("fontName", false, font);
+
+    const html = editorRef.current ? editorRef.current.innerHTML : "";
+    setPost((prev) => ({ ...prev, postBody: html }));
   };
   const navigate = useNavigate();
   // Keep state updated while user types or pastes
@@ -99,18 +145,19 @@ export default function BlogPage() {
   const onBlogSubmit = async (e) => {
     e.preventDefault();
     try {
-      if(!errorMessage){
-      await axios.post("http://localhost:8080/UVB/blogs/writeBlogs", post, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      alert("Content submitted successfully");
-      navigate("/viewBlogs");
-    } else{
-      alert("All the fields are required.");
-    }}catch (error) {
+      if (!errorMessage) {
+        await axios.post("http://localhost:8080/UVB/blogs/writeBlogs", post, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        alert("Content submitted successfully");
+        navigate("/viewBlogs");
+      } else {
+        alert("All the fields are required.");
+      }
+    } catch (error) {
       console.error("Error submitting blog:", error);
       alert("Failed to submit blog. Please try again.");
     }
@@ -232,9 +279,9 @@ export default function BlogPage() {
               marginTop: "3%",
               marginLeft: "3%",
               width: "600px",
-              textAlign: "center",
               fontSize: "18px",
               fontWeight: "bold",
+              textAlign: "center",
               fontFamily: "Times New Roman",
               backgroundColor: "lightblue",
             }}
@@ -243,7 +290,6 @@ export default function BlogPage() {
         <h3 className="row mt-5" style={{ marginLeft: "10%" }}>
           Article:
         </h3>
-
         <div
           ref={editorRef}
           contentEditable={true}
@@ -262,20 +308,56 @@ export default function BlogPage() {
             width: "85%",
             marginLeft: "8%",
             outline: "none",
+            textAlign: "justify",
             whiteSpace: "pre-wrap",
             overflowWrap: "break-word",
           }}
           // initial plain text can be set via state; innerHTML synchronization done in useEffect
         />
-
+        {!viewTextEditor?<button className="btn btn-primary" 
+        style={{fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+              marginLeft:"70%"}}
+        onClick={()=> setViewTextEditor(true)}>View Style Palette</button>:
         <div style={{ marginLeft: "8%", marginTop: "8px" }}>
+          <select
+            className={`shadow border rounded ${isFontSizeSelected ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+              marginLeft:"59%"
+            }}
+            onChange={(e) => applyFontSize(e.target.value)}
+          >
+            <option value="">Font Size</option>
+            <option value="4">Text</option>
+            <option value="5">Sub-Header</option>
+            <option value="6">Header</option>
+            <option value="7">Title</option>
+          </select>
+          <select className={`shadow border rounded ${IsFontFamilySet ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+            }}
+            onChange={(e) => applyFontFamily(e.target.value)}>
+              <option value="">Font Family</option>
+            <option value="Times New Roman">Times</option>
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier</option>
+            <option value="Cursive">Cursive</option>
+            <option value="sans-serif">Sans-serif</option>
+            <option value="Montserrat">Montserrat</option>
+            <option value="Poppins">Poppins</option>
+          </select>
           <button
             className={`shadow border rounded ${isBold ? "active" : ""}`}
             style={{
-              fontFamily: "cursive",
+              fontFamily: "Times New Roman",
               fontWeight: "bold",
               margin: "2px",
-              marginLeft: "80%",
             }}
             onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
             onClick={applyBold}
@@ -286,7 +368,7 @@ export default function BlogPage() {
           <button
             className={`shadow border rounded ${isItalic ? "active" : ""}`}
             style={{
-              fontFamily: "cursive",
+              fontFamily: "Times New Roman",
               fontStyle: "italic",
               margin: "2px",
             }}
@@ -298,15 +380,90 @@ export default function BlogPage() {
           </button>
           <button
             className={`shadow border rounded ${isUnderlined ? "active" : ""}`}
-            style={{ fontFamily: "cursive", textDecoration: "underline" }}
+            style={{ fontFamily: "Times New Roman", textDecoration: "underline" }}
             onMouseDown={(e) => e.preventDefault()}
             onClick={applyUnderline}
             type="button"
           >
             U
           </button>
+          <button
+            className={`shadow border rounded ${isUnorderedList ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyUnorderedList}
+            type="button"
+          >
+            •
+          </button>
+          <button
+            className={`shadow border rounded ${isOrderedList ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyOrderedList}
+            type="button"
+          >
+            1.
+          </button>
+          <button
+            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => applyHighlight("LemonChiffon")}
+            type="button"
+          >
+            🟡
+          </button>
+          <button
+            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => applyHighlight("red")}
+            type="button"
+          >
+            🟥
+          </button>
+          <button
+            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              fontWeight: "bold",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => applyHighlight("skyblue")}
+            type="button"
+          >
+            💙
+          </button>
         </div>
-            <p style={{color:"red", fontFamily:"monospace", fontWeight:"bold", textAlign:"left", marginLeft:"10%", marginTop:"-2%"}}>{errorMessage}</p>
+        }
+        
+        <p
+          style={{
+            color: "red",
+            fontFamily: "monospace",
+            fontWeight: "bold",
+            textAlign: "left",
+            marginLeft: "10%",
+            marginTop: "-2%",
+          }}
+        >
+          {errorMessage}
+        </p>
         <div
           className="mt-2 fs-4 pb-2"
           style={{
