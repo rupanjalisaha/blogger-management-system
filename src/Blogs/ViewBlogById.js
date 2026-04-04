@@ -1,10 +1,9 @@
-import React, { use } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../layout/Navbar";
-import DOMPurify from "dompurify"; // optional but recommended: npm install dompurify
+import DOMPurify from "dompurify";
 
 function ViewBlogById() {
   const [post, setPost] = useState({
@@ -17,7 +16,7 @@ function ViewBlogById() {
   const { id } = useParams();
   useEffect(() => {
     loadPost();
-  }, []);
+  },[]);
 
   const loadPost = async () => {
     try {
@@ -111,7 +110,7 @@ function ViewBlogById() {
             <button
               className="btn btn-danger mx-2"
               onClick={() => deleteBlog(post.postId)}
-              disabled={post.writerUsername !== localStorage.getItem("username") || localStorage.getItem("username") === "admin"}
+              disabled={post.writerUsername !== localStorage.getItem("username") && localStorage.getItem("username") !== "admin"}
             >
               Delete
             </button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { uploadImage } from "../services/imageService";
 
 const ProfileImageUpload = ({ bloggerId, onUploadSuccess, username }) => {
@@ -12,7 +12,7 @@ const ProfileImageUpload = ({ bloggerId, onUploadSuccess, username }) => {
     setSelectedFile(file);
 
     if (file) {
-      setPreview(URL.createObjectURL(file)); // preview before upload
+      setPreview(URL.createObjectURL(file));
     }
   };
 

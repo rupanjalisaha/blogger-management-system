@@ -1,13 +1,11 @@
 import axios from "axios";
-import { React, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import Navbar from "../layout/Navbar";
 import PostNavbar from "../layout/PostNavbar";
 export default function ViewBlog() {
   const [post, setPost] = useState([]);
 
-  const { id } = useParams();
   useEffect(() => {
     loadBlogs();
   }, []);

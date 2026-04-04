@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "../layout/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import DOMPurify from "dompurify"; // optional but recommended: npm install dompurify
+import DOMPurify from "dompurify";
 import PostNavbar from "../layout/PostNavbar";
 export default function BlogPage() {
   const username = localStorage.getItem("username");
@@ -312,7 +312,6 @@ export default function BlogPage() {
             whiteSpace: "pre-wrap",
             overflowWrap: "break-word",
           }}
-          // initial plain text can be set via state; innerHTML synchronization done in useEffect
         />
         {!viewTextEditor?<button className="btn btn-primary" 
         style={{fontFamily: "Times New Roman",

@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { getImageById } from "../services/imageService";
-import ProfileImageUpload from "../Utils/profileImageUpload";
 
 export default function AddUser() {
   const [user, setUser] = useState({

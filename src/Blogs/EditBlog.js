@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -29,7 +29,7 @@ function EditBlog() {
    const [isFontSizeSelected, setIsFontSizeSelected] = useState(false);
    const [IsFontFamilySet, setIsFontFamilySet] = useState(false);
    const [viewTextEditor, setViewTextEditor] = useState(false);
-  // keep editor's innerHTML in sync with state (useful if you programmatically set content)
+
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== postBody) {
       editorRef.current.innerHTML = postBody;
@@ -118,7 +118,7 @@ function EditBlog() {
   };
   useEffect(() => {
     loadPost();
-  }, []);
+  },[]);
   const categoryOptions = [
     { label: "Select an option", value: `{post.genre}` },
     { label: "Fiction", value: "Fiction" },

@@ -1,5 +1,4 @@
-import React from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../AuthContext";
 
@@ -17,7 +16,7 @@ export default function Navbar() {
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
         <div className="container-fluid d-flex gap-3" style={{marginLeft:"3%", marginRight:"1%"}}>
-          <a className="navbar-brand">UVB (Univeral Blog) Portal</a>
+          <h4 className="navbar-brand">UVB (Univeral Blog) Portal</h4>
           <p style={{ fontSize: "16px", fontFamily: "revert", textAlign:"left", marginLeft: "-180px", marginTop:"3.5%", color:"whitesmoke"}}>
         Username: {localStorage.getItem("username")}
       </p>

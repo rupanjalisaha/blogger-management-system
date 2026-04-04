@@ -1,4 +1,3 @@
-import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -13,7 +12,6 @@ export default function ViewUser() {
     category: "",
     message: "",
   });
-  const[imageExists, setImageExists] = useState(false);
   const [image, setImage] = useState({
     fileName: "",
     fileType: "",
@@ -23,11 +21,9 @@ export default function ViewUser() {
   const { id } = useParams();
   useEffect(() => {
     loadUser();
-  }, []);
+  },[]);
 
   const [imageUrl, setImageUrl] = useState(null);
-  const [clicked, setClicked] = useState(false);
-  const bloggerId = localStorage.getItem("bloggerId");
   const token = localStorage.getItem("token");
   const loadUser = async () => {
     try {
@@ -50,7 +46,7 @@ export default function ViewUser() {
   };
   useEffect((imageUrl) => {
       handleViewImage(imageUrl);
-  }, []);
+  },[imageUrl]);
   const handleViewImage = async (id) => {
     
     try {
@@ -120,11 +116,6 @@ export default function ViewUser() {
                 </div>
               )}
             </div>
-            {clicked && !imageExists && (
-              <div className="alert alert-warning mt-3" role="alert">
-                No profile image found for this user.
-              </div>
-            )}
             <Link
               className="btn btn-primary mx-2"
               to={`/viewBlogByUserName/${user.username}`}

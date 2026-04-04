@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -28,7 +28,7 @@ export default function EditUser() {
   const { id } = useParams();
   useEffect(() => {
     loadUser();
-  }, []);
+  },[]);
   var errorMessage = "";
   if (password && password.length < 8) {
     errorMessage = "Password must be at least 8 characters long.";
@@ -61,12 +61,6 @@ export default function EditUser() {
   } else if (fullName && !/^[a-zA-Z\s]+$/.test(fullName)) {
     errorMessage = "Name can only contain letters and spaces.";
   }
-  /* const[userImage, setUserImage] = useState({
-    profileImage:""
-  })
-/*   const{profileImage} = userImage;
- */
-  const [submitted,setSubmitted] = useState(false);
   const publicDomains = [
     "gmail.com",
     "yahoo.com",
@@ -104,7 +98,7 @@ export default function EditUser() {
     if (bloggerId) {
       fetchImage(bloggerId);
     }
-  }, []);
+  },[bloggerId]);
 
   const fetchImage = async (id) => {
     try {
@@ -112,7 +106,7 @@ export default function EditUser() {
       const url = URL.createObjectURL(response.data);
       setImageUrl(url);
       setImage(response.data);
-      console.log("Fetched image with ID:", id);
+      console.log("Fetched image with ID:", image.id);
     } catch (err) {
       console.error("Error fetching image", err);
     }
@@ -142,7 +136,6 @@ export default function EditUser() {
           .then((response) => {
             if (response.status === 200) {
               alert("User details updated successfully!");
-              setSubmitted(true);
               navigate("/details");
             } else {
               alert("Failed to update user details. Please try again.");

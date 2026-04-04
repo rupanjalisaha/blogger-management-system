@@ -1,10 +1,9 @@
-import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../layout/Navbar";
-import DOMPurify from "dompurify"; // optional but recommended: npm install dompurify
+import DOMPurify from "dompurify";
 function ViewBlogByUserName() {
   const [post, setPost] = useState([]);
   const Navigate = useNavigate();
