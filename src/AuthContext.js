@@ -1,7 +1,7 @@
 // AuthContext.js
 import { createContext, useState, useEffect } from "react";
 import {jwtDecode} from "jwt-decode";
-
+import { Navigate } from "react-router-dom";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -15,10 +15,10 @@ export const AuthProvider = ({ children }) => {
       const isExpired = decoded.exp * 1000 < Date.now();
       if (isExpired) {
         console.log("Token expired");
-        alert("Your session has expired. Please log in again.");
         localStorage.removeItem("token");
         setIsAuth(false);
-        window.location.href = "/login";
+        alert("Your session has expired. Please log in again.");
+        window.location.href="/login";
       } else {
         setIsAuth(true);
       }

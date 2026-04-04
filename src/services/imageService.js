@@ -17,8 +17,8 @@ export const uploadImage = async (file, bloggerId) => {
         );
     };
 export const getImageById = async (bloggerId) => {
-    console.log("Fetching image with ID:", bloggerId);
-    return axios.get(`http://localhost:8080/UVB/bloggers/profileImages/${bloggerId}`,{
+    console.log("Fetching image with user ID:", bloggerId);
+    return await axios.get(`http://localhost:8080/UVB/bloggers/profileImages/${bloggerId}`,{
         responseType: 'blob',
         headers:{
             Authorization: `Bearer ${localStorage.getItem("token")}`, 

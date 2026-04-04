@@ -6,9 +6,11 @@ export default function Navbar() {
   
   const navigate = useNavigate();
   const { setIsAuth } = useContext(AuthContext);
-
+  const token = localStorage.getItem("token");
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    if(token){
+      localStorage.removeItem("token");
+    }
     setIsAuth(false);
     navigate("/login");
   };

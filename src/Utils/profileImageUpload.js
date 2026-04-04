@@ -25,8 +25,10 @@ const ProfileImageUpload = ({ bloggerId, onUploadSuccess, username }) => {
     try {
       setLoading(true);
       const response = await uploadImage(selectedFile, bloggerId);
-      alert("Profile image uploaded successfully!");
-      console.log("Upload response:", response);
+      console.log("Upload response:", response.data);
+      if(response.status === 200){
+        alert(response.data.message);
+      }
       localStorage.setItem("imageId", response.data.imageId); // Store the image ID for later retrieval
       alert("Proceed to submit the form to save changes.");
 
@@ -37,7 +39,7 @@ const ProfileImageUpload = ({ bloggerId, onUploadSuccess, username }) => {
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || error.message);
+      alert("This profile image exists for other user, please try to upload another one.");
     } finally {
       setLoading(false);
     }

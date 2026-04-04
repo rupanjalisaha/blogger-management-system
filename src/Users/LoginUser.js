@@ -8,7 +8,6 @@ function LoginUser() {
     username: "",
     password: "",
   });
-
   const { username, password } = userDetails;
   const navigate = useNavigate();
   var errorMessage = "";

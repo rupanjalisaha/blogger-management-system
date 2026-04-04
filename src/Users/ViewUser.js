@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Navbar from "../layout/Navbar";
 import { getImageById } from "../services/imageService";
 export default function ViewUser() {
+  const token = localStorage.getItem("token");
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -18,13 +19,13 @@ export default function ViewUser() {
     imageData: null,
     bloggerName: "",
   });
+  const [role, setRole] = useState(null);
   const { id } = useParams();
   useEffect(() => {
     loadUser();
   },[]);
 
   const [imageUrl, setImageUrl] = useState(null);
-  const token = localStorage.getItem("token");
   const loadUser = async () => {
     try {
       const result = await axios.get(
@@ -37,6 +38,7 @@ export default function ViewUser() {
         },
       );
       setUser(result.data);
+      setRole(result.data.roles[0].name);
     } catch (error) {
       alert(
         "Error! User details could not be loaded, check console for more details.",
@@ -44,22 +46,18 @@ export default function ViewUser() {
       console.error("Error loading user details:", error);
     }
   };
-  useEffect((imageUrl) => {
-      handleViewImage(imageUrl);
-  },[imageUrl]);
+  
   const handleViewImage = async (id) => {
-    
     try {
       const response = await getImageById(id);
+      console.log(response);
       const url = URL.createObjectURL(response.data);
       setImageUrl(url);
       setImage(response.data);
       console.log("Profile image data:", image);
     } catch (err) {
       console.error("Error fetching profile image:", err);
-      if(!image){
-        alert("Failed to load profile image. Please try again later.");
-      }
+        alert("profile image not found");
     }
   };
   return (
@@ -91,6 +89,10 @@ export default function ViewUser() {
                 <li className="list-group-item m-2">
                   <b className="p-4">Profile Description:</b>
                   {user.message}
+                </li>
+                <li className="list-group-item m-2">
+                  <b className="p-4">User role:</b>
+                  {role}
                 </li>
               </ul>
             </div>

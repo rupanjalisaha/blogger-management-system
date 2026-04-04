@@ -28,7 +28,7 @@ export default function EditUser() {
   const { id } = useParams();
   useEffect(() => {
     loadUser();
-  },[]);
+  }, []);
   var errorMessage = "";
   if (password && password.length < 8) {
     errorMessage = "Password must be at least 8 characters long.";
@@ -98,7 +98,7 @@ export default function EditUser() {
     if (bloggerId) {
       fetchImage(bloggerId);
     }
-  },[bloggerId]);
+  }, [bloggerId]);
 
   const fetchImage = async (id) => {
     try {
@@ -136,9 +136,10 @@ export default function EditUser() {
           .then((response) => {
             if (response.status === 200) {
               alert("User details updated successfully!");
-              navigate("/details");
+              window.location.href="/details";
             } else {
               alert("Failed to update user details. Please try again.");
+              window.location.href="/details";
             }
           });
       } else if (
@@ -155,7 +156,8 @@ export default function EditUser() {
       }
     } catch (error) {
       console.error("Error updating user:", error);
-      alert("Failed to update user. Please try again.");
+      alert("Nothing to update!");
+      navigate("/details");
     }
   };
   const [defaultRole, setDefaultRole] = useState(null);
@@ -212,22 +214,27 @@ export default function EditUser() {
       value: "ROLE_ADMIN",
     },
   ];
-  const handleDeleteProfileImage = async(profileId)=>{
-    try{
-    const response = await axios.delete(`http://localhost:8080/UVB/bloggers/deleteProfileImage/${profileId}`,{
-      headers:{
-        Authorization:`Bearer ${localStorage.getItem("token")}`
-      }
-    });
-    alert(response.data.message);
-    window.location.reload();
-  }catch(error){
-    alert("Failed to delete profile image", error.message);
-  }
-  }
-  if(!isAdmin){
-    user.role=defaultRole;
-  }
+  const handleDeleteProfileImage = async (profileId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/UVB/bloggers/deleteProfileImage/${profileId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      alert(response.data.message);
+      window.location.reload();
+    } catch (error) {
+      alert("Failed to delete profile image", error.message);
+    }
+  };
+  
+if(!isAdmin){
+  user.role=defaultRole;
+}
+console.log("default role "+user.role);
   return (
     <>
       <Navbar />
@@ -314,17 +321,18 @@ export default function EditUser() {
                   onChange={(e) => onInputChange(e)}
                 />
               </div>
-              {isAdmin &&
-              <div className="mb-3">
+              {isAdmin && (
+                <div className="mb-3">
                   <label htmlFor="role" className="form-label fs-5">
                     Role
                   </label>
                   <select
                     id="role"
-                    value={role}// Controls the selected value
-                    onChange={(e) =>
-                      setUser({ ...user, [e.target.id]: e.target.value })
-                    } // Updates the state on change
+                    value={defaultRole} // Controls the selected value
+                    onChange={(e) => {
+                      setUser({ ...user, [e.target.id]: e.target.value });
+                      setDefaultRole(user.role);
+                    }} // Updates the state on change
                     className="form-control"
                   >
                     {roleOptions.map((option) => (
@@ -335,14 +343,14 @@ export default function EditUser() {
                   </select>
                   {<p>{role}</p>}
                 </div>
-              }
-                
+              )}
+
               <div className="mb-3">
                 <label htmlFor="profileImage" className="form-label fs-5">
                   Profile Image
                 </label>
-                
-                {imageUrl &&(
+
+                {imageUrl && (
                   <div className="mb-3">
                     <img
                       typeof={image.fileType}
@@ -356,13 +364,23 @@ export default function EditUser() {
                 )}
                 {/* Upload Component */}
                 <ProfileImageUpload
-                  bloggerId={bloggerId}
+                  bloggerId={user.id}
                   onUploadSuccess={handleUploadSuccess}
                   username={user.username}
                 />
               </div>
-              <button className="btn btn-outline-primary m-3" onClick={()=>handleDeleteProfileImage(user.id)}disabled={!isSameUser}>Delete Profile Image</button>
-              <button className="btn btn-outline-primary m-3" type="submit" disabled={!isSameUser && !isAdmin}>
+              <button
+                className="btn btn-outline-primary m-3"
+                onClick={() => handleDeleteProfileImage(user.id)}
+                disabled={!isSameUser}
+              >
+                Delete Profile Image
+              </button>
+              <button
+                className="btn btn-outline-primary m-3"
+                type="submit"
+                disabled={!isSameUser && !isAdmin}
+              >
                 Submit
               </button>
               <Link className="btn btn-outline-danger" to="/details">

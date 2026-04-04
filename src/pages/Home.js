@@ -1,16 +1,23 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../layout/Navbar";
+import { AuthContext } from "../AuthContext";
+import { useContext } from "react";
+import { jwtDecode } from "jwt-decode";
 export default function Home() {
   const [users, setUsers] = useState([]);
-
+  const { setIsAuth } = useContext(AuthContext);
   const token = localStorage.getItem("token");
-  console.log(token);
+  const decoded = jwtDecode(token);
+  const remainingMs = decoded.exp*1000 - Date.now();
+const totalSeconds = Math.floor(remainingMs / 1000);
+console.log(totalSeconds);
+  const [timeLeft, setTimeLeft] = useState(totalSeconds); 
   useEffect(() => {
     if (token) loadUsers();
-  },[token]);
-
+  },[]);
+  const navigate = useNavigate();
   const loadUsers = async () => {
     try {
       const res = await axios.get("http://localhost:8080/UVB/bloggerDetails", {
@@ -22,6 +29,28 @@ export default function Home() {
     } catch (err) {
       console.error(err);
     }
+  };
+  useEffect(() => {
+  const interval = setInterval(() => {
+    setTimeLeft(prev => {
+      if (prev <= 1) {
+        clearInterval(interval);
+        localStorage.removeItem("token");
+        setIsAuth(false);
+        window.location.href="/login";
+        return 0;
+      }
+      return (prev - 1);
+    });
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [navigate]);
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
   const isAdmin = localStorage.getItem("username") === "admin";
   const deleteUser = async (id, username) => {
@@ -55,6 +84,7 @@ export default function Home() {
         <h2 style={{ fontFamily: "monospace", textDecoration: "overline", marginTop: "3%" }}>
           Registered Writers List of UVB
         </h2>
+        <div>Session Time Left: {formatTime(timeLeft)}</div>
         <p style={{ color: "red", fontWeight: "bold" }}>
           * Edit & Delete is only possible for own account
         </p>
@@ -89,9 +119,6 @@ export default function Home() {
                       <Link
                       className="btn btn-outline-primary mx-2"
                       to={`/edituser/${user.id}`}
-                      aria-disabled={
-                        user.username !== localStorage.getItem("username")
-                      }
                     >
                       Edit
                     </Link>
