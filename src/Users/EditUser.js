@@ -234,7 +234,6 @@ export default function EditUser() {
 if(!isAdmin){
   user.role=defaultRole;
 }
-console.log("default role "+user.role);
   return (
     <>
       <Navbar />
