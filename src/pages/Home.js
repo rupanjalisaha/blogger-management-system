@@ -11,12 +11,11 @@ export default function Home() {
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   const remainingMs = decoded.exp*1000 - Date.now();
-const totalSeconds = Math.floor(remainingMs / 1000);
-console.log(totalSeconds);
+  const totalSeconds = Math.floor(remainingMs / 1000);
   const [timeLeft, setTimeLeft] = useState(totalSeconds); 
   useEffect(() => {
     if (token) loadUsers();
-  },[]);
+  },[token]);
   const navigate = useNavigate();
   const loadUsers = async () => {
     try {
