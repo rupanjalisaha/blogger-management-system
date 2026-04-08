@@ -114,6 +114,7 @@ export default function AddUser() {
     e.preventDefault();
     try {
       if (!errorMessage) {
+        console.log(process.env.REACT_APP_BACKEND_URL);
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/register`, user);
         if(response.data) {
           console.log("User added successfully:", response.data);
