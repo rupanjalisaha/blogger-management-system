@@ -35,7 +35,7 @@ export default function ViewBlog() {
       <PostNavbar />
       <div className="container">
         <h2>Blog List</h2>
-        {post && (
+        {isPostAvailable && (
           <>
         <p style={{ color: "red", fontWeight: "bold" }}>
           * Edit & Delete blogs is active for user account only 
