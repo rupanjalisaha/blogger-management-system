@@ -21,7 +21,7 @@ function ViewBlogById() {
   const loadPost = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:8080/UVB/blogs/blogsDetails/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/blogsDetails/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -43,7 +43,7 @@ function ViewBlogById() {
     );
     if (!deleteConfirmed) return;
     try {
-      await axios.delete(`http://localhost:8080/UVB/blogs/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,

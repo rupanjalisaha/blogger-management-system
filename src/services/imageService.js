@@ -6,7 +6,7 @@ export const uploadImage = async (file, bloggerId) => {
         formData.append("file", file);
 
         return await axios.post(
-        `http://localhost:8080/UVB/bloggers/images/${bloggerId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/bloggers/images/${bloggerId}`,
         formData,
         {
             headers: {
@@ -18,7 +18,7 @@ export const uploadImage = async (file, bloggerId) => {
     };
 export const getImageById = async (bloggerId) => {
     console.log("Fetching image with user ID:", bloggerId);
-    return await axios.get(`http://localhost:8080/UVB/bloggers/profileImages/${bloggerId}`,{
+    return await axios.get(`${process.env.REACT_APP_BACKEND_URL}/UVB/bloggers/profileImages/${bloggerId}`,{
         responseType: 'blob',
         headers:{
             Authorization: `Bearer ${localStorage.getItem("token")}`, 

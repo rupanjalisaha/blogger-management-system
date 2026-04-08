@@ -146,7 +146,7 @@ export default function BlogPage() {
     e.preventDefault();
     try {
       if (!errorMessage) {
-        await axios.post("http://localhost:8080/UVB/blogs/writeBlogs", post, {
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/writeBlogs`, post, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,

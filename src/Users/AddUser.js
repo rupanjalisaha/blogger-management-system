@@ -114,7 +114,7 @@ export default function AddUser() {
     e.preventDefault();
     try {
       if (!errorMessage) {
-        const response = await axios.post("http://localhost:8080/UVB/register", user);
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/register`, user);
         if(response.data) {
           console.log("User added successfully:", response.data);
           localStorage.setItem("bloggerId", response.data.bloggerId);

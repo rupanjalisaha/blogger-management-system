@@ -29,7 +29,7 @@ export default function ViewUser() {
   const loadUser = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:8080/UVB/user/bloggerDetails/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/user/bloggerDetails/${id}`,
         {
           headers: {
             "Content-Type": "application/json",

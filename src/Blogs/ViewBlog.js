@@ -13,7 +13,7 @@ export default function ViewBlog() {
   const loadBlogs = async () => {
     try{
     const result = await axios.get(
-      `http://localhost:8080/UVB/blogs/blogsDetails`,
+      `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/blogsDetails`,
       {
         headers: {
           "Content-Type": "application/json",

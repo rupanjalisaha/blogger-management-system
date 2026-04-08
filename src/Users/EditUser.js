@@ -127,7 +127,7 @@ export default function EditUser() {
     try {
       if (!errorMessage) {
         await axios
-          .put(`http://localhost:8080/UVB/user/${id}`, user, {
+          .put(`${process.env.REACT_APP_BACKEND_URL}/UVB/user/${id}`, user, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -164,7 +164,7 @@ export default function EditUser() {
   const loadUser = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:8080/UVB/user/bloggerDetails/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/user/bloggerDetails/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -217,7 +217,7 @@ export default function EditUser() {
   const handleDeleteProfileImage = async (profileId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/UVB/bloggers/deleteProfileImage/${profileId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/bloggers/deleteProfileImage/${profileId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

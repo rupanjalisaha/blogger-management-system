@@ -19,7 +19,7 @@ function LoginUser() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/UVB/login",
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/login`,
         userDetails,
       );
       console.log(response.data);

@@ -38,7 +38,7 @@ function ResetPasswordPage() {
     try {
       if (userPassword.username) {
         const result = await axios.put(
-          `http://localhost:8080/UVB/users/reset-password/${userPassword.username}`,
+          `${process.env.REACT_APP_BACKEND_URL}/UVB/users/reset-password/${userPassword.username}`,
           {
             newPassword:userPassword.newPassword
           },

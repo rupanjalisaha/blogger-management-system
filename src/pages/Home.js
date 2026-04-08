@@ -20,7 +20,7 @@ console.log(totalSeconds);
   const navigate = useNavigate();
   const loadUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/UVB/bloggerDetails", {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/UVB/bloggerDetails`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,7 +58,7 @@ console.log(totalSeconds);
       if (isAdmin) {
         const deleteConfirmed = window.confirm("Are you sure you want to delete this user? This action cannot be undone.");
         if(!deleteConfirmed) return;
-        const result = await axios.delete(`http://localhost:8080/UVB/${id}`, {
+        const result = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/UVB/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`, // Include the token with the 'Bearer' scheme
