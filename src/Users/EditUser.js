@@ -22,7 +22,7 @@ export default function EditUser() {
   const [image, setImage] = useState({
     fileName: "",
     fileType: "",
-    imageData: null,
+    imageData: "",
     bloggerName: "",
   });
   const { id } = useParams();
@@ -103,10 +103,10 @@ export default function EditUser() {
   const fetchImage = async (id) => {
     try {
       const response = await getImageById(id);
-      const url = URL.createObjectURL(response.data);
-      setImageUrl(url);
       setImage(response.data);
-      console.log("Fetched image with ID:", image.id);
+      const url = `data:${response.data.fileType};base64,${response.data.imageData}`;
+      setImageUrl(url);
+      console.log("Fetched image with ID:", image.id ," and details ", image);
     } catch (err) {
       console.error("Error fetching image", err);
     }
@@ -353,7 +353,7 @@ if(!isAdmin){
                   <div className="mb-3">
                     <img
                       typeof={image.fileType}
-                      src={imageUrl}
+                      src={`data:${image.fileType};base64,${imageUrl}`}
                       alt="profile"
                       width="350px"
                       height="450px"

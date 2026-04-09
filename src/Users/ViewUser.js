@@ -51,7 +51,7 @@ export default function ViewUser() {
     try {
       const response = await getImageById(id);
       console.log(response);
-      const url = URL.createObjectURL(response.data);
+      const url = `data:${response.data.fileType};base64,${response.data.imageData}`;
       setImageUrl(url);
       setImage(response.data);
       console.log("Profile image data:", image);
