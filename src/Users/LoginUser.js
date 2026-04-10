@@ -62,6 +62,7 @@ function LoginUser() {
                 color: "Highlight",
                 textDecoration: "overline",
                 fontFamily: "cursive",
+                fontWeight:"bold"
               }}
             >
               Welcome to UVB
