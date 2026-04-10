@@ -40,7 +40,7 @@ export default function ViewBlog() {
         <p style={{ color: "red", fontWeight: "bold" }}>
           * Edit & Delete blogs is active for user account only 
         </p>
-        <div style={{padding:"1%"}}>
+        <div className="py-4">
           <table className="table border shadow">
             <thead>
               <tr>
