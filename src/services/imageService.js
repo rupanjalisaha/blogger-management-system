@@ -20,10 +20,9 @@ export const getImageById = async (bloggerId) => {
     console.log("Fetching image with user ID:", bloggerId);
     console.log(`Bearer ${localStorage.getItem("token")}`);
     return await axios.get(`${process.env.REACT_APP_BACKEND_URL}/UVB/bloggers/profileImages/${bloggerId}`,{
-        responseType: 'blob',
         headers:{
             Authorization: `Bearer ${localStorage.getItem("token")}`, 
-            Accept:"image/*"
+            Accept:"application/json"
         }
     });
   };
