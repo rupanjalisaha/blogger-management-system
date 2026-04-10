@@ -115,12 +115,15 @@ export default function Home() {
                     >
                       View
                     </Link>
+                    {(isAdmin || user.username === localStorage.getItem("username")) && (
                       <Link
                       className="btn btn-outline-primary mx-2"
                       to={`/edituser/${user.id}`}
                     >
                       Edit
                     </Link>
+                    )}
+                      
                     {isAdmin && (
                     <button
                       className="btn btn-danger mx-2"

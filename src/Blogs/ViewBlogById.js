@@ -107,20 +107,22 @@ function ViewBlogById() {
                 </li>
               </ul>
             </div>
-            <button
+            {(post.writerUsername === localStorage.getItem("username") || localStorage.getItem("username") === "admin") && (
+              <button
               className="btn btn-danger mx-2"
               onClick={() => deleteBlog(post.postId)}
-              disabled={post.writerUsername !== localStorage.getItem("username") && localStorage.getItem("username") !== "admin"}
             >
               Delete
             </button>
-            <button
+            )}
+            {post.writerUsername === localStorage.getItem("username") &&(
+              <button
               className="btn btn-outline-primary mx-2"
               onClick={()=>handleEditBlog(post.postId)}
-              disabled={post.writerUsername !== localStorage.getItem("username")}
             >
               Edit
             </button>
+            )}
             <Link className="btn btn-outline-primary m-2 px-4" to="/viewBlogs">
               Back to Blog List
             </Link>
