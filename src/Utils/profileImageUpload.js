@@ -38,7 +38,9 @@ const ProfileImageUpload = ({ bloggerId, onUploadSuccess, username }) => {
       }
     } catch (error) {
       console.error(error);
+      if(selectedFile){
       alert("This profile image exists for other user, please try to upload another one.");
+      }
     } finally {
       setLoading(false);
     }
