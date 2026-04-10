@@ -83,14 +83,14 @@ export default function Home() {
         <h2 style={{ fontFamily: "monospace", textDecoration: "overline", marginTop: "3%" }}>
           Registered Writers List of UVB
         </h2>
-        <div>Session Time Left: {formatTime(timeLeft)}</div>
+        <div style={{fontFamily:"monospace", color:"red"}}>Session Time Left: {formatTime(timeLeft)}</div>
         <p style={{ color: "red", fontWeight: "bold" }}>
           * Edit & Delete is only possible for own account
         </p>
         <p style={{ color: "blue", fontWeight: "bold", textDecoration: "underline" }}>
           Admin rights are managed by admins only, contact admin to request for admin privileges.
         </p>
-        <div className="py-4">
+        <div className="py-5">
           <table className="table border shadow">
             <thead>
               <tr>
