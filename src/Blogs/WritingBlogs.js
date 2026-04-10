@@ -220,7 +220,7 @@ export default function BlogPage() {
         </span>
         <h5
           className="row mt-5"
-          style={{ left: "46%", top: "25%", position: "absolute" }}
+          style={{ left: "46%", top: "27%", position: "absolute" }}
         >
           Author:
         </h5>
@@ -228,7 +228,7 @@ export default function BlogPage() {
           style={{
             fontWeight: "bold",
             textDecoration: "underline",
-            fontSize: "18px",
+            fontSize: "16px",
             fontFamily: "monospace",
             marginLeft: "5%",
           }}
@@ -252,7 +252,7 @@ export default function BlogPage() {
               marginTop: "3%",
               width: "300px",
               textAlign: "center",
-              fontSize: "18px",
+              fontSize: "16px",
               backgroundColor: "lightblue",
               fontFamily: "Times New Roman",
             }}
@@ -279,7 +279,7 @@ export default function BlogPage() {
               marginTop: "3%",
               marginLeft: "3%",
               width: "600px",
-              fontSize: "18px",
+              fontSize: "16px",
               fontWeight: "bold",
               textAlign: "center",
               fontFamily: "Times New Roman",
@@ -487,7 +487,7 @@ export default function BlogPage() {
             className="shadow p-3"
             style={{
               fontWeight: "bold",
-              fontSize: "24px",
+              fontSize: "18px",
               fontFamily: "monospace",
               textAlign: "center",
               backgroundColor: "lightblue",
@@ -497,7 +497,7 @@ export default function BlogPage() {
           </h5>
           <div
             style={{
-              fontSize: "18px",
+              fontSize: "16px",
               color: "whitesmoke",
               fontFamily: "Times New Roman",
               fontWeight: "light",
@@ -512,7 +512,7 @@ export default function BlogPage() {
           style={{
             fontWeight: "bold",
             marginLeft: "70%",
-            fontSize: "16px",
+            fontSize: "14px",
             fontFamily: "monospace",
             textAlign: "center",
           }}

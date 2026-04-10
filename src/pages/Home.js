@@ -90,8 +90,8 @@ export default function Home() {
         <p style={{ color: "blue", fontWeight: "bold", textDecoration: "underline" }}>
           Admin rights are managed by admins only, contact admin to request for admin privileges.
         </p>
-        <div className="py-5" style={{width:"80%"}}>
-          <table className="table border shadow">
+        <div className="py-5">
+          <table className="table border shadow" style={{fontSize:"16px", fontFamily:"monospace"}}>
             <thead>
               <tr>
                 <th scope="col">S.N.</th>
