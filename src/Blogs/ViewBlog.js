@@ -41,7 +41,7 @@ export default function ViewBlog() {
           * Edit & Delete blogs is active for user account only 
         </p>
         <div className="py-4">
-          <table className="table border shadow">
+          <table className="table border shadow" style={{width:"80%"}}>
             <thead>
               <tr>
                 <th scope="col">S.N.</th>

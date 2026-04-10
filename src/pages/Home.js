@@ -91,7 +91,7 @@ export default function Home() {
           Admin rights are managed by admins only, contact admin to request for admin privileges.
         </p>
         <div className="py-5">
-          <table className="table border shadow">
+          <table className="table border shadow" style={{width:"80%"}}>
             <thead>
               <tr>
                 <th scope="col">S.N.</th>
