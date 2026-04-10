@@ -27,6 +27,8 @@ const ProfileImageUpload = ({ bloggerId, onUploadSuccess, username }) => {
       console.log("Upload response:", response.data);
       if(response.status === 200){
         alert(response.data.message);
+      }else if(response.status === 403){
+        alert(response.data.error);
       }
       localStorage.setItem("imageId", response.data.imageId); // Store the image ID for later retrieval
       alert("Proceed to submit the form to save changes.");

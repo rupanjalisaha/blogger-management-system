@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
         console.log("Token expired");
         localStorage.removeItem("token");
         setIsAuth(false);
+        window.location.reload();
         alert("Your session has expired. Please log in again.");
         window.location.href="/login";
       } else {
