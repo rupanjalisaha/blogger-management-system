@@ -90,7 +90,7 @@ export default function Home() {
         <p style={{ color: "blue", fontWeight: "bold", textDecoration: "underline" }}>
           Admin rights are managed by admins only, contact admin to request for admin privileges.
         </p>
-        <div className="py-5">
+        <div style={{padding:"1%"}}>
           <table className="table border shadow">
             <thead>
               <tr>
