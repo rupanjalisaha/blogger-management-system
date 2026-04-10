@@ -19,7 +19,6 @@ const ProfileImageUpload = ({ bloggerId, onUploadSuccess, username }) => {
   const handleUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file");
-      return;
     }
 
     try {
