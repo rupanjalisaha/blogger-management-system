@@ -349,8 +349,7 @@ if(!isAdmin){
                 {imageUrl && (
                   <div className="mb-3">
                     <img
-                      typeof={image.fileType}
-                      src={`data:${image.fileType};base64,${imageUrl}`}
+                      src={imageUrl}
                       alt="profile"
                       width="350px"
                       height="450px"
