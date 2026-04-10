@@ -15,8 +15,8 @@ export default function Navbar() {
     navigate("/login");
   };
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div style={{width:"100%"}}>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary" style={{width:"100%"}}>
         <div className="container-fluid d-flex gap-3" style={{marginLeft:"3%", marginRight:"1%"}}>
           <h4 className="navbar-brand">UVB (Univeral Blog) Portal</h4>
           <p style={{ fontSize: "16px", fontFamily: "cursive", textAlign:"left", marginLeft: "10%", marginTop:"5%", color:"whitesmoke"}}>

@@ -30,10 +30,10 @@ export default function ViewBlog() {
   };
 
   return (
-    <div>
+    <div style={{width:"100%"}}>
       <Navbar />
       <PostNavbar />
-      <div className="container">
+      <div className="container" style={{width:"100%"}}>
         <h2>Blog List</h2>
         {isPostAvailable && (
           <>

@@ -77,9 +77,9 @@ export default function Home() {
   };
   const filteredUsers = users.filter(user=> user.username !== "admin");
   return (
-    <div>
+    <div style={{width:"100%"}}>
       <Navbar />
-      <div className="container">
+      <div className="container" style={{width:"100%"}}>
         <h2 style={{ fontFamily: "monospace", textDecoration: "overline", marginTop: "3%" }}>
           Registered Writers List of UVB
         </h2>
