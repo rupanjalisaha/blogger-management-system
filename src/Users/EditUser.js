@@ -106,7 +106,7 @@ export default function EditUser() {
       setImage(response.data);
       const url = `data:${response.data.fileType};base64,${response.data.imageData}`;
       setImageUrl(url);
-      console.log("Fetched image with ID:", image.id ," and details ", image);
+      console.log("Fetched image with name:", response.data.fileName);
     } catch (err) {
       console.error("Error fetching image", err);
     }
@@ -118,10 +118,7 @@ export default function EditUser() {
       fetchImage(data.imageId);
     }
   };
-  /* const onImageUpload=async(e)=>{
-    setUserImage({...userImage,[e.target.id]:e.target.value});
-  }
-   */
+  
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
