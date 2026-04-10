@@ -106,8 +106,6 @@ export default function ViewUser() {
               {imageUrl && (
                 <div className="mb-3">
                   <img
-                    typeof={image.fileType}
-                    name={image.fileName}
                     src={imageUrl}
                     alt="profile"
                     width="350px"
