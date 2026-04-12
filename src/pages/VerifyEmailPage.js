@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import Navbar from "../layout/Navbar";
 
 export default function VerifyEmailPage() {
   const [params] = useSearchParams();
@@ -47,7 +48,7 @@ export default function VerifyEmailPage() {
 
       {status === "loading" && <p>Verifying...</p>}
       {status === "success" && <p className="text-success">{message}</p>}
-      {status === "error" && <p className="text-danger">{message}</p>}
+      {status === "error" && <p className="text-danger">{message} Please register with a valid mail id.<Link to="/register">Try again to register</Link></p>}
     </div>
   );
 }
