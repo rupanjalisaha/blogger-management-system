@@ -119,7 +119,7 @@ export default function AddUser() {
           console.log("User added successfully:", response.data);
           localStorage.setItem("bloggerId", response.data.bloggerId);
           alert("User added successfully!");
-          navigate("/login");
+          navigate("/verifyEmail");
         } else {
           alert("Failed to add user. Please try again.");
         }

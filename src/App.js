@@ -16,6 +16,7 @@ import ResetPasswordPage from "./layout/ResetPasswordPage";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { Navigate } from "react-router-dom";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 
 function App() {
   const { isAuth } = useContext(AuthContext);
@@ -38,6 +39,11 @@ function App() {
               !isAuth ? <ResetPasswordPage /> : <Navigate to="/details" />
             }
           />
+          <Route
+            path="/verifyEmail" 
+            element={
+              !isAuth ? <VerifyEmailPage /> : <Navigate to="/details" />
+            }/>
           <Route
             path="/details"
             element={
