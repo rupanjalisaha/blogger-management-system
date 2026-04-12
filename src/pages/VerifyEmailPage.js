@@ -10,7 +10,7 @@ export default function VerifyEmailPage() {
 
   useEffect(() => {
     const token = params.get("token");
-
+    console.log(token);
     if (!token) {
       setMessage("Invalid link");
       setStatus("error");
@@ -39,7 +39,7 @@ export default function VerifyEmailPage() {
           setStatus("error");
         }
       });
-  }, []);
+  }, [params]);
 
   return (
     <div className="container text-center mt-5">
