@@ -40,7 +40,7 @@ function App() {
             }
           />
           <Route
-            path="/verifyEmail" 
+            path="/verify" 
             element={
               !isAuth ? <VerifyEmailPage /> : <Navigate to="/details" />
             }/>
