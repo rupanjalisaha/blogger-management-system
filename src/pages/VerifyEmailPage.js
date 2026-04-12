@@ -47,7 +47,7 @@ export default function VerifyEmailPage() {
 
       {status === "loading" && <p>Verifying...</p>}
       {status === "success" && <p className="text-success">{message} Please proceed to login.<Link to="/login">Login</Link></p>}
-      {status === "error" && <p className="text-danger">{message} Please register with a valid mail id.<Link to="/register">Try again to register</Link></p>}
+      {status === "error" && <p className="text-danger">{message} Please register with a valid mail id.<Link to="/">Try again to register</Link></p>}
     </div>
   );
 }
