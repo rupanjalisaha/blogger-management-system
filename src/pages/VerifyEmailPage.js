@@ -13,7 +13,6 @@ export default function VerifyEmailPage() {
     console.log(token);
     console.log(window.href);
     if (!token) {
-      setMessage("Invalid link");
       setStatus("error");
       return;
     }
@@ -45,7 +44,7 @@ export default function VerifyEmailPage() {
   return (
     <div className="container text-center mt-5">
       <h2 style={{fontFamily:"cursive"}}>Email Verification</h2>
-
+      <p> Please check your inbox for email verification link</p>
       {status === "loading" && <p>Verifying...</p>}
       {status === "success" && <p className="text-success">{message} Please proceed to login.<Link to="/login">Login</Link></p>}
       {status === "error" && <p className="text-danger">{message} Please register with a valid mail id.<Link to="/">Try again to register</Link></p>}
