@@ -1,6 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  Link,
+  useSearchParams,
+  useEffect,
+} from "react-router-dom";
 
 export default function AddUser() {
   const [user, setUser] = useState({
@@ -10,11 +15,11 @@ export default function AddUser() {
     fullName: "",
     category: "",
     message: "",
-    role:"",
+    role: "",
   });
 
   const { username, password, email, fullName, category, message, role } = user;
-  
+
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.id]: e.target.value });
   };
@@ -52,7 +57,8 @@ export default function AddUser() {
   const [showPassword, setShowPassword] = useState(false);
 
   const [params] = useSearchParams();
-  const [verificationMessage, setVerificationMessage] = useState("Verifying...");
+  const [verificationMessage, setVerificationMessage] =
+    useState("Verifying...");
   const [status, setStatus] = useState("loading");
   if (password && password.length < 8) {
     errorMessage = "Password must be at least 8 characters long.";
@@ -88,8 +94,9 @@ export default function AddUser() {
   }
 
   const isAdminCredentials = user.username === "admin";
-  if(isAdminCredentials) {
-    errorMessage = "Provided username and password are reserved. Please choose different credentials.";
+  if (isAdminCredentials) {
+    errorMessage =
+      "Provided username and password are reserved. Please choose different credentials.";
   }
   const publicDomains = [
     "gmail.com",
@@ -113,24 +120,11 @@ export default function AddUser() {
     "hotmail.com",
     "mac.com"}.`);
   }
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    try {
+  useEffect(() => {
+    const token = params.get("token");
 
-      if (!errorMessage) {
-        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/register`, user);
-        if(response.data) {
-          console.log("User added successfully:", response.data);
-          localStorage.setItem("bloggerId", response.data.bloggerId);
-          alert("User added successfully! Please check your inbox to verify email and login. You must check your spam folder also.");
-          if(params){
-            const token = params.get("token");
-    console.log(token);
-    console.log(window.href);
-    if (!token) {
-      setStatus("error");
-      return;
-    }
+    if (!token) return;
+
     axios
       .get(
         `${process.env.REACT_APP_BACKEND_URL}/UVB/email-verification?token=${token}`,
@@ -138,7 +132,7 @@ export default function AddUser() {
       .then((res) => {
         setVerificationMessage(res.data);
         setStatus("success");
-        alert(verificationMessage);
+        alert(res.data);
         navigate("/login");
       })
       .catch((err) => {
@@ -146,23 +140,33 @@ export default function AddUser() {
 
         if (errorCode === "EMAIL_NOT_VERIFIED") {
           setVerificationMessage("Verify your email before logging in.");
-          setStatus("error");
-          alert(verificationMessage);
-        } else if (errorCode === "INVALID_CREDENTIALS") {
-          setVerificationMessage("Invalid username or password");
-          setStatus("error");
-          alert(verificationMessage);
+        } else if (errorCode === "INVALID_TOKEN") {
+          setVerificationMessage("Invalid or expired token.");
         } else {
           setVerificationMessage("Something went wrong");
-          setStatus("error");
-          alert(verificationMessage);
         }
-        window.location.reload();
+
+        setStatus("error");
+        alert(verificationMessage);
       });
+  }, [params, navigate]);
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (!errorMessage) {
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/UVB/register`,
+          user,
+        );
+        if (response.data) {
+          console.log("User added successfully:", response.data);
+          localStorage.setItem("bloggerId", response.data.bloggerId);
+          alert(
+            "User added successfully! Please check your inbox to verify email and login. You must check your spam folder also.",
+          );
         } else {
           alert("Failed to add user. Please try again.");
         }
-          }
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -182,7 +186,7 @@ export default function AddUser() {
               color: "Highlight",
               textDecoration: "overline",
               fontFamily: "cursive",
-              fontWeight:"bold"
+              fontWeight: "bold",
             }}
           >
             Welcome to UVB
@@ -311,8 +315,12 @@ export default function AddUser() {
               </select>
               {<p>{role}</p>}
             </div>
-            
-            <button className="btn btn-outline-primary m-3" type="submit" disabled={isAdminCredentials}>
+
+            <button
+              className="btn btn-outline-primary m-3"
+              type="submit"
+              disabled={isAdminCredentials}
+            >
               Register
             </button>
             <Link className="btn btn-outline-primary" to="/login">
@@ -320,6 +328,12 @@ export default function AddUser() {
             </Link>
           </form>
           <p style={{ color: "red" }}>{errorMessage}</p>
+          {status === "success" && (
+            <p style={{ color: "green" }}>{verificationMessage}</p>
+          )}
+          {status === "error" && (
+            <p style={{ color: "red" }}>{verificationMessage}</p>
+          )}
         </div>
       </div>
     </div>
