@@ -113,6 +113,7 @@ export default function AddUser() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+
       if (!errorMessage) {
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/register`, user);
         if(response.data) {

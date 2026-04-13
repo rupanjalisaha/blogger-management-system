@@ -11,6 +11,7 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     const token = params.get("token");
     console.log(token);
+    console.log(window.href);
     if (!token) {
       setMessage("Invalid link");
       setStatus("error");
