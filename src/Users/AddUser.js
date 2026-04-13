@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 
 export default function AddUser() {
   const [user, setUser] = useState({
@@ -51,6 +51,9 @@ export default function AddUser() {
   ];
   const [showPassword, setShowPassword] = useState(false);
 
+  const [params] = useSearchParams();
+  const [verificationMessage, setVerificationMessage] = useState("Verifying...");
+  const [status, setStatus] = useState("loading");
   if (password && password.length < 8) {
     errorMessage = "Password must be at least 8 characters long.";
   } else if (
@@ -119,11 +122,47 @@ export default function AddUser() {
         if(response.data) {
           console.log("User added successfully:", response.data);
           localStorage.setItem("bloggerId", response.data.bloggerId);
-          alert("User added successfully!");
-          navigate("/verify");
+          alert("User added successfully! Please check your inbox to verify email and login. You must check your spam folder also.");
+          if(params){
+            const token = params.get("token");
+    console.log(token);
+    console.log(window.href);
+    if (!token) {
+      setStatus("error");
+      return;
+    }
+    axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/email-verification?token=${token}`,
+      )
+      .then((res) => {
+        setVerificationMessage(res.data);
+        setStatus("success");
+        alert(verificationMessage);
+        navigate("/login");
+      })
+      .catch((err) => {
+        const errorCode = err.response?.data?.error;
+
+        if (errorCode === "EMAIL_NOT_VERIFIED") {
+          setVerificationMessage("Verify your email before logging in.");
+          setStatus("error");
+          alert(verificationMessage);
+        } else if (errorCode === "INVALID_CREDENTIALS") {
+          setVerificationMessage("Invalid username or password");
+          setStatus("error");
+          alert(verificationMessage);
+        } else {
+          setVerificationMessage("Something went wrong");
+          setStatus("error");
+          alert(verificationMessage);
+        }
+        window.location.reload();
+      });
         } else {
           alert("Failed to add user. Please try again.");
         }
+          }
       }
     } catch (error) {
       console.error("Login failed:", error);

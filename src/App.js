@@ -40,11 +40,6 @@ function App() {
             }
           />
           <Route
-            path="/verify" 
-            element={
-              !isAuth ? <VerifyEmailPage /> : <Navigate to="/details" />
-            }/>
-          <Route
             path="/details"
             element={
               <ProtectedRoute>
