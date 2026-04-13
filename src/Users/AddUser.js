@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   useNavigate,
   Link,
   useSearchParams,
-  useEffect,
 } from "react-router-dom";
 
 export default function AddUser() {
