@@ -55,10 +55,6 @@ export default function AddUser() {
   ];
   const [showPassword, setShowPassword] = useState(false);
 
-  const [params] = useSearchParams();
-  const [verificationMessage, setVerificationMessage] =
-    useState("Verifying...");
-  const [status, setStatus] = useState("loading");
   if (password && password.length < 8) {
     errorMessage = "Password must be at least 8 characters long.";
   } else if (
@@ -119,36 +115,6 @@ export default function AddUser() {
     "hotmail.com",
     "mac.com"}.`);
   }
-  useEffect(() => {
-    const token = params.get("token");
-
-    if (!token) return;
-
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_URL}/UVB/email-verification?token=${token}`,
-      )
-      .then((res) => {
-        setVerificationMessage(res.data);
-        setStatus("success");
-        alert(res.data);
-        navigate("/login");
-      })
-      .catch((err) => {
-        const errorCode = err.response?.data?.error;
-
-        if (errorCode === "EMAIL_NOT_VERIFIED") {
-          setVerificationMessage("Verify your email before logging in.");
-        } else if (errorCode === "INVALID_TOKEN") {
-          setVerificationMessage("Invalid or expired token.");
-        } else {
-          setVerificationMessage("Something went wrong");
-        }
-
-        setStatus("error");
-        alert(verificationMessage);
-      });
-  }, [params, navigate]);
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -161,8 +127,9 @@ export default function AddUser() {
           console.log("User added successfully:", response.data);
           localStorage.setItem("bloggerId", response.data.bloggerId);
           alert(
-            "User added successfully! Please check your inbox to verify email and login. You must check your spam folder also.",
+            "User added successfully!"
           );
+          navigate("/verify");
         } else {
           alert("Failed to add user. Please try again.");
         }
