@@ -58,8 +58,8 @@ export default function VerifyEmailPage() {
           </div>
       <p style={{fontFamily:"monospace", fontSize:"16px"}}> Please check your inbox for email verification link</p>
       {status === "loading" && <p>Verifying...</p>}
-      {status === "success" && <p className="text-success">{message} Please proceed to login.<button onClick={()=>navigate("/login")}>Login</button></p>}
-      {status === "error" && <p className="text-danger">{message} Please register with a valid mail id.<button onClick={()=>navigate("/")}>Try again to register</button></p>}
+      {status === "success" && <p className="text-success">{message} Please proceed to login.<Link className="btn btn-outline-primary" to="/login">Login</Link></p>}
+      {status === "error" && <p className="text-danger">{message} Please register with a valid mail id.<Link className="btn btn-outline-primary" to="/">Try again to register</Link></p>}
     </div>
     </div>
   );

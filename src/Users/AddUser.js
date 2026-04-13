@@ -293,13 +293,6 @@ export default function AddUser() {
               Login
             </Link>
           </form>
-          <p style={{ color: "red" }}>{errorMessage}</p>
-          {status === "success" && (
-            <p style={{ color: "green" }}>{verificationMessage}</p>
-          )}
-          {status === "error" && (
-            <p style={{ color: "red" }}>{verificationMessage}</p>
-          )}
         </div>
       </div>
     </div>
