@@ -35,7 +35,7 @@ export default function Navbar() {
             Home
           </Link>
           <Link className="btn btn-outline-light" to="/viewBlogs" style={{padding:"10px 10px 10px 10px", fontSize:"18px"}}>
-            UBP
+            Blog Page
           </Link>
           <button
             className="btn btn-outline-light"

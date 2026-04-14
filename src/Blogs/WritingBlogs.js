@@ -166,26 +166,18 @@ export default function BlogPage() {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const categoryOptions = [
     { label: "Select an option", value: "" },
-    { label: "Fiction", value: "Fiction" },
-    { label: "Non-Fiction", value: "Non-Fiction" },
-    { label: "Poetry", value: "Poetry" },
-    { label: "Science Fiction", value: "Science Fiction" },
-    { label: "Fantasy", value: "Fantasy" },
-    { label: "Mystery", value: "Mystery" },
-    { label: "Romance", value: "Romance" },
-    { label: "Horror", value: "Horror" },
-    { label: "Biography", value: "Biography" },
-    { label: "Self-Help", value: "Self-Help" },
-    { label: "Health & Wellness", value: "Health & Wellness" },
-    { label: "Travel", value: "Travel" },
-    { label: "Food & Cooking", value: "Food & Cooking" },
-    { label: "History", value: "History" },
-    { label: "Science & Technology", value: "Science & Technology" },
-    { label: "Business & Finance", value: "Business & Finance" },
-    { label: "Art & Photography", value: "Art & Photography" },
-    { label: "Children's Books", value: "Children's Books" },
-    { label: "Young Adult", value: "Young Adult" },
-    { label: "Other", value: "Other" },
+    { label: "Space Exploration Missions", value: "Space Exploration Missions" },
+    { label: "Rocket Science Basics", value: "Rocket Science Basics" },
+    { label: "Satellites and Communication", value: "Satellites and Communication" },
+    { label: "Astronomy and Astrophysics", value: "Astronomy and Astrophysics" },
+    { label: "Space Agencies (ISRO, NASA, ESA)", value: "Space Agencies (ISRO, NASA, ESA)" },
+    { label: "Emerging Space Technologies", value: "Emerging Space Technologies" },
+    { label: "Space Startups and Innovations", value: "Space Startups and Innovations" },
+    { label: "Human Spaceflight", value: "Human Spaceflight" },
+    { label: "Planetary Science", value: "Planetary Science" },
+    { label: "Space Research and Discoveries", value: "Space Research and Discoveries" },
+    { label: "AI and Space Technology", value: "AI and Space Technology" },
+    { label: "Space Debates and Opinions", value: "Space Debates and Opinions" }
   ];
   useEffect(() => {
     // Update the time every second

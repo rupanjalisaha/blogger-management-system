@@ -178,26 +178,11 @@ export default function EditUser() {
   };
   const categoryOptions = [
     { label: "Select an option", value: `{user.category}` },
-    { label: "Fiction", value: "Fiction" },
-    { label: "Non-Fiction", value: "Non-Fiction" },
-    { label: "Poetry", value: "Poetry" },
-    { label: "Science Fiction", value: "Science Fiction" },
-    { label: "Fantasy", value: "Fantasy" },
-    { label: "Mystery", value: "Mystery" },
-    { label: "Romance", value: "Romance" },
-    { label: "Horror", value: "Horror" },
-    { label: "Biography", value: "Biography" },
-    { label: "Self-Help", value: "Self-Help" },
-    { label: "Health & Wellness", value: "Health & Wellness" },
-    { label: "Travel", value: "Travel" },
-    { label: "Food & Cooking", value: "Food & Cooking" },
-    { label: "History", value: "History" },
-    { label: "Science & Technology", value: "Science & Technology" },
-    { label: "Business & Finance", value: "Business & Finance" },
-    { label: "Art & Photography", value: "Art & Photography" },
-    { label: "Children's Books", value: "Children's Books" },
-    { label: "Young Adult", value: "Young Adult" },
-    { label: "Other", value: "Other" },
+    { label: "Rocket Science", value: "Rocket Science" },
+    { label: "Astrophysics", value: "Astrophysics" },
+    { label: "Space Missions", value: "Space Missions" },
+    { label: "AI & Space", value: "AI & Space" },
+    { label: "Space Technology", value: "Space Technology" }
   ];
 
   const isAdmin = localStorage.getItem("username") === "admin";
