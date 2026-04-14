@@ -88,10 +88,10 @@ export default function Home() {
     <div style={{ width: "100%" }}>
       <Navbar />
       <div className="container" style={{ width: "100%" }}>
-        <div style={{ fontFamily: "monospace", color: "red" }}>
+        <div style={{ fontFamily: "monospace", marginTop: "1%", color: "red" }}>
           Session Time Left: {formatTime(timeLeft)}
         </div>
-        <h1 style={{ fontFamily:"sans-serif", marginTop: "3%", marginBottom:"3%", textDecoration:"underline" }}>
+        <h1 style={{ fontFamily:"sans-serif", marginTop: "2%", marginBottom:"3%" }}>
           UVB Portal – Explore, Write, and Share Space Technology
         </h1>
         <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"4%", lineHeight:"1cm" }}>
