@@ -212,7 +212,7 @@ export default function BlogPage() {
         </span>
         <h5
           className="row mt-5"
-          style={{ left: "46%", top: "27%", position: "absolute" }}
+          style={{ left: "46%", top: "27.5%", position: "absolute" }}
         >
           Author:
         </h5>
