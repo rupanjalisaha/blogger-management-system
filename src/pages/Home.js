@@ -91,15 +91,15 @@ export default function Home() {
         <div style={{ fontFamily: "monospace", marginTop: "1%", color: "red" }}>
           Session Time Left: {formatTime(timeLeft)}
         </div>
-        <h1 style={{ fontFamily:"sans-serif", marginTop: "2%", marginBottom:"3%" }}>
+        <h1 style={{ fontFamily:"sans-serif", marginTop: "2%", marginBottom:"3%", color:"Highlight" }}>
           UVB Portal – Explore, Write, and Share Space Technology
         </h1>
-        <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"1%", lineHeight:"1cm", color:"AppWorkspace" }}>
+        <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"1%", lineHeight:"1cm" }}>
           UVB Portal is a modern blogging platform designed for beginner-level
           writers passionate about space technology. It provides a secure and
           intuitive environment where users can create, manage, and share
           content while exploring ideas from fellow enthusiasts. </p>
-          <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"1%", lineHeight:"1cm", color:"AppWorkspace"}}>The platform offers complete user management with full CRUD capabilities, enabling
+          <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"1%", lineHeight:"1cm"}}>The platform offers complete user management with full CRUD capabilities, enabling
           seamless creation, retrieval and update of blogger profiles.
           Authentication is handled using JWT-based security, ensuring safe
           access and protected user sessions. Users can personalize their
@@ -109,7 +109,7 @@ export default function Home() {
           with clarity and visual appeal. Writers can publish blogs, explore
           posts from other users, and maintain full control over their own
           content with edit and delete functionalities. </p>
-          <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"1%", lineHeight:"1cm", color:"AppWorkspace"}}>The platform encourages
+          <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"1%", lineHeight:"1cm"}}>The platform encourages
           knowledge sharing and continuous learning within the space technology
           domain. UVB Portal aims to empower aspiring writers to contribute,
           learn, and grow within a focused community driven by curiosity for
