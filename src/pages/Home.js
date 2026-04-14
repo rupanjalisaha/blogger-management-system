@@ -94,7 +94,7 @@ export default function Home() {
         <h1 style={{ fontFamily:"sans-serif", marginTop: "2%", marginBottom:"3%" }}>
           UVB Portal – Explore, Write, and Share Space Technology
         </h1>
-        <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"4%", lineHeight:"1cm" }}>
+        <p style={{ fontFamily: "monospace", fontSize: "18px", padding:"5px", textAlign:"justify", marginBottom:"4%", lineHeight:"1cm", color:"AppWorkspace" }}>
           UVB Portal is a modern blogging platform designed for beginner-level
           writers passionate about space technology. It provides a secure and
           intuitive environment where users can create, manage, and share
