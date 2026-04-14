@@ -88,7 +88,7 @@ export default function Home() {
     <div style={{ width: "100%" }}>
       <Navbar />
       <div className="container" style={{ width: "100%" }}>
-        <h1 style={{ fontFamily: "revert", marginTop: "3%", marginBottom:"3%" }}>
+        <h1 style={{ fontFamily: "revert", marginTop: "3%", textDecoration:"underline" }}>
           UVB Portal – Explore, Write, and Share Space Technology
         </h1>
         <p style={{ fontFamily: "sans-serif", fontSize: "16px", padding:"5px", textAlign:"justify", margin:"5%" }}>
