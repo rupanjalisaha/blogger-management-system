@@ -212,7 +212,7 @@ export default function BlogPage() {
         </span>
         <h5
           className="row mt-5"
-          style={{ left: "46%", top: "27.5%", position: "absolute" }}
+          style={{ left: "45.5%", top: "27.5%", position: "absolute" }}
         >
           Author:
         </h5>
@@ -222,7 +222,7 @@ export default function BlogPage() {
             textDecoration: "underline",
             fontSize: "16px",
             fontFamily: "monospace",
-            marginLeft: "5%",
+            marginLeft: "5.5%",
           }}
         >
           "{username}"
