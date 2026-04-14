@@ -88,10 +88,10 @@ export default function Home() {
     <div style={{ width: "100%" }}>
       <Navbar />
       <div className="container" style={{ width: "100%" }}>
-        <h1 style={{ fontFamily: "revert", marginTop: "3%" }}>
+        <h1 style={{ fontFamily: "revert", marginTop: "3%", marginBottom:"3%" }}>
           UVB Portal – Explore, Write, and Share Space Technology
         </h1>
-        <p style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
+        <p style={{ fontFamily: "sans-serif", fontSize: "16px", padding:"5px", textAlign:"justify", margin:"5%" }}>
           UVB Portal is a modern blogging platform designed for beginner-level
           writers passionate about space technology. It provides a secure and
           intuitive environment where users can create, manage, and share
