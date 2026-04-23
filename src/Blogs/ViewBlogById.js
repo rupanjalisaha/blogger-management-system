@@ -13,10 +13,11 @@ function ViewBlogById() {
     writerUsername: "",
   });
   const Navigate = useNavigate();
+  const [likes, setLikes] = useState(0);
   const { id } = useParams();
   useEffect(() => {
     loadPost();
-  },[]);
+  }, []);
 
   const loadPost = async () => {
     try {
@@ -37,18 +38,59 @@ function ViewBlogById() {
       );
     }
   };
+
+  const fetchLikes = async (postId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/blogsDetails/${postId}/count`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      setLikes(response.data);
+    } catch (error) {
+      console.error("Error fetching likes:", error);
+    }
+  };
+  const handleLike = async (postId) => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/blogsDetails/${postId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      fetchLikes(postId);
+    } catch (error) {
+      console.error("Error liking the blog:", error);
+    }
+  };
+  useEffect(() => {
+    fetchLikes(post.postId);
+  }, [post.postId]);
+
   const deleteBlog = async (id) => {
     const deleteConfirmed = window.confirm(
       "Are you sure you want to delete this blog?",
     );
     if (!deleteConfirmed) return;
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
-      });
+      );
       Navigate("/viewBlogs");
     } catch (error) {
       console.error("Error deleting blog:", error);
@@ -60,7 +102,7 @@ function ViewBlogById() {
     if (post.writerUsername === localStorage.getItem("username")) {
       navigate(`/editblog/${id}`);
     }
-  }
+  };
   return (
     <div>
       <Navbar />
@@ -101,27 +143,32 @@ function ViewBlogById() {
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(post.postBody || ""),
                     }}
+                  ></div>
+                  <Link
+                    className="btn p-1 btn-outline-primary"
+                    onClick={handleLike(post.postId)}
                   >
-                </div>
-                          
+                    👍{likes}
+                  </Link>
                 </li>
               </ul>
             </div>
-            {(post.writerUsername === localStorage.getItem("username") || localStorage.getItem("username") === "admin") && (
+            {(post.writerUsername === localStorage.getItem("username") ||
+              localStorage.getItem("username") === "admin") && (
               <button
-              className="btn btn-danger mx-2"
-              onClick={() => deleteBlog(post.postId)}
-            >
-              Delete
-            </button>
+                className="btn btn-danger mx-2"
+                onClick={() => deleteBlog(post.postId)}
+              >
+                Delete
+              </button>
             )}
-            {post.writerUsername === localStorage.getItem("username") &&(
+            {post.writerUsername === localStorage.getItem("username") && (
               <button
-              className="btn btn-outline-primary mx-2"
-              onClick={()=>handleEditBlog(post.postId)}
-            >
-              Edit
-            </button>
+                className="btn btn-outline-primary mx-2"
+                onClick={() => handleEditBlog(post.postId)}
+              >
+                Edit
+              </button>
             )}
             <Link className="btn btn-outline-primary m-2 px-4" to="/viewBlogs">
               Back to Blog List
