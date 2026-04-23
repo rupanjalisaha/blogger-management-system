@@ -73,7 +73,9 @@ function ViewBlogById() {
     }
   };
   useEffect(() => {
-    fetchLikes(post.postId);
+    if(post.postId){
+      fetchLikes(post.postId);
+    }
   }, [post.postId]);
 
   const deleteBlog = async (id) => {
@@ -147,12 +149,12 @@ function ViewBlogById() {
                 </li>
               </ul>
             </div>
-            <Link
+            <button
               className="btn p-1 btn-outline-primary"
-              onClick={handleLike(post.postId)}
+              onClick={() => handleLike(post.postId)}
             >
               👍{likes}
-            </Link>
+            </button>
             {(post.writerUsername === localStorage.getItem("username") ||
               localStorage.getItem("username") === "admin") && (
               <button
