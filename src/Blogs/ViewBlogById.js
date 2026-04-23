@@ -144,15 +144,15 @@ function ViewBlogById() {
                       __html: DOMPurify.sanitize(post.postBody || ""),
                     }}
                   ></div>
-                  <Link
-                    className="btn p-1 btn-outline-primary"
-                    onClick={handleLike(post.postId)}
-                  >
-                    👍{likes}
-                  </Link>
                 </li>
               </ul>
             </div>
+            <Link
+              className="btn p-1 btn-outline-primary"
+              onClick={handleLike(post.postId)}
+            >
+              👍{likes}
+            </Link>
             {(post.writerUsername === localStorage.getItem("username") ||
               localStorage.getItem("username") === "admin") && (
               <button
