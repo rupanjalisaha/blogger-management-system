@@ -19,6 +19,7 @@ function ViewBlogById() {
     loadPost();
   }, []);
 
+  const [isLiked, setIsLiked] = useState(false);
   const loadPost = async () => {
     try {
       const result = await axios.get(
@@ -68,6 +69,7 @@ function ViewBlogById() {
         },
       );
       fetchLikes(postId);
+      setIsLiked(true);
     } catch (error) {
       console.error("Error liking the blog:", error);
     }
@@ -150,7 +152,7 @@ function ViewBlogById() {
               </ul>
             </div>
             <button
-              className="btn p-1 btn-outline-primary"
+              className={isLiked? "btn active p-1 btn-outline-primary": "btn p-1 btn-outline-primary"}
               onClick={() => handleLike(post.postId)}
             >
               👍{likes}
