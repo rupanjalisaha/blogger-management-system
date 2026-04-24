@@ -218,17 +218,17 @@ function ViewBlogByUserName() {
                       👍{likes[post.postId] || 0}
                     </button>
                     <button
-                      className="btn p-1 btn-outline-primary"
+                      className="btn p-1 btn-primary mx-2"
                       style={{ marginLeft: "5px" }}
                       onClick={() => setIsOpen(true)}
                     >
                       ↩️share
                     </button>
                     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                      <button onClick={()=>handleNativeShare(post.postId)}>Share</button>
+                      <button className="btn p-1 btn-outline-primary" onClick={()=>handleNativeShare(post.postId)}>Share</button>
 
                       <button
-                        className="btn p-1 btn-primary-outline"
+                        className="btn p-1 btn-outline-primary"
                         onClick={() =>
                           window.open(
                             `https://wa.me/?text=${getText(post.title)}%20${getShareUrl(post.postId)}`,
@@ -240,7 +240,7 @@ function ViewBlogByUserName() {
                       </button>
 
                       <button
-                        className="btn p-1 btn-primary-outline"
+                        className="btn p-1 btn-outline-primary"
                         onClick={() =>
                           window.open(
                             `https://twitter.com/intent/tweet?text=${getText(post.title)}&url=${getShareUrl(post.postId)}`,
@@ -252,7 +252,7 @@ function ViewBlogByUserName() {
                       </button>
 
                       <button
-                        className="btn p-1 btn-primary-outline"
+                        className="btn p-1 btn-outline-primary"
                         onClick={() =>
                           window.open(
                             `https://www.linkedin.com/sharing/share-offsite/?url=${getShareUrl(post.postId)}`,
@@ -264,7 +264,7 @@ function ViewBlogByUserName() {
                       </button>
 
                       <button
-                        className="btn p-1 btn-primary-outline"
+                        className="btn p-1 btn-outline-primary"
                         onClick={async () => {
                           await navigator.clipboard.writeText(getShareUrl(post.postId));
                           alert("Copied!");
