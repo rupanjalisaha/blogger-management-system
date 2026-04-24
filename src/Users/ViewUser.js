@@ -98,10 +98,11 @@ export default function ViewUser() {
             </div>
             <div>
               <button
+              title="View Profile Image"
                 className="btn btn-outline-primary m-2 px-4"
                 onClick={() => handleViewImage(user.id)}
               >
-                View Profile Image
+                🪪
               </button>
               {imageUrl && (
                 <div className="mb-3">
@@ -117,13 +118,14 @@ export default function ViewUser() {
               )}
             </div>
             <Link
+            title="View Blogs"
               className="btn btn-primary mx-2"
               to={`/viewBlogByUserName/${user.username}`}
             >
-              View Blogs
+              📖
             </Link>
-            <Link className="btn btn-outline-primary m-2 px-4" to="/details">
-              Back to Home
+            <Link title="Back to Home" className="btn btn-outline-primary m-2 px-4" to="/details">
+              🏠︎
             </Link>
           </div>
         </div>

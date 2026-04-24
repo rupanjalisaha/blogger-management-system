@@ -412,11 +412,11 @@ function EditBlog() {
           </button>
         </div>
         }
-              <button className="btn btn-outline-primary m-3" type="submit">
-                Submit
+              <button title="Submit" className="btn btn-outline-primary m-3" type="submit">
+                ✔
               </button>
-              <Link className="btn btn-outline-danger" to="/viewBlogs">
-                Cancel
+              <Link title="Cancel" className="btn btn-outline-danger" to="/viewBlogs">
+                🗙
               </Link>
             </form>
           </div>

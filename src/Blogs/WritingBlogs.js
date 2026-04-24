@@ -521,10 +521,11 @@ export default function BlogPage() {
         </button>
       </form>
       <button
+      title="Back to previous page"
         className="btn btn-outline-secondary m-2 px-4"
         onClick={handleGoBack}
       >
-        Go Back
+        🔙
       </button>
     </div>
   );

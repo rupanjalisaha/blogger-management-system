@@ -350,21 +350,23 @@ if(!isAdmin){
                 />
               </div>
               <button
+              title="Delete Profile Image"
                 className="btn btn-outline-primary m-3"
                 onClick={() => handleDeleteProfileImage(user.id)}
                 disabled={!isSameUser}
               >
-                Delete Profile Image
+                🗑️
               </button>
               <button
+              title="Submit Changes"
                 className="btn btn-outline-primary m-3"
                 type="submit"
                 disabled={!isSameUser && !isAdmin}
               >
-                Submit
+                ✅️
               </button>
-              <Link className="btn btn-outline-danger" to="/details">
-                Cancel
+              <Link title="Cancel" className="btn btn-outline-danger" to="/details">
+                🗙
               </Link>
             </form>
             <p style={{ color: "red" }}>{errorMessage}</p>

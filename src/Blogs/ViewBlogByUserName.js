@@ -87,26 +87,23 @@ function ViewBlogByUserName() {
                     }}></div></p>
                   <div className="col">
                   <button
+                  title="Delete Blog"
               className="btn btn-danger mx-2"
               onClick={() => deleteBlog(post.postId)} disabled={post.writerUsername !== localStorage.getItem("username") || localStorage.getItem("username") === "admin"}
             >
-              Delete
+              🗑️
             </button>
-            <button className="btn btn-primary mx-2" onClick={()=>handleEditBlog(post.postId)} disabled={post.writerUsername !== localStorage.getItem("username")}>
-              Edit Blog
+            <button title="Edit Blog" className="btn btn-primary mx-2" onClick={()=>handleEditBlog(post.postId)} disabled={post.writerUsername !== localStorage.getItem("username")}>
+              🖍
             </button>
                 </div>
                 </div>
               ))}
               
-            <Link className="btn btn-outline-primary m-2 px-4" to="/writeBlogs">
-              Write New Blog
+            <Link title="Write New Blog" className="btn btn-outline-primary m-2 px-4" to="/writeBlogs">
+              ✍︎
             </Link>
-            
-            <Link className="btn btn-outline-primary m-2 px-4" to="/details">
-              Back to Bloggers List
-            </Link>
-            <button className="btn btn-outline-secondary m-2 px-4" onClick={handleGoBack}>Go Back</button>
+            <button title="Go Back" className="btn btn-outline-secondary m-2 px-4" onClick={handleGoBack}>🔙</button>
           </div>
         </div>
       </div>
