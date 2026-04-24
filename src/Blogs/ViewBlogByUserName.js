@@ -25,8 +25,7 @@ function ViewBlogByUserName() {
       left: 500,
       width: "50%",
       height: "50%",
-      background: "#acd9f4",
-      border: "2px solid #000",
+      background: "rgba(0,0,0,0.5)",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -34,6 +33,7 @@ function ViewBlogByUserName() {
     modal: {
       padding: "20px",
       borderRadius: "8px",
+      background: "#fff",
       minWidth: "300px",
       position: "relative",
     },
@@ -218,7 +218,7 @@ function ViewBlogByUserName() {
                       👍{likes[post.postId] || 0}
                     </button>
                     <button
-                      className="btn p-1 btn-primary"
+                      className="btn p-1 btn-outline-primary"
                       style={{ marginLeft: "5px" }}
                       onClick={() => setIsOpen(true)}
                     >
