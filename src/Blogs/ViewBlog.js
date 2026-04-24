@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../layout/Navbar";
 import PostNavbar from "../layout/PostNavbar";
+import DOMPurify from "dompurify";
+
 export default function ViewBlog() {
   const [post, setPost] = useState([]);
   const [isPostAvailable, setIsPostAvailable] = useState(false);
@@ -29,11 +31,11 @@ export default function ViewBlog() {
     }
   };
   function getFirst100Words(text) {
-  if (!text) return "";
+    if (!text) return "";
 
-  const words = text.trim().split(/\s+/); // split by spaces, tabs, newlines
-  return words.slice(0, 100).join(" ") + (words.length > 100 ? "..." : "");
-}
+    const words = text.trim().split(/\s+/); // split by spaces, tabs, newlines
+    return words.slice(0, 100).join(" ") + (words.length > 100 ? "..." : "");
+  }
 
   return (
     <div style={{ width: "100%" }}>
@@ -68,7 +70,21 @@ export default function ViewBlog() {
                         </p>
                         <p className="card-text">
                           <strong>📝 Summary:</strong>
-                          {getFirst100Words(post.postBody)}
+                          <div
+                            style={{
+                              fontSize: "18px",
+                              padding: "10px",
+                              textAlign: "justify",
+                              fontFamily: "Times New Roman",
+                              fontWeight: "light",
+                            }}
+                            // sanitize to avoid XSS; DOMPurify is recommended
+                            dangerouslySetInnerHTML={{
+                              __html: DOMPurify.sanitize(
+                                getFirst100Words(post.postBody) || "",
+                              ),
+                            }}
+                          ></div>
                         </p>
                       </div>
                       <div className="card-footer bg-white border-0">
