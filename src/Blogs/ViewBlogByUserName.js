@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../layout/Navbar";
 import DOMPurify from "dompurify";
+import styles from "../Utils/ModalStyles";
 function ViewBlogByUserName() {
   const [post, setPost] = useState([]);
   const Navigate = useNavigate();
   const { username } = useParams();
   const [likes, setLikes] = useState({});
   const [isLiked, setIsLiked] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     if (username) {
       loadPost(username);
@@ -88,6 +90,11 @@ function ViewBlogByUserName() {
     }
   }, [post]);
 
+  const copyToClipboard = async () => {
+    const url = `${window.location.origin}/post/${post._id}`;
+    await navigator.clipboard.writeText(url);
+    alert("Link copied!");
+  };
   const deleteBlog = async (id) => {
     const deleteConfirmed = window.confirm(
       "Are you sure you want to delete this blog?",
@@ -111,6 +118,20 @@ function ViewBlogByUserName() {
     }
   };
 
+  const Modal = ({ isOpen, onClose, children }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div style={styles.overlay}>
+        <div style={styles.modal}>
+          <button onClick={onClose} style={styles.closeBtn}>
+            X
+          </button>
+          {children}
+        </div>
+      </div>
+    );
+  };
   const handleEditBlog = (postId) => {
     Navigate(`/editBlog/${postId}`);
   };
@@ -158,6 +179,14 @@ function ViewBlogByUserName() {
                     >
                       👍{likes[post.postId] || 0}
                     </button>
+                    <button onClick={() => copyToClipboard()}>Share</button>
+                    <button onClick={() => setIsOpen(true)}>
+                      Share window
+                    </button>
+                    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                      <h2>Hello 👋</h2>
+                      <p>This is a share window popup</p>
+                    </Modal>
                     <button
                       title="Delete Blog"
                       className="btn btn-danger mx-2"
