@@ -25,7 +25,9 @@ function ViewBlogByUserName() {
       left: 500,
       width: "50%",
       height: "50%",
-      background: "#fff",
+      background: "#ADD8E6",
+      border: "2px solid #000",
+      borderRadius: "5%",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -115,7 +117,7 @@ function ViewBlogByUserName() {
     }
   }, [post]);
 
-  const shareUrl = `${window.location.origin}/post/${post._id}`;
+  const shareUrl = `${window.location.origin}/post/${post.postId}`;
   const text = encodeURIComponent(post.title);
 
   const handleNativeShare = async () => {
@@ -212,7 +214,7 @@ function ViewBlogByUserName() {
                     >
                       👍{likes[post.postId] || 0}
                     </button>
-                    <button className="btn p-1 btn-primary"onClick={() => setIsOpen(true)}>
+                    <button className="btn p-1 btn-primary" style={{marginLeft:"5px"}} onClick={() => setIsOpen(true)}>
                       ↩️share
                     </button>
                     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
