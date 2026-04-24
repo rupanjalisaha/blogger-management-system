@@ -35,8 +35,11 @@ function ViewBlogByUserName() {
       borderRadius: "8px",
       background: "#fff",
       width: "80%",
-      height: "80%",
+      height: "50%",
       position: "relative",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
     closeBtn: {
       position: "absolute",
