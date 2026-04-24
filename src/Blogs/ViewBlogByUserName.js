@@ -21,17 +21,16 @@ function ViewBlogByUserName() {
   const styles = {
     overlay: {
       position: "fixed",
-      top: 0,
-      left: 0,
+      top: 300,
+      left: 500,
       width: "50%",
       height: "50%",
-      background: "rgba(0,0,0,0.5)",
+      background: "#fff",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
     },
     modal: {
-      background: "#fff",
       padding: "20px",
       borderRadius: "8px",
       minWidth: "300px",
@@ -46,6 +45,7 @@ function ViewBlogByUserName() {
   const handleGoBack = () => {
     window.history.back();
   };
+  
   const loadPost = async (username) => {
     try {
       const result = await axios.get(
@@ -115,11 +115,19 @@ function ViewBlogByUserName() {
     }
   }, [post]);
 
-  const copyToClipboard = async () => {
-    const url = `${window.location.origin}/post/${post._id}`;
-    await navigator.clipboard.writeText(url);
-    alert("Link copied!");
+  const shareUrl = `${window.location.origin}/post/${post._id}`;
+  const text = encodeURIComponent(post.title);
+
+  const handleNativeShare = async () => {
+    await navigator.clipboard.writeText(shareUrl);
+    if (navigator.share) {
+      await navigator.share({
+        title: post.title,
+        url: shareUrl
+      });
+    }
   };
+
   const deleteBlog = async (id) => {
     const deleteConfirmed = window.confirm(
       "Are you sure you want to delete this blog?",
@@ -204,13 +212,53 @@ function ViewBlogByUserName() {
                     >
                       👍{likes[post.postId] || 0}
                     </button>
-                    <button onClick={() => copyToClipboard()}>Share</button>
-                    <button onClick={() => setIsOpen(true)}>
-                      Share window
+                    <button className="btn p-1 btn-primary"onClick={() => setIsOpen(true)}>
+                      ↩️share
                     </button>
                     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                      <h2>Hello 👋</h2>
-                      <p>This is a share window popup</p>
+                      <button onClick={handleNativeShare}>Share</button>
+
+                      <button
+                        onClick={() =>
+                          window.open(
+                            `https://wa.me/?text=${text}%20${shareUrl}`,
+                            "_blank",
+                          )
+                        }
+                      >
+                        WhatsApp
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          window.open(
+                            `https://twitter.com/intent/tweet?text=${text}&url=${shareUrl}`,
+                            "_blank",
+                          )
+                        }
+                      >
+                        Twitter
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          window.open(
+                            `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
+                            "_blank",
+                          )
+                        }
+                      >
+                        LinkedIn
+                      </button>
+
+                      <button
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(shareUrl);
+                          alert("Copied!");
+                        }}
+                      >
+                        Copy Link
+                      </button>
                     </Modal>
                     <button
                       title="Delete Blog"
