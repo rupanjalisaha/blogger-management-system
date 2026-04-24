@@ -21,7 +21,7 @@ const CommentSection = ({ blogId }) => {
 
   const addComment = async (content, parentId = null) => {
     const query = new URLSearchParams({
-        userId: user._id,
+      userId: user._id,
       postId: blogId,
       content,
       parentId: parentId || "",
