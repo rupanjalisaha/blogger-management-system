@@ -18,7 +18,7 @@ export default function Navbar() {
     <div style={{width:"100%"}}>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary" style={{width:"100%"}}>
         <div className="container-fluid d-flex gap-3" style={{marginLeft:"3%", marginRight:"1%"}}>
-          <h4 className="navbar-brand">UVB (Univeral Blog) Portal</h4>
+          <h4 className="navbar-brand">🌐UVB (Univeral Blog) Portal</h4>
           <p style={{ fontSize: "16px", fontFamily: "cursive", textAlign:"left", marginLeft: "30%", marginTop:"5%", color:"whitesmoke"}}>
         Username: {localStorage.getItem("username")}
       </p>
