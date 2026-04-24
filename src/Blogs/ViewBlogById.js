@@ -156,7 +156,6 @@ function ViewBlogById() {
             >
               👍{likes}
             </button>
-            <CommentForm/>
             {(post.writerUsername === localStorage.getItem("username") ||
               localStorage.getItem("username") === "admin") && (
               <button
