@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../layout/Navbar";
 import DOMPurify from "dompurify";
-import styles from "../Utils/ModalStyles";
+
 function ViewBlogByUserName() {
   const [post, setPost] = useState([]);
   const Navigate = useNavigate();
@@ -18,6 +18,31 @@ function ViewBlogByUserName() {
     }
   }, [username]);
 
+  const styles = {
+    overlay: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "50%",
+      height: "50%",
+      background: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    modal: {
+      background: "#fff",
+      padding: "20px",
+      borderRadius: "8px",
+      minWidth: "300px",
+      position: "relative",
+    },
+    closeBtn: {
+      position: "absolute",
+      top: "10px",
+      right: "10px",
+    },
+  };
   const handleGoBack = () => {
     window.history.back();
   };
