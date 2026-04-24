@@ -25,9 +25,8 @@ function ViewBlogByUserName() {
       left: 500,
       width: "50%",
       height: "50%",
-      background: "#ADD8E6",
+      background: "#acd9f4",
       border: "2px solid #000",
-      borderRadius: "5%",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -40,14 +39,14 @@ function ViewBlogByUserName() {
     },
     closeBtn: {
       position: "absolute",
-      top: "10px",
-      right: "10px",
+      top: "5px",
+      right: "5px",
     },
   };
   const handleGoBack = () => {
     window.history.back();
   };
-  
+
   const loadPost = async (username) => {
     try {
       const result = await axios.get(
@@ -117,15 +116,19 @@ function ViewBlogByUserName() {
     }
   }, [post]);
 
-  const shareUrl = `${window.location.origin}/post/${post.postId}`;
-  const text = encodeURIComponent(post.title);
+  const getShareUrl = (postId) => {
+    return `${window.location.origin}/post/${postId}`;
+  }
+  const getText = (postTitle)=>{
+    return encodeURIComponent(postTitle);
+  }
 
-  const handleNativeShare = async () => {
-    await navigator.clipboard.writeText(shareUrl);
+  const handleNativeShare = async (postId) => {
+    await navigator.clipboard.writeText(getShareUrl(postId));
     if (navigator.share) {
       await navigator.share({
         title: post.title,
-        url: shareUrl
+        url: getShareUrl(postId),
       });
     }
   };
@@ -159,7 +162,7 @@ function ViewBlogByUserName() {
     return (
       <div style={styles.overlay}>
         <div style={styles.modal}>
-          <button onClick={onClose} style={styles.closeBtn}>
+          <button className="btn p-1 btn-outline-primary" onClick={onClose} style={styles.closeBtn}>
             X
           </button>
           {children}
@@ -214,16 +217,21 @@ function ViewBlogByUserName() {
                     >
                       👍{likes[post.postId] || 0}
                     </button>
-                    <button className="btn p-1 btn-primary" style={{marginLeft:"5px"}} onClick={() => setIsOpen(true)}>
+                    <button
+                      className="btn p-1 btn-primary"
+                      style={{ marginLeft: "5px" }}
+                      onClick={() => setIsOpen(true)}
+                    >
                       ↩️share
                     </button>
                     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                      <button onClick={handleNativeShare}>Share</button>
+                      <button onClick={()=>handleNativeShare(post.postId)}>Share</button>
 
                       <button
+                        className="btn p-1 btn-primary-outline"
                         onClick={() =>
                           window.open(
-                            `https://wa.me/?text=${text}%20${shareUrl}`,
+                            `https://wa.me/?text=${getText(post.title)}%20${getShareUrl(post.postId)}`,
                             "_blank",
                           )
                         }
@@ -232,9 +240,10 @@ function ViewBlogByUserName() {
                       </button>
 
                       <button
+                        className="btn p-1 btn-primary-outline"
                         onClick={() =>
                           window.open(
-                            `https://twitter.com/intent/tweet?text=${text}&url=${shareUrl}`,
+                            `https://twitter.com/intent/tweet?text=${getText(post.title)}&url=${getShareUrl(post.postId)}`,
                             "_blank",
                           )
                         }
@@ -243,9 +252,10 @@ function ViewBlogByUserName() {
                       </button>
 
                       <button
+                        className="btn p-1 btn-primary-outline"
                         onClick={() =>
                           window.open(
-                            `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
+                            `https://www.linkedin.com/sharing/share-offsite/?url=${getShareUrl(post.postId)}`,
                             "_blank",
                           )
                         }
@@ -254,8 +264,9 @@ function ViewBlogByUserName() {
                       </button>
 
                       <button
+                        className="btn p-1 btn-primary-outline"
                         onClick={async () => {
-                          await navigator.clipboard.writeText(shareUrl);
+                          await navigator.clipboard.writeText(getShareUrl(post.postId));
                           alert("Copied!");
                         }}
                       >
