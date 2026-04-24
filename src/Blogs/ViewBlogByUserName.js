@@ -8,7 +8,8 @@ function ViewBlogByUserName() {
   const [post, setPost] = useState([]);
   const Navigate = useNavigate();
   const { username } = useParams();
-
+  const [likes, setLikes] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
   useEffect(() => {
     if(username){
       loadPost(username);
@@ -36,6 +37,46 @@ function ViewBlogByUserName() {
     console.error("Error loading blog details:", error);
   }
   };
+  const fetchLikes = async (postId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/blogsDetails/${postId}/count`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      setLikes(response.data);
+    } catch (error) {
+      console.error("Error fetching likes:", error);
+    }
+  };
+  const handleLike = async (postId) => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/blogsDetails/${postId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      fetchLikes(postId);
+      setIsLiked(true);
+    } catch (error) {
+      console.error("Error liking the blog:", error);
+    }
+  };
+  useEffect(() => {
+    if(post.postId){
+      fetchLikes(post.postId);
+    }
+  }, [post.postId]);
+
   const deleteBlog = async (id) => {
       const deleteConfirmed = window.confirm("Are you sure you want to delete this blog?");
       if(!deleteConfirmed) return;
@@ -86,6 +127,12 @@ function ViewBlogByUserName() {
                       __html: DOMPurify.sanitize(post.postBody || ""),
                     }}></div></p>
                   <div className="col">
+                    <button
+              className={isLiked? "btn active p-1 btn-outline-primary": "btn p-1 btn-outline-primary"}
+              onClick={() => handleLike(post.postId)}
+            >
+              👍{likes}
+            </button>
                   <button
                   title="Delete Blog"
               className="btn btn-danger mx-2"

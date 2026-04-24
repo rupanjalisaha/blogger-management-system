@@ -30,11 +30,11 @@ export default function ViewBlog() {
       alert("Failed to load blogs. Please try again later.");
     }
   };
-  function getFirst100Words(text) {
+  function getFirst50Words(text) {
     if (!text) return "";
 
     const words = text.trim().split(/\s+/); // split by spaces, tabs, newlines
-    return words.slice(0, 100).join(" ") + (words.length > 100 ? "..." : "");
+    return words.slice(0, 50).join(" ") + (words.length > 100 ? "..." : "");
   }
 
   return (
@@ -81,7 +81,7 @@ export default function ViewBlog() {
                             // sanitize to avoid XSS; DOMPurify is recommended
                             dangerouslySetInnerHTML={{
                               __html: DOMPurify.sanitize(
-                                getFirst100Words(post.postBody) || "",
+                                getFirst50Words(post.postBody) || "",
                               ),
                             }}
                           ></div>

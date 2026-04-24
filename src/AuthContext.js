@@ -1,9 +1,10 @@
 // AuthContext.js
 import { createContext, useState, useEffect } from "react";
 import {jwtDecode} from "jwt-decode";
+import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 export const AuthContext = createContext();
-
+export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(!!localStorage.getItem("token"));
 

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../layout/Navbar";
 import DOMPurify from "dompurify";
-
+import CommentForm from "../Utils/CommentForm";
 function ViewBlogById() {
   const [post, setPost] = useState({
     genre: "",
@@ -156,6 +156,7 @@ function ViewBlogById() {
             >
               👍{likes}
             </button>
+            <CommentForm/>
             {(post.writerUsername === localStorage.getItem("username") ||
               localStorage.getItem("username") === "admin") && (
               <button
