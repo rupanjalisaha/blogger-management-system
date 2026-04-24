@@ -8,34 +8,37 @@ function ViewBlogByUserName() {
   const [post, setPost] = useState([]);
   const Navigate = useNavigate();
   const { username } = useParams();
-  const [likes, setLikes] = useState(0);
+  const [likes, setLikes] = useState({});
   const [isLiked, setIsLiked] = useState(false);
   useEffect(() => {
-    if(username){
+    if (username) {
       loadPost(username);
     }
   }, [username]);
 
   const handleGoBack = () => {
     window.history.back();
-  }
+  };
   const loadPost = async (username) => {
-    try{
-    const result = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/blogsByUser/${username}`,
-      {
-        headers:{
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-      }
-    );
-    setPost(result.data);
-    console.log(result.data);
-  }catch(error){
-    alert('Error! Blog details could not be fetched, having error: '+error.message);
-    console.error("Error loading blog details:", error);
-  }
+    try {
+      const result = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/blogsByUser/${username}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      setPost(result.data);
+      console.log(result.data);
+    } catch (error) {
+      alert(
+        "Error! Blog details could not be fetched, having error: " +
+          error.message,
+      );
+      console.error("Error loading blog details:", error);
+    }
   };
   const fetchLikes = async (postId) => {
     try {
@@ -48,7 +51,10 @@ function ViewBlogByUserName() {
           },
         },
       );
-      setLikes(response.data);
+      setLikes((prev) => ({
+        ...prev,
+        [postId]: response.data,
+      }));
     } catch (error) {
       console.error("Error fetching likes:", error);
     }
@@ -66,95 +72,136 @@ function ViewBlogByUserName() {
         },
       );
       fetchLikes(postId);
-      setIsLiked(true);
+      setIsLiked((prev) => ({
+        ...prev,
+        [postId]: true,
+      }));
     } catch (error) {
       console.error("Error liking the blog:", error);
     }
   };
   useEffect(() => {
-    if(post.postId){
-      fetchLikes(post.postId);
+    if (post.length > 0) {
+      post.forEach((p) => {
+        fetchLikes(p.postId);
+      });
     }
-  }, [post.postId]);
+  }, [post]);
 
   const deleteBlog = async (id) => {
-      const deleteConfirmed = window.confirm("Are you sure you want to delete this blog?");
-      if(!deleteConfirmed) return;
-    try{
-    await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${id}`,{
-        headers:{
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-      });
-    alert('Alert! you just deleted a Blog');
-    window.history.back();
-    }catch(error){
-      alert('Error! Blog could not be deleted, having error: ' + error.message);
+    const deleteConfirmed = window.confirm(
+      "Are you sure you want to delete this blog?",
+    );
+    if (!deleteConfirmed) return;
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      alert("Alert! you just deleted a Blog");
+      window.history.back();
+    } catch (error) {
+      alert("Error! Blog could not be deleted, having error: " + error.message);
       console.error("Error deleting blog:", error);
     }
   };
-  
+
   const handleEditBlog = (postId) => {
-      Navigate(`/editBlog/${postId}`);
-      }
+    Navigate(`/editBlog/${postId}`);
+  };
   return (
     <div>
       <Navbar />
       <div className="container">
         <div className="row">
-
           <div
             className="offset-md-3 border rounded p-4 mt-2 shadow"
             style={{ width: "70%", marginLeft: "15%" }}
           >
-            
             <h2 className="text-center m-4">Blog Details</h2>
             <div className="card shadow mb-4">
               {post.map((post, index) => (
                 <div key={index} className="card shadow mb-4">
-                  <h4>Blog: {index+1}</h4>
+                  <h4>Blog: {index + 1}</h4>
                   <h5>Writer_username: {post.writerUsername}</h5>
-                  <h5 style={{fontWeight:"bold"}}>Title:  {post.postTitle}</h5>
-                  <p>Content: <div style={{
-                      fontSize: "18px",
-                      padding: "10px",
-                      textAlign: "justify",
-                      fontFamily: "Times New Roman",
-                      fontWeight: "normal"
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(post.postBody || ""),
-                    }}></div></p>
+                  <h5 style={{ fontWeight: "bold" }}>
+                    Title: {post.postTitle}
+                  </h5>
+                  <p>
+                    Content:{" "}
+                    <div
+                      style={{
+                        fontSize: "18px",
+                        padding: "10px",
+                        textAlign: "justify",
+                        fontFamily: "Times New Roman",
+                        fontWeight: "normal",
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(post.postBody || ""),
+                      }}
+                    ></div>
+                  </p>
                   <div className="col">
                     <button
-              className={isLiked? "btn active p-1 btn-outline-primary": "btn p-1 btn-outline-primary"}
-              onClick={() => handleLike(post.postId)}
-            >
-              👍{likes}
-            </button>
-                  <button
-                  title="Delete Blog"
-              className="btn btn-danger mx-2"
-              onClick={() => deleteBlog(post.postId)} disabled={post.writerUsername !== localStorage.getItem("username") || localStorage.getItem("username") === "admin"}
-            >
-              🗑️ Delete
-            </button>
-            <button title="Edit Blog" className="btn btn-primary mx-2" onClick={()=>handleEditBlog(post.postId)} disabled={post.writerUsername !== localStorage.getItem("username")}>
-              🖍 Edit
-            </button>
-                </div>
+                      className={
+                        isLiked[post.postId]
+                          ? "btn active p-1 btn-outline-primary"
+                          : "btn p-1 btn-outline-primary"
+                      }
+                      onClick={() => handleLike(post.postId)}
+                    >
+                      👍{likes[post.postId] || 0}
+                    </button>
+                    <button
+                      title="Delete Blog"
+                      className="btn btn-danger mx-2"
+                      onClick={() => deleteBlog(post.postId)}
+                      disabled={
+                        post.writerUsername !==
+                          localStorage.getItem("username") ||
+                        localStorage.getItem("username") === "admin"
+                      }
+                    >
+                      🗑️ Delete
+                    </button>
+                    <button
+                      title="Edit Blog"
+                      className="btn btn-primary mx-2"
+                      onClick={() => handleEditBlog(post.postId)}
+                      disabled={
+                        post.writerUsername !== localStorage.getItem("username")
+                      }
+                    >
+                      🖍 Edit
+                    </button>
+                  </div>
                 </div>
               ))}
-              
-            <Link title="Write New Blog" className="btn btn-outline-primary m-2 px-4" to="/writeBlogs">
-              ✍︎ Write
-            </Link>
-            <button title="Go Back" className="btn btn-outline-secondary m-2 px-4" onClick={handleGoBack}>🔙</button>
+
+              <Link
+                title="Write New Blog"
+                className="btn btn-outline-primary m-2 px-4"
+                to="/writeBlogs"
+              >
+                ✍︎ Write
+              </Link>
+              <button
+                title="Go Back"
+                className="btn btn-outline-secondary m-2 px-4"
+                onClick={handleGoBack}
+              >
+                🔙
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }
