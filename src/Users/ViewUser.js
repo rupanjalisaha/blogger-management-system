@@ -68,7 +68,6 @@ export default function ViewUser() {
           <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
             <h2 className="text-center m-4">User Details</h2>
             <div className="card shadow mb-4">
-              <h4 className="mt-4">Details of User id:{user.id}</h4>
               <ul className="list-group list-group-flush m-2">
                 <li className="list-group-item m-2">
                   <b className="p-4">Username:</b>

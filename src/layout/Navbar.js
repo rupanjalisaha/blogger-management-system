@@ -32,17 +32,17 @@ export default function Navbar() {
             aria-label="Toggle navigation"
           ></button>
           <Link className="btn btn-outline-light ms-auto" to="/details" style={{padding:"10px 10px 10px 10px", fontSize:"18px"}}>
-            Home
+            Home 🈴
           </Link>
           <Link className="btn btn-outline-light" to="/viewBlogs" style={{padding:"10px 10px 10px 10px", fontSize:"18px"}}>
-            Blog Page
+            Blogs 📑
           </Link>
           <button
             className="btn btn-outline-light"
             style={{padding:"10px 10px 10px 10px", fontSize:"18px"}}
             onClick={handleLogout}
           >
-            Log Out
+            Log Out【﻿⏻】
           </button>
         </div>
         

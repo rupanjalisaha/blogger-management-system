@@ -118,7 +118,6 @@ function ViewBlogById() {
           >
             <h2 className="text-center m-4">Blog Details</h2>
             <div className="card shadow mb-4">
-              <h4 className="mt-4">Details of Blog id:{post.postId}</h4>
               <ul className="list-group list-group-flush m-2">
                 <li className="list-group-item m-2">
                   <b className="p-4">Writer_username:</b>

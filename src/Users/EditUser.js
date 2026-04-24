@@ -355,7 +355,7 @@ if(!isAdmin){
                 onClick={() => handleDeleteProfileImage(user.id)}
                 disabled={!isSameUser}
               >
-                🗑️ Delete
+                🗑️ Delete Profile Image
               </button>
               <button
               title="Submit Changes"
