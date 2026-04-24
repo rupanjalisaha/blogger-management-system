@@ -91,17 +91,17 @@ function ViewBlogByUserName() {
               className="btn btn-danger mx-2"
               onClick={() => deleteBlog(post.postId)} disabled={post.writerUsername !== localStorage.getItem("username") || localStorage.getItem("username") === "admin"}
             >
-              🗑️
+              🗑️ Delete
             </button>
             <button title="Edit Blog" className="btn btn-primary mx-2" onClick={()=>handleEditBlog(post.postId)} disabled={post.writerUsername !== localStorage.getItem("username")}>
-              🖍
+              🖍 Edit
             </button>
                 </div>
                 </div>
               ))}
               
             <Link title="Write New Blog" className="btn btn-outline-primary m-2 px-4" to="/writeBlogs">
-              ✍︎
+              ✍︎ Write
             </Link>
             <button title="Go Back" className="btn btn-outline-secondary m-2 px-4" onClick={handleGoBack}>🔙</button>
           </div>

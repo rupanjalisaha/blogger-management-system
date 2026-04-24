@@ -164,7 +164,7 @@ function ViewBlogById() {
                 className="btn btn-danger mx-2"
                 onClick={() => deleteBlog(post.postId)}
               >
-                🗑️
+                🗑️ Delete
               </button>
             )}
             {post.writerUsername === localStorage.getItem("username") && (
@@ -173,7 +173,7 @@ function ViewBlogById() {
                 className="btn btn-outline-primary mx-2"
                 onClick={() => handleEditBlog(post.postId)}
               >
-                🖍
+                🖍 Edit
               </button>
             )}
             <Link title = "Back to Blog List" className="btn btn-outline-primary m-2 px-4" to="/viewBlogs">

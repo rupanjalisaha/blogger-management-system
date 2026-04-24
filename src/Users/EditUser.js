@@ -355,7 +355,7 @@ if(!isAdmin){
                 onClick={() => handleDeleteProfileImage(user.id)}
                 disabled={!isSameUser}
               >
-                🗑️
+                🗑️ Delete
               </button>
               <button
               title="Submit Changes"
@@ -363,10 +363,10 @@ if(!isAdmin){
                 type="submit"
                 disabled={!isSameUser && !isAdmin}
               >
-                ✅️
+                ✅️ Submit
               </button>
               <Link title="Cancel" className="btn btn-outline-danger" to="/details">
-                🗙
+                🗙 Cancel
               </Link>
             </form>
             <p style={{ color: "red" }}>{errorMessage}</p>

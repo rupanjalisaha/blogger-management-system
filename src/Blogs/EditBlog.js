@@ -413,10 +413,10 @@ function EditBlog() {
         </div>
         }
               <button title="Submit" className="btn btn-outline-primary m-3" type="submit">
-                ✔
+                ✔ Submit
               </button>
               <Link title="Cancel" className="btn btn-outline-danger" to="/viewBlogs">
-                🗙
+                🗙 Cancel
               </Link>
             </form>
           </div>

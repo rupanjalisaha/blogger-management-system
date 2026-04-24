@@ -69,7 +69,7 @@ const ProfileImageUpload = ({ bloggerId, onUploadSuccess, username }) => {
         onClick={handleUpload}
         disabled={loading || !isSameUser}
       >
-        {loading ? "Uploading..." : "Update"}
+        {loading ? "Uploading..." : "Update 🪪"}
       </button>
     </div>
   );

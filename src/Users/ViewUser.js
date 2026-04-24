@@ -102,7 +102,7 @@ export default function ViewUser() {
                 className="btn btn-outline-primary m-2 px-4"
                 onClick={() => handleViewImage(user.id)}
               >
-                🪪
+                🪪 Profile Image
               </button>
               {imageUrl && (
                 <div className="mb-3">
@@ -122,7 +122,7 @@ export default function ViewUser() {
               className="btn btn-primary mx-2"
               to={`/viewBlogByUserName/${user.username}`}
             >
-              📖
+              📖 Read Blogs
             </Link>
             <Link title="Back to Home" className="btn btn-outline-primary m-2 px-4" to="/details">
               🏠︎

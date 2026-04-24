@@ -517,7 +517,7 @@ export default function BlogPage() {
           className="btn btn-outline-primary m-3"
           style={{ width: "100px" }}
         >
-          Submit
+          ✔ Submit
         </button>
       </form>
       <button

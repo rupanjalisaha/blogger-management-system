@@ -68,7 +68,7 @@ export default function ViewBlog() {
                         </p>
                         <p className="card-text">
                           <strong>📝 Summary:</strong>
-                          {getFirst100Words(post.postContent)}
+                          {getFirst100Words(post.postBody)}
                         </p>
                       </div>
                       <div className="card-footer bg-white border-0">
