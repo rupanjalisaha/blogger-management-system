@@ -469,6 +469,7 @@ function ViewBlogById() {
               >
                 <input
                   type="text"
+                  width="80%"
                   className="form-control"
                   id="comment"
                   value={comment}
