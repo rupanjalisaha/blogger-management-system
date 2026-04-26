@@ -335,7 +335,7 @@ function ViewBlogByUserName() {
                     </Modal>
                     <button
                       title="Make a comment"
-                      className="btn btn-outline-primary m-2 px-4"
+                      className="btn btn-primary m-2 px-4"
                       onClick={() => handleComments()}
                     >
                       Comment 💬
@@ -344,13 +344,13 @@ function ViewBlogByUserName() {
                       <form onSubmit={() => handleSubmitComment(post.postId, comment)}>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control mx-2"
                           id="comment"
                           value={comment}
                           placeholder="Write a comment..."
                           onChange={(e) => setComment(e.target.value)}
                         />
-                        <button type="submit">Submit</button>
+                        <button className="btn p-1 btn-outline-primary my-2" type="submit">Submit</button>
                       </form>
                     )}
                   </div>
