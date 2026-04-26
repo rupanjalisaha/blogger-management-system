@@ -51,14 +51,17 @@ export default function BlogPage() {
     return editorRef.current.contains(range.commonAncestorContainer);
   };
 
-  const countWords= async(char)=>{
+  const countWords= (char)=>{
+    if (typeof char !== "string") return 0;
     const text = char.replace(/<[^>]+>/g, "").trim();
     const words = text.split(/\s+/).filter(Boolean);
     return words.length;
   }
-  if (countWords(post.postBody) < 1000) {
+  
+  const wordCount = countWords(post.postBody);
+  if (wordCount < 1000) {
     errorMessage = "* Article content must be at least 1000 words long to rank in SEO";
-  }else if (countWords(post.postBody) > 5000) {
+  }else if (wordCount > 5000) {
     errorMessage = "* Article content shall not exceed 5000 words for SEO rankings";
   } else if (
     postBody &&
@@ -298,7 +301,7 @@ export default function BlogPage() {
           role="textbox"
           required
           minLength={1000}
-          maxLength={2500}
+          maxLength={5000}
           aria-multiline="true"
           aria-label="Blog content editor"
           onInput={handleInput}
