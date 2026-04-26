@@ -249,6 +249,28 @@ function ViewBlogByUserName() {
 
   return past.toLocaleDateString();
 };
+const handleDeleteComment = async (postId) => {
+  const deleteConfirmed = window.confirm(
+    "Are you sure you want to delete this comment?",
+  );
+  if (!deleteConfirmed) return;
+  try {
+    await axios.delete(
+      `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/removeComments/${postId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+    alert("Comment deleted successfully!");
+    fetchComments(postId);
+  } catch (error) {
+    alert("Error! Comment could not be deleted, having error: " + error.message);
+    console.error("Error deleting comment:", error);
+  }
+}
   return (
     <div>
       <Navbar />
@@ -395,9 +417,11 @@ function ViewBlogByUserName() {
                           <div key={c.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
                             <div>
                             <p><strong>{c.username}:</strong></p>
-                            <button style={{border:"solid 1px black", borderRadius:"10%", marginLeft:"5%", padding:"2px", backgroundColor:"ButtonShadow"}}> {c.content}</button><Link style={{marginLeft:"2%", marginTop:"2%"}}>Reply</Link>
+                            <button style={{border:"solid 1px black", borderRadius:"50%", marginLeft:"5%", padding:"5px", backgroundColor:"ButtonShadow"}}> {c.content}</button>
+                            <p style={{marginLeft:"5%", marginTop:"2%", fontSize:"14px"}}>{timeAgo(c.createdAt)}</p>
+                            <button className="btn p-1 btn-outline-primary mt-2 mx-5">Reply</button>
+                            <button className="btn p-1 btn-outline-danger mt-2 mx-10" onClick={()=>handleDeleteComment(post.postId)}>Delete</button>
                             </div>
-                            <p style={{marginLeft:"80%", fontSize:"14px"}}>{timeAgo(c.createdAt)}</p>
                           </div>
                         ))}
                       </div>
