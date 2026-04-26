@@ -313,7 +313,7 @@ export default function BlogPage() {
             overflowWrap: "break-word",
           }}
         />
-        <p style={{color: (countWords(post.postBody.length)>999 && countWords(post.postBody.length)<5001)?"green":"red"}}>Word Count: {countWords(post.postBody.length)}</p>
+        <p style={{color: (countWords(post.postBody)>999 && countWords(post.postBody)<5001)?"green":"red"}}>Word Count: {countWords(post.postBody)}</p>
         {!viewTextEditor?<button className="btn btn-primary" 
         style={{fontFamily: "Times New Roman",
               fontWeight: "bold",
