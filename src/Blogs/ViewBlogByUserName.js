@@ -318,6 +318,7 @@ function ViewBlogByUserName() {
                       }}
                     ></div>
                   </p>
+                  <p style={{marginLeft:"80%"}}>Posted on: {post.createdAt}</p>
                   <p style={{marginLeft:"80%"}}>Reading time: {readingTime(post.postBody)} mins</p>
                   <div className="col">
                     <button

@@ -94,7 +94,8 @@ export default function ViewBlog() {
                             }}
                           ></div>
                         </p>
-                        <p>Reading time:{readingTime(post.postBody)}</p>
+                        <p style={{textAlign:"right", marginLeft:"10%"}}>Posted On: {post.createdAt}</p>
+                        <p style={{textAlign:"right", marginLeft:"10%"}}>Reading time: {readingTime(post.postBody)} mins</p>
                       </div>
                       <div className="card-footer bg-white border-0">
                         <Link

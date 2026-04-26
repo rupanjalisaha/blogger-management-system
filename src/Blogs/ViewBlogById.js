@@ -140,6 +140,19 @@ function ViewBlogById() {
     }
   }, [post.postId]);
 
+  if (!localStorage.getItem("sessionId")) {
+    localStorage.setItem("sessionId", crypto.randomUUID());
+  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      axios.post(`/api/posts/${post.postId}/view`, {
+        sessionId: localStorage.getItem("sessionId"),
+      });
+    }, 5000); // user stayed 5 seconds
+
+    return () => clearTimeout(timer);
+  }, [post.postId]);
+
   const getShareUrl = (postId) => {
     return `${window.location.origin}/post/${postId}`;
   };
@@ -262,13 +275,13 @@ function ViewBlogById() {
       console.error("Error deleting comment:", error);
     }
   };
-  const countWords= (char)=>{
+  const countWords = (char) => {
     if (typeof char !== "string") return 0;
     const text = char.replace(/<[^>]+>/g, "").trim();
     const words = text.split(/\s+/).filter(Boolean);
     return words.length;
-  }
-  const readingTime = Math.ceil((countWords(post.postBody))/200);
+  };
+  const readingTime = Math.ceil(countWords(post.postBody) / 200);
   return (
     <div>
       <Navbar />
@@ -311,7 +324,10 @@ function ViewBlogById() {
                   ></div>
                 </li>
               </ul>
-              <p style={{marginLeft:"80%"}}>Reading time: {readingTime} mins</p>
+              <p style={{ marginLeft: "80%" }}>Posted on: {post.createdAt}</p>
+              <p style={{ marginLeft: "80%" }}>
+                Reading time: {readingTime} mins
+              </p>
             </div>
             <button
               className={
