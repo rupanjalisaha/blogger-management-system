@@ -12,6 +12,8 @@ function ViewBlogByUserName() {
   const [likes, setLikes] = useState({});
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isCommentClicked, setIsCommentClicked] = useState(false);
+  const [comment, setComment] = useState("");
   useEffect(() => {
     if (username) {
       loadPost(username);
@@ -46,6 +48,10 @@ function ViewBlogByUserName() {
       top: "5px",
       right: "5px",
     },
+  };
+
+  const handleComments = async () => {
+    setIsCommentClicked(true);
   };
   const handleGoBack = () => {
     window.history.back();
@@ -122,16 +128,16 @@ function ViewBlogByUserName() {
 
   const getShareUrl = (postId) => {
     return `${window.location.origin}/post/${postId}`;
-  }
-  const getText = (postTitle)=>{
+  };
+  const getText = (postTitle) => {
     return encodeURIComponent(postTitle);
-  }
+  };
 
-  const handleNativeShare = async (postId) => {
+  const handleNativeShare = async (postId, postTitle) => {
     await navigator.clipboard.writeText(getShareUrl(postId));
     if (navigator.share) {
       await navigator.share({
-        title: post.title,
+        title: postTitle,
         url: getShareUrl(postId),
       });
     }
@@ -166,7 +172,11 @@ function ViewBlogByUserName() {
     return (
       <div style={styles.overlay}>
         <div style={styles.modal}>
-          <button className="btn p-1 btn-outline-primary" onClick={onClose} style={styles.closeBtn}>
+          <button
+            className="btn p-1 btn-outline-primary"
+            onClick={onClose}
+            style={styles.closeBtn}
+          >
             X
           </button>
           {children}
@@ -177,6 +187,20 @@ function ViewBlogByUserName() {
   const handleEditBlog = (postId) => {
     Navigate(`/editBlog/${postId}`);
   };
+  const handleSubmitComment = async(postId, comment)=>{
+    const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${postId}/comments`, comment, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if(res.status === 200){
+      alert("Comment added successfully!");
+      setIsCommentClicked(false);
+    } else {
+      alert("Failed to add comment. Please try again.");
+    }
+  }
   return (
     <div>
       <Navbar />
@@ -221,6 +245,29 @@ function ViewBlogByUserName() {
                     >
                       👍{likes[post.postId] || 0}
                     </button>
+
+                    <button
+                      title="Delete Blog"
+                      className="btn btn-danger mx-2"
+                      onClick={() => deleteBlog(post.postId)}
+                      disabled={
+                        post.writerUsername !==
+                          localStorage.getItem("username") ||
+                        localStorage.getItem("username") === "admin"
+                      }
+                    >
+                      🗑️ Delete
+                    </button>
+                    <button
+                      title="Edit Blog"
+                      className="btn btn-primary mx-2"
+                      onClick={() => handleEditBlog(post.postId)}
+                      disabled={
+                        post.writerUsername !== localStorage.getItem("username")
+                      }
+                    >
+                      🖍 Edit
+                    </button>
                     <button
                       className="btn p-1 btn-primary mx-2"
                       style={{ marginLeft: "5px" }}
@@ -229,7 +276,14 @@ function ViewBlogByUserName() {
                       ↩️share
                     </button>
                     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                      <button className="btn p-1 btn-outline-primary mx-2" onClick={()=>handleNativeShare(post.postId)}>Share</button>
+                      <button
+                        className="btn p-1 btn-outline-primary mx-2"
+                        onClick={() =>
+                          handleNativeShare(post.postId, post.title)
+                        }
+                      >
+                        Share
+                      </button>
 
                       <button
                         className="btn p-1 btn-outline-primary mx-2"
@@ -270,7 +324,9 @@ function ViewBlogByUserName() {
                       <button
                         className="btn p-1 btn-outline-primary mx-2"
                         onClick={async () => {
-                          await navigator.clipboard.writeText(getShareUrl(post.postId));
+                          await navigator.clipboard.writeText(
+                            getShareUrl(post.postId),
+                          );
                           alert("Copied!");
                         }}
                       >
@@ -278,27 +334,25 @@ function ViewBlogByUserName() {
                       </button>
                     </Modal>
                     <button
-                      title="Delete Blog"
-                      className="btn btn-danger mx-2"
-                      onClick={() => deleteBlog(post.postId)}
-                      disabled={
-                        post.writerUsername !==
-                          localStorage.getItem("username") ||
-                        localStorage.getItem("username") === "admin"
-                      }
+                      title="Make a comment"
+                      className="btn btn-outline-primary m-2 px-4"
+                      onClick={() => handleComments()}
                     >
-                      🗑️ Delete
+                      Comment 💬
                     </button>
-                    <button
-                      title="Edit Blog"
-                      className="btn btn-primary mx-2"
-                      onClick={() => handleEditBlog(post.postId)}
-                      disabled={
-                        post.writerUsername !== localStorage.getItem("username")
-                      }
-                    >
-                      🖍 Edit
-                    </button>
+                    {isCommentClicked && (
+                      <form onSubmit={() => handleSubmitComment(post.postId, comment)}>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="comment"
+                          value={comment}
+                          placeholder="Write a comment..."
+                          onChange={(e) => setComment(e.target.value)}
+                        />
+                        <button type="submit">Submit</button>
+                      </form>
+                    )}
                   </div>
                 </div>
               ))}
@@ -310,6 +364,7 @@ function ViewBlogByUserName() {
               >
                 ✍︎ Write
               </Link>
+
               <button
                 title="Go Back"
                 className="btn btn-outline-secondary m-2 px-4"
