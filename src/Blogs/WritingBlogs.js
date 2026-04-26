@@ -42,8 +42,10 @@ export default function BlogPage() {
     setPost({ ...post, [e.target.id]: e.target.value });
   };
 
-  if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length < 200) {
-    errorMessage = "* Article content must be at least 200 characters long";
+  if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length < 1000) {
+    errorMessage = "* Article content must be at least 1000 characters long";
+  }else if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length > 2500) {
+    errorMessage = "* Article content must not exceed 2500 characters";
   } else if (
     postBody &&
     /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(postBody)
@@ -290,7 +292,8 @@ export default function BlogPage() {
           value={postBody}
           role="textbox"
           required
-          minLength={200}
+          minLength={1000}
+          maxLength={2500}
           aria-multiline="true"
           aria-label="Blog content editor"
           onInput={handleInput}
@@ -305,6 +308,7 @@ export default function BlogPage() {
             overflowWrap: "break-word",
           }}
         />
+        <p style={{color: (post.postBody.length>999 && post.postBody.length<2501)?"green":"red"}}>Word Count: {post.postBody.length}</p>
         {!viewTextEditor?<button className="btn btn-primary" 
         style={{fontFamily: "Times New Roman",
               fontWeight: "bold",
