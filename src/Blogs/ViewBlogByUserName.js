@@ -376,11 +376,12 @@ function ViewBlogByUserName() {
                       Comment 💬
                     </button>
                     {comments[post.postId]?.length > 0 && (
-                      <div>
+                      <div style={{textAlign:"left", marginLeft:"20px"}}>
                         <h3 style={{"fontFamily":"cursive"}}>Comments:</h3>
                         {comments[post.postId].map((c) => (
                           <div key={c.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
-                            <p><strong>{c.username}:</strong> {c.content}</p>
+                            <p><strong>{c.username}:</strong> {c.content}</p><small style={{textAlign:"right"}}>{c.createdAt}</small>
+                            <button>Reply</button>
                           </div>
                         ))}
                       </div>
