@@ -187,8 +187,14 @@ function ViewBlogByUserName() {
   const handleEditBlog = (postId) => {
     Navigate(`/editBlog/${postId}`);
   };
-  const handleSubmitComment = async(postId, comment)=>{
-    const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${postId}/comments`, comment, {
+  const handleSubmitComment = async(postId, comment, parentId = null)=>{
+    const query = new URLSearchParams({
+      postId: postId,
+      comment,
+      parentId: parentId || "",
+    }).toString();
+    
+    const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/comments?${query}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
