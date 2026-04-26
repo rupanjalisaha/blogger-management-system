@@ -310,7 +310,7 @@ function ViewBlogByUserName() {
                       }}
                     ></div>
                   </p>
-                  <p style={{marginLeft:"80%"}}>Reading time: {(post.postBody.length)/200} mins</p>
+                  <p style={{marginLeft:"80%"}}>Reading time: {Math.ceil((post.postBody.length)/200)} mins</p>
                   <div className="col">
                     <button
                       className={
