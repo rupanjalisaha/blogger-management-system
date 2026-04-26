@@ -190,11 +190,10 @@ function ViewBlogByUserName() {
   const handleSubmitComment = async(postId, comment, parentId = null)=>{
     const query = new URLSearchParams({
       postId: postId,
-      comment,
       parentId: parentId || "",
     }).toString();
     
-    const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/comments?${query}`, {
+    const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/comments?${query}`, comment, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -202,7 +201,6 @@ function ViewBlogByUserName() {
     });
     if(res.status === 200){
       alert("Comment added successfully!");
-      setIsCommentClicked(false);
     } else {
       alert("Failed to add comment. Please try again.");
     }
@@ -350,7 +348,7 @@ function ViewBlogByUserName() {
                       <form onSubmit={() => handleSubmitComment(post.postId, comment)}>
                         <input
                           type="text"
-                          className="form-control m-2"
+                          className="form-control"
                           id="comment"
                           value={comment}
                           placeholder="Write a comment..."
