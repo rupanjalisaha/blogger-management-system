@@ -262,7 +262,13 @@ function ViewBlogById() {
       console.error("Error deleting comment:", error);
     }
   };
-  const readingTime = Math.ceil((post.postBody.length)/200);
+  const countWords= (char)=>{
+    if (typeof char !== "string") return 0;
+    const text = char.replace(/<[^>]+>/g, "").trim();
+    const words = text.split(/\s+/).filter(Boolean);
+    return words.length;
+  }
+  const readingTime = Math.ceil((countWords(post.postBody))/200);
   return (
     <div>
       <Navbar />

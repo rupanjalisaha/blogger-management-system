@@ -277,6 +277,14 @@ function ViewBlogByUserName() {
       console.error("Error deleting comment:", error);
     }
   };
+  const countWords= (char)=>{
+    if (typeof char !== "string") return 0;
+    const text = char.replace(/<[^>]+>/g, "").trim();
+    const words = text.split(/\s+/).filter(Boolean);
+    return words.length;
+  }
+  const readingTime =(postBody)=> Math.ceil((countWords(postBody))/200);
+  
   return (
     <div>
       <Navbar />
@@ -310,7 +318,7 @@ function ViewBlogByUserName() {
                       }}
                     ></div>
                   </p>
-                  <p style={{marginLeft:"80%"}}>Reading time: {Math.ceil((post.postBody.length)/200)} mins</p>
+                  <p style={{marginLeft:"80%"}}>Reading time: {readingTime(post.postBody)} mins</p>
                   <div className="col">
                     <button
                       className={
