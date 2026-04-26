@@ -321,16 +321,17 @@ function ViewBlogByUserName() {
                     >
                       👍{likes[post.postId] || 0}
                     </button>
-                    {post.writerUsername === localStorage.getItem("username") ||
-                      (localStorage.getItem("username") === "admin" && (
-                        <button
-                          title="Delete Blog"
-                          className="btn btn-danger mx-2"
-                          onClick={() => deleteBlog(post.postId)}
-                        >
-                          🗑️ Delete
-                        </button>
-                      ))}
+                    {(post.writerUsername ===
+                      localStorage.getItem("username") ||
+                      localStorage.getItem("username") === "admin") && (
+                      <button
+                        title="Delete Blog"
+                        className="btn btn-danger mx-2"
+                        onClick={() => deleteBlog(post.postId)}
+                      >
+                        🗑️ Delete
+                      </button>
+                    )}
                     {post.writerUsername !==
                       localStorage.getItem("username") && (
                       <button
@@ -466,7 +467,7 @@ function ViewBlogByUserName() {
                                     handleDeleteComment(post.postId, c.id)
                                   }
                                 >
-                                  Delete
+                                🗑️ Delete
                                 </button>
                               )}
                             </div>
