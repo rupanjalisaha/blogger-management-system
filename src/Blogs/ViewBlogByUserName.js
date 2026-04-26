@@ -237,6 +237,18 @@ function ViewBlogByUserName() {
     fetchComments(postId);
     setComment("");
   }
+  const timeAgo = (dateString) => {
+  const now = new Date();
+  const past = new Date(dateString);
+  const diff = Math.floor((now - past) / 1000);
+
+  if (diff < 60) return `${diff}s ago`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  if (diff < 2592000) return `${Math.floor(diff / 86400)}d ago`;
+
+  return past.toLocaleDateString();
+};
   return (
     <div>
       <Navbar />
@@ -383,9 +395,9 @@ function ViewBlogByUserName() {
                           <div key={c.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
                             <div>
                             <p><strong>{c.username}:</strong></p>
-                            <button style={{border:"solid 1px black", borderRadius:"5%", backgroundColor:"ButtonShadow"}}> {c.content}</button><Link style={{marginLeft:"5%", marginTop:"2%"}}>Reply</Link>
+                            <button style={{border:"solid 1px black", borderRadius:"10%", marginLeft:"5%", padding:"2px", backgroundColor:"ButtonShadow"}}> {c.content}</button><Link style={{marginLeft:"2%", marginTop:"2%"}}>Reply</Link>
                             </div>
-                            <p style={{marginLeft:"80%", fontSize:"14px"}}>{c.createdAt}</p>
+                            <p style={{marginLeft:"80%", fontSize:"14px"}}>{timeAgo(c.createdAt)}</p>
                           </div>
                         ))}
                       </div>
