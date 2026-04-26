@@ -37,6 +37,14 @@ export default function ViewBlog() {
     return words.slice(0, 100).join(" ") + (words.length > 100 ? "..." : "");
   }
 
+  const countWords= (char)=>{
+    if (typeof char !== "string") return 0;
+    const text = char.replace(/<[^>]+>/g, "").trim();
+    const words = text.split(/\s+/).filter(Boolean);
+    return words.length;
+  }
+  const readingTime =(postBody)=> Math.ceil((countWords(postBody))/200);
+
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
@@ -86,6 +94,7 @@ export default function ViewBlog() {
                             }}
                           ></div>
                         </p>
+                        <p>Reading time:{readingTime(post.postBody)}</p>
                       </div>
                       <div className="card-footer bg-white border-0">
                         <Link
