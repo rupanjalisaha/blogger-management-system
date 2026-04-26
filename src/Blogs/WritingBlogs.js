@@ -57,9 +57,9 @@ export default function BlogPage() {
     return words.length;
   }
   if (countWords(post.postBody.length) < 1000) {
-    errorMessage = "* Article content must be at least 1000 characters long";
-  }else if (countWords(post.postBody.length) > 2500) {
-    errorMessage = "* Article content must not exceed 2500 characters";
+    errorMessage = "* Article content must be at least 1000 words long to rank in SEO";
+  }else if (countWords(post.postBody.length) > 5000) {
+    errorMessage = "* Article content shall not exceed 5000 words for SEO rankings";
   } else if (
     postBody &&
     /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(postBody)
@@ -313,7 +313,7 @@ export default function BlogPage() {
             overflowWrap: "break-word",
           }}
         />
-        <p style={{color: (countWords(post.postBody.length)>999 && countWords(post.postBody.length)<2501)?"green":"red"}}>Word Count: {countWords(post.postBody.length)}</p>
+        <p style={{color: (countWords(post.postBody.length)>999 && countWords(post.postBody.length)<5001)?"green":"red"}}>Word Count: {countWords(post.postBody.length)}</p>
         {!viewTextEditor?<button className="btn btn-primary" 
         style={{fontFamily: "Times New Roman",
               fontWeight: "bold",
