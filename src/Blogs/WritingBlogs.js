@@ -42,9 +42,23 @@ export default function BlogPage() {
     setPost({ ...post, [e.target.id]: e.target.value });
   };
 
-  if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length < 1000) {
+  // helper to ensure selection is inside editor
+  const selectionInsideEditor = () => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return false;
+    const range = sel.getRangeAt(0);
+    if (!editorRef.current) return false;
+    return editorRef.current.contains(range.commonAncestorContainer);
+  };
+
+  const countWords= async(char)=>{
+    const text = char.replace(/<[^>]+>/g, "").trim();
+    const words = text.split(/\s+/).filter(Boolean);
+    return words.length;
+  }
+  if (countWords(post.postBody.length) < 1000) {
     errorMessage = "* Article content must be at least 1000 characters long";
-  }else if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length > 2500) {
+  }else if (countWords(post.postBody.length) > 2500) {
     errorMessage = "* Article content must not exceed 2500 characters";
   } else if (
     postBody &&
@@ -61,15 +75,6 @@ export default function BlogPage() {
     errorMessage =
       "Title contains disallowed scripts. Please remove any <script> tags";
   }
-  // helper to ensure selection is inside editor
-  const selectionInsideEditor = () => {
-    const sel = window.getSelection();
-    if (!sel || sel.rangeCount === 0) return false;
-    const range = sel.getRangeAt(0);
-    if (!editorRef.current) return false;
-    return editorRef.current.contains(range.commonAncestorContainer);
-  };
-
   const applyCommand = (command) => {
     // Only apply formatting when selection is inside editor
     if (!selectionInsideEditor()) {
@@ -308,7 +313,7 @@ export default function BlogPage() {
             overflowWrap: "break-word",
           }}
         />
-        <p style={{color: (post.postBody.length>999 && post.postBody.length<2501)?"green":"red"}}>Word Count: {post.postBody.length}</p>
+        <p style={{color: (countWords(post.postBody.length)>999 && countWords(post.postBody.length)<2501)?"green":"red"}}>Word Count: {countWords(post.postBody.length)}</p>
         {!viewTextEditor?<button className="btn btn-primary" 
         style={{fontFamily: "Times New Roman",
               fontWeight: "bold",
