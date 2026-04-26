@@ -417,8 +417,8 @@ const handleDeleteComment = async (postId) => {
                           <div key={c.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
                             <div>
                             <p><strong>{c.username}:</strong></p>
-                            <button style={{border:"solid 1px black", borderRadius:"50%", marginLeft:"5%", padding:"5px", backgroundColor:"ButtonShadow"}}> {c.content}</button>
-                            <p style={{marginLeft:"5%", marginTop:"2%", fontSize:"14px"}}>{timeAgo(c.createdAt)}</p>
+                            <button style={{border:"solid 1px black", borderRadius:"5%", marginLeft:"5%", padding:"5px", backgroundColor:"ButtonShadow"}}> {c.content}</button>
+                            <p style={{marginLeft:"10%", fontSize:"14px"}}>{timeAgo(c.createdAt)}</p>
                             <button className="btn p-1 btn-outline-primary mt-2 mx-5">Reply</button>
                             <button className="btn p-1 btn-outline-danger mt-2 mx-10" onClick={()=>handleDeleteComment(post.postId)}>Delete</button>
                             </div>
