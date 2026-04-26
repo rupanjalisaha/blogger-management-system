@@ -139,12 +139,23 @@ function ViewBlogByUserName() {
         },
       );
       console.log(res.data);
-      setComments(res.data);
+      setComments((prev) => ({
+        ...prev,
+        [postId]: res.data,
+      }));
     } catch (error) {
       console.error("Error fetching comments:", error);
       return [];
     }
   }
+  useEffect(() => {
+    if (post.length > 0) {
+      post.forEach((p) => {
+        fetchComments(p.postId);
+      });
+    }
+  }, [post]);
+
   const getShareUrl = (postId) => {
     return `${window.location.origin}/post/${postId}`;
   };
