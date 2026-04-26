@@ -249,14 +249,14 @@ function ViewBlogByUserName() {
 
   return past.toLocaleDateString();
 };
-const handleDeleteComment = async (postId) => {
+const handleDeleteComment = async (postId,commentId) => {
   const deleteConfirmed = window.confirm(
     "Are you sure you want to delete this comment?",
   );
   if (!deleteConfirmed) return;
   try {
     await axios.delete(
-      `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/removeComments/${postId}`,
+      `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/removeComments/${commentId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -417,10 +417,9 @@ const handleDeleteComment = async (postId) => {
                           <div key={c.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
                             <div>
                             <p><strong>{c.username}:</strong></p>
-                            <button style={{border:"solid 1px black", borderRadius:"5%", marginLeft:"5%", padding:"5px", backgroundColor:"ButtonShadow"}}> {c.content}</button>
-                            <p style={{marginLeft:"10%", fontSize:"14px"}}>{timeAgo(c.createdAt)}</p>
-                            <button className="btn p-1 btn-outline-primary mt-2 mx-5">Reply</button>
-                            <button className="btn p-1 btn-outline-danger mt-2 mx-10" onClick={()=>handleDeleteComment(post.postId)}>Delete</button>
+                            <button style={{border:"solid 1px black", borderRadius:"5%", marginLeft:"5%", padding:"5px", backgroundColor:"ButtonShadow"}}> {c.content}<p style={{marginLeft:"10%", fontSize:"14px"}}>{timeAgo(c.createdAt)}</p></button>
+                            <button className="btn p-1 btn-outline-primary mt-2 mx-10">Reply</button>
+                            <button className="btn p-1 btn-outline-danger mt-2 mx-5" onClick={()=>handleDeleteComment(post.postId,c.id)}>Delete</button>
                             </div>
                           </div>
                         ))}
