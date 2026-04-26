@@ -147,7 +147,7 @@ function ViewBlogByUserName() {
       console.error("Error fetching comments:", error);
       return [];
     }
-  }
+  };
   useEffect(() => {
     if (post.length > 0) {
       post.forEach((p) => {
@@ -217,46 +217,15 @@ function ViewBlogByUserName() {
   const handleEditBlog = (postId) => {
     Navigate(`/editBlog/${postId}`);
   };
-  const handleSubmitComment = async(postId, comment, parentId = null)=>{
+  const handleSubmitComment = async (postId, comment, parentId = null) => {
     const query = new URLSearchParams({
       postId: postId,
       parentId: parentId || "",
     }).toString();
-    
-    const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/comments?${query}`, comment, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    if(res.status === 200){
-      alert("Comment added successfully!");
-    } else {
-      alert("Failed to add comment. Please try again.");
-    }
-    fetchComments(postId);
-    setComment("");
-  }
-  const timeAgo = (dateString) => {
-  const now = new Date();
-  const past = new Date(dateString);
-  const diff = Math.floor((now - past) / 1000);
 
-  if (diff < 60) return `${diff}s ago`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  if (diff < 2592000) return `${Math.floor(diff / 86400)}d ago`;
-
-  return past.toLocaleDateString();
-};
-const handleDeleteComment = async (postId,commentId) => {
-  const deleteConfirmed = window.confirm(
-    "Are you sure you want to delete this comment?",
-  );
-  if (!deleteConfirmed) return;
-  try {
-    await axios.delete(
-      `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/removeComments/${commentId}`,
+    const res = await axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/comments?${query}`,
+      comment,
       {
         headers: {
           "Content-Type": "application/json",
@@ -264,13 +233,50 @@ const handleDeleteComment = async (postId,commentId) => {
         },
       },
     );
-    alert("Comment deleted successfully!");
+    if (res.status === 200) {
+      alert("Comment added successfully!");
+    } else {
+      alert("Failed to add comment. Please try again.");
+    }
     fetchComments(postId);
-  } catch (error) {
-    alert("Error! Comment could not be deleted, having error: " + error.message);
-    console.error("Error deleting comment:", error);
-  }
-}
+    setComment("");
+  };
+  const timeAgo = (dateString) => {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diff = Math.floor((now - past) / 1000);
+
+    if (diff < 60) return `${diff}s ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    if (diff < 2592000) return `${Math.floor(diff / 86400)}d ago`;
+
+    return past.toLocaleDateString();
+  };
+  const handleDeleteComment = async (postId, commentId) => {
+    const deleteConfirmed = window.confirm(
+      "Are you sure you want to delete this comment?",
+    );
+    if (!deleteConfirmed) return;
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/removeComments/${commentId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      alert("Comment deleted successfully!");
+      fetchComments(postId);
+    } catch (error) {
+      alert(
+        "Error! Comment could not be deleted, having error: " + error.message,
+      );
+      console.error("Error deleting comment:", error);
+    }
+  };
   return (
     <div>
       <Navbar />
@@ -315,29 +321,26 @@ const handleDeleteComment = async (postId,commentId) => {
                     >
                       👍{likes[post.postId] || 0}
                     </button>
-
-                    <button
-                      title="Delete Blog"
-                      className="btn btn-danger mx-2"
-                      onClick={() => deleteBlog(post.postId)}
-                      disabled={
-                        post.writerUsername !==
-                          localStorage.getItem("username") ||
-                        localStorage.getItem("username") === "admin"
-                      }
-                    >
-                      🗑️ Delete
-                    </button>
-                    <button
-                      title="Edit Blog"
-                      className="btn btn-primary mx-2"
-                      onClick={() => handleEditBlog(post.postId)}
-                      disabled={
-                        post.writerUsername !== localStorage.getItem("username")
-                      }
-                    >
-                      🖍 Edit
-                    </button>
+                    {post.writerUsername === localStorage.getItem("username") ||
+                      (localStorage.getItem("username") === "admin" && (
+                        <button
+                          title="Delete Blog"
+                          className="btn btn-danger mx-2"
+                          onClick={() => deleteBlog(post.postId)}
+                        >
+                          🗑️ Delete
+                        </button>
+                      ))}
+                    {post.writerUsername !==
+                      localStorage.getItem("username") && (
+                      <button
+                        title="Edit Blog"
+                        className="btn btn-primary mx-2"
+                        onClick={() => handleEditBlog(post.postId)}
+                      >
+                        🖍 Edit
+                      </button>
+                    )}
                     <button
                       className="btn p-1 btn-primary mx-2"
                       style={{ marginLeft: "5px" }}
@@ -411,25 +414,73 @@ const handleDeleteComment = async (postId,commentId) => {
                       Comment 💬
                     </button>
                     {comments[post.postId]?.length > 0 && (
-                      <div style={{textAlign:"left", marginLeft:"20px"}}>
-                        <h3 style={{"fontFamily":"cursive"}}>Comments:</h3>
+                      <div style={{ textAlign: "left", marginLeft: "20px" }}>
+                        <h3 style={{ fontFamily: "cursive" }}>Comments:</h3>
                         {comments[post.postId].map((c) => (
-                          <div key={c.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
+                          <div
+                            key={c.id}
+                            style={{
+                              borderBottom: "1px solid #ccc",
+                              padding: "10px 0",
+                            }}
+                          >
                             <div>
-                            <p><strong>{c.username}:</strong></p>
-                            <button style={{border:"solid 1px black", borderRadius:"5%", marginLeft:"5%", padding:"5px", backgroundColor:"ButtonShadow"}}> {c.content}</button><p style={{marginLeft:"10%", fontSize:"14px"}}>{timeAgo(c.createdAt)}</p>
-                            <button className="btn p-1 btn-outline-primary mt-2 mx-10">Reply</button>
-                            <button className="btn p-1 btn-outline-danger mt-2 mx-5" onClick={()=>handleDeleteComment(post.postId,c.id)}>Delete</button>
+                              <p>
+                                <strong>{c.username}:</strong>
+                              </p>
+                              <button
+                                style={{
+                                  border: "solid 1px black",
+                                  borderRadius: "5%",
+                                  marginLeft: "5%",
+                                  padding: "5px",
+                                  backgroundColor: "ButtonShadow",
+                                }}
+                              >
+                                {" "}
+                                {c.content}
+                              </button>
+                              <p
+                                style={{
+                                  marginLeft: "10%",
+                                  marginTop: "2%",
+                                  fontSize: "14px",
+                                }}
+                              >
+                                {timeAgo(c.createdAt)}
+                              </p>
+                              <button
+                                className="btn p-1 btn-outline-primary mt-2"
+                                style={{ marginLeft: "10%" }}
+                              >
+                                Reply
+                              </button>
+                              {(post.writerUsername ===
+                                localStorage.getItem("username") ||
+                                localStorage.getItem("username") ===
+                                  "admin") && (
+                                <button
+                                  className="btn p-1 btn-outline-danger mt-2"
+                                  style={{ marginLeft: "3%" }}
+                                  onClick={() =>
+                                    handleDeleteComment(post.postId, c.id)
+                                  }
+                                >
+                                  Delete
+                                </button>
+                              )}
                             </div>
                           </div>
                         ))}
                       </div>
                     )}
                     {isCommentClicked && (
-                      <form onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSubmitComment(post.postId, comment);
-                      }}>
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleSubmitComment(post.postId, comment);
+                        }}
+                      >
                         <input
                           type="text"
                           className="form-control"
@@ -438,7 +489,12 @@ const handleDeleteComment = async (postId,commentId) => {
                           placeholder="Write a comment..."
                           onChange={(e) => setComment(e.target.value)}
                         />
-                        <button className="btn p-1 btn-outline-primary my-2" type="submit">Post</button>
+                        <button
+                          className="btn p-1 btn-outline-primary my-2"
+                          type="submit"
+                        >
+                          Post
+                        </button>
                       </form>
                     )}
                   </div>
