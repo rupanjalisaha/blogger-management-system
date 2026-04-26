@@ -14,7 +14,7 @@ function ViewBlogByUserName() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCommentClicked, setIsCommentClicked] = useState(false);
   const [comment, setComment] = useState("");
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState({});
   useEffect(() => {
     if (username) {
       loadPost(username);
@@ -246,7 +246,7 @@ function ViewBlogByUserName() {
             style={{ width: "70%", marginLeft: "15%" }}
           >
             <h2 className="text-center m-4">Blog Details</h2>
-            <div className="card shadow mb-4">
+            <div className="card shadow m-4">
               {post.map((post, index) => (
                 <div key={index} className="card shadow mb-4">
                   <h4>Blog: {index + 1}</h4>
@@ -375,18 +375,21 @@ function ViewBlogByUserName() {
                     >
                       Comment 💬
                     </button>
-                    {comments.length > 0 && (
+                    {comments[post.postId]?.length > 0 && (
                       <div>
-                        <h3>Comments:</h3>
-                        {comments.map((c) => (
-                          <div key={c._id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
+                        <h3 style={{"fontFamily":"cursive"}}>Comments:</h3>
+                        {comments[post.postId].map((c) => (
+                          <div key={c.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
                             <p><strong>{c.username}:</strong> {c.content}</p>
                           </div>
                         ))}
                       </div>
                     )}
                     {isCommentClicked && (
-                      <form onSubmit={() => handleSubmitComment(post.postId, comment)}>
+                      <form onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubmitComment(post.postId, comment);
+                      }}>
                         <input
                           type="text"
                           className="form-control"
@@ -395,7 +398,7 @@ function ViewBlogByUserName() {
                           placeholder="Write a comment..."
                           onChange={(e) => setComment(e.target.value)}
                         />
-                        <button className="btn p-1 btn-outline-primary my-2" type="submit">Submit</button>
+                        <button className="btn p-1 btn-outline-primary my-2" type="submit">Post</button>
                       </form>
                     )}
                   </div>
