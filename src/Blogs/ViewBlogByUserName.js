@@ -383,7 +383,7 @@ function ViewBlogByUserName() {
                           <div key={c.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
                             <p><strong>{c.username}:</strong> {c.content}</p>
                             <p style={{marginLeft:"80%", fontSize:"14px"}}>{c.createdAt}</p>
-                            <button className="btn p-1 btn-outline-primary" style={{marginLeft:"50%"}}>Reply</button>
+                            <Link style={{marginLeft:"30%"}}>Reply</Link>
                           </div>
                         ))}
                       </div>
