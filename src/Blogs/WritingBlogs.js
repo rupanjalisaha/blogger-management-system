@@ -56,9 +56,9 @@ export default function BlogPage() {
     const words = text.split(/\s+/).filter(Boolean);
     return words.length;
   }
-  if (countWords(post.postBody.length) < 1000) {
+  if (countWords(post.postBody) < 1000) {
     errorMessage = "* Article content must be at least 1000 words long to rank in SEO";
-  }else if (countWords(post.postBody.length) > 5000) {
+  }else if (countWords(post.postBody) > 5000) {
     errorMessage = "* Article content shall not exceed 5000 words for SEO rankings";
   } else if (
     postBody &&
