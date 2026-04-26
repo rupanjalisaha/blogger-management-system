@@ -262,6 +262,7 @@ function ViewBlogById() {
       console.error("Error deleting comment:", error);
     }
   };
+  const readingTime = (post.postBody.length)/200;
   return (
     <div>
       <Navbar />
@@ -304,6 +305,7 @@ function ViewBlogById() {
                   ></div>
                 </li>
               </ul>
+              <p style={{marginLeft:"80%"}}>Reading time: ${readingTime} mins</p>
             </div>
             <button
               className={
