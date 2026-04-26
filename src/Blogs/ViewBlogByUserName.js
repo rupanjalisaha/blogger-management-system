@@ -14,6 +14,7 @@ function ViewBlogByUserName() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCommentClicked, setIsCommentClicked] = useState(false);
   const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
   useEffect(() => {
     if (username) {
       loadPost(username);
@@ -126,6 +127,24 @@ function ViewBlogByUserName() {
     }
   }, [post]);
 
+  const fetchComments = async (postId) => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/comments/${postId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      console.log(res.data);
+      setComments(res.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      return [];
+    }
+  }
   const getShareUrl = (postId) => {
     return `${window.location.origin}/post/${postId}`;
   };
@@ -204,6 +223,7 @@ function ViewBlogByUserName() {
     } else {
       alert("Failed to add comment. Please try again.");
     }
+    fetchComments(postId);
   }
   return (
     <div>
@@ -344,6 +364,16 @@ function ViewBlogByUserName() {
                     >
                       Comment 💬
                     </button>
+                    {comments.length > 0 && (
+                      <div>
+                        <h3>Comments:</h3>
+                        {comments.map((c) => (
+                          <div key={c._id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
+                            <p><strong>{c.username}:</strong> {c.content}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     {isCommentClicked && (
                       <form onSubmit={() => handleSubmitComment(post.postId, comment)}>
                         <input
