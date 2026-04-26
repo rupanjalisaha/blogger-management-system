@@ -344,7 +344,7 @@ function ViewBlogByUserName() {
                       <form onSubmit={() => handleSubmitComment(post.postId, comment)}>
                         <input
                           type="text"
-                          className="form-control mx-2"
+                          className="form-control m-2"
                           id="comment"
                           value={comment}
                           placeholder="Write a comment..."
