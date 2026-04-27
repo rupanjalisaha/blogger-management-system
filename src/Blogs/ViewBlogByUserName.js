@@ -310,14 +310,39 @@ function ViewBlogByUserName() {
   };
   const readingTime = (postBody) => Math.ceil(countWords(postBody) / 200);
 
-  const getPreviewText = (htmlContent, wordLimit, postId) => {
-    if (!htmlContent) return "";
-    const text = htmlContent.replace(/<[^>]+>/g, " ");
-    const words = text.trim().split(/\s+/);
-    const preview = words.slice(0, wordLimit).join(" ");
-    return preview;
-  };
+  const truncateHTML = (html, wordLimit) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
 
+    let wordCount = 0;
+
+    const walk = (node) => {
+      if (wordCount >= wordLimit) {
+        node.remove();
+        return;
+      }
+
+      if (node.nodeType === Node.TEXT_NODE) {
+        const words = node.textContent.trim().split(/\s+/);
+
+        if (wordCount + words.length > wordLimit) {
+          const remaining = wordLimit - wordCount;
+          node.textContent = words.slice(0, remaining).join(" ") + "...";
+          wordCount = wordLimit;
+        } else {
+          wordCount += words.length;
+        }
+      }
+
+      // Traverse children safely
+      const children = [...node.childNodes];
+      children.forEach(walk);
+    };
+
+    walk(doc.body);
+
+    return doc.body.innerHTML;
+  };
   return (
     <div>
       <Navbar />
@@ -347,7 +372,17 @@ function ViewBlogByUserName() {
                         fontWeight: "normal",
                       }}
                     ></div>
-                    {getPreviewText(post.postBody, 500, post.postId)}
+                    <div
+                      style={{
+                        padding: "10px",
+                        textAlign: "justify",
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(
+                          truncateHTML(post.postBody, 200),
+                        ),
+                      }}
+                    />
                   </p>
                   <p style={{ marginLeft: "80%" }}>
                     Posted on: {formatDate(post.createdAt)}
