@@ -253,6 +253,12 @@ function ViewBlogByUserName() {
 
     return past.toLocaleDateString();
   };
+  const formatDate = (postCreatedAt) => {
+    const formatted = new Date(postCreatedAt).toLocaleString();
+
+    console.log(formatted);
+    return formatted;
+  };
   const handleDeleteComment = async (postId, commentId) => {
     const deleteConfirmed = window.confirm(
       "Are you sure you want to delete this comment?",
@@ -318,7 +324,7 @@ function ViewBlogByUserName() {
                       }}
                     ></div>
                   </p>
-                  <p style={{marginLeft:"80%"}}>Posted on: {post.createdAt}</p>
+                  <p style={{marginLeft:"80%"}}>Posted on: {formatDate(post.createdAt)}</p>
                   <p style={{marginLeft:"80%"}}>Reading time: {readingTime(post.postBody)} mins</p>
                   <div className="col">
                     <button

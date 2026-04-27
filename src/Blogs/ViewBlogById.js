@@ -48,6 +48,12 @@ function ViewBlogById() {
     },
   };
 
+  const formatDate = (postCreatedAt) => {
+    const formatted = new Date(postCreatedAt).toLocaleString();
+
+    console.log(formatted);
+    return formatted;
+  };
   const handleComments = async () => {
     setIsCommentClicked(true);
   };
@@ -324,7 +330,7 @@ function ViewBlogById() {
                   ></div>
                 </li>
               </ul>
-              <p style={{ marginLeft: "80%" }}>Posted on: {post.createdAt}</p>
+              <p style={{ marginLeft: "80%" }}>Posted on: {formatDate(post.createdAt)}</p>
               <p style={{ marginLeft: "80%" }}>
                 Reading time: {readingTime} mins
               </p>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import {
   useNavigate,
@@ -17,8 +17,13 @@ export default function AddUser() {
     role: "",
   });
 
+  const [isChecked, setIsChecked] = useState(false);
+  const checkboxRef = useRef(null);
+  const handleOnChange = () => {
+    checkboxRef.current.focus();
+    setIsChecked(!isChecked);
+  };
   const { username, password, email, fullName, category, message, role } = user;
-
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.id]: e.target.value });
   };
@@ -102,8 +107,12 @@ export default function AddUser() {
   }
   const onSubmit = async (e) => {
     e.preventDefault();
+    if(!isChecked){
+      alert("Your consent is required to proceed.");
+      return;
+    }
     try {
-      if (!errorMessage) {
+      if (!errorMessage && isChecked) {
         const response = await axios.post(
           `${process.env.REACT_APP_BACKEND_URL}/UVB/register`,
           user,
@@ -265,8 +274,8 @@ export default function AddUser() {
                 ))}
               </select>
               {<p>{role}</p>}
+              <label><input type="checkbox" checked={isChecked} ref={checkboxRef} onChange={handleOnChange}/>I agree to share my credentials with UVB portal for verification links, newsletters, post notifications and latest updates</label>
             </div>
-
             <button
               className="btn btn-outline-primary m-3"
               type="submit"
