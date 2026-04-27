@@ -45,7 +45,7 @@ export default function ViewBlog() {
   };
   const readingTime = (postBody) => Math.ceil(countWords(postBody) / 200);
 
-  const formatDate = async (postCreatedAt) => {
+  const formatDate = (postCreatedAt) => {
     const formatted = new Date(postCreatedAt).toLocaleString();
 
     console.log(formatted);
