@@ -154,9 +154,14 @@ function ViewBlogById() {
     const timer = setTimeout(() => {
       axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/views/${post.postId}`,
+        {},
         {
-        sessionId: localStorage.getItem("sessionId"),
-      });
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
       loadPost(); // refresh post to update view count
     }, 5000); // user stayed 5 seconds
 
@@ -343,7 +348,7 @@ function ViewBlogById() {
               className={
                 isLiked
                   ? "btn active p-1 btn-primary"
-                  : "btn p-1 btn-outline-primary"
+                  : "btn p-1 btn-primary"
               }
               onClick={() => handleLike(post.postId)}
             >
@@ -363,7 +368,7 @@ function ViewBlogById() {
             {post.writerUsername === localStorage.getItem("username") && (
               <button
                 title="Edit Blog"
-                className="btn btn-outline-primary mx-2"
+                className="btn btn-primary mx-2"
                 onClick={() => handleEditBlog(post.postId)}
               >
                 🖍 Edit
