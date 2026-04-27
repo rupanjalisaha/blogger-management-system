@@ -37,14 +37,20 @@ export default function ViewBlog() {
     return words.slice(0, 100).join(" ") + (words.length > 100 ? "..." : "");
   }
 
-  const countWords= (char)=>{
+  const countWords = (char) => {
     if (typeof char !== "string") return 0;
     const text = char.replace(/<[^>]+>/g, "").trim();
     const words = text.split(/\s+/).filter(Boolean);
     return words.length;
-  }
-  const readingTime =(postBody)=> Math.ceil((countWords(postBody))/200);
+  };
+  const readingTime = (postBody) => Math.ceil(countWords(postBody) / 200);
 
+  const formatDate = async (postCreatedAt) => {
+    const formatted = new Date(postCreatedAt).toLocaleString();
+
+    console.log(formatted);
+    return formatted;
+  };
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
@@ -94,8 +100,12 @@ export default function ViewBlog() {
                             }}
                           ></div>
                         </p>
-                        <p style={{textAlign:"right", marginLeft:"10%"}}>Posted On: {post.createdAt}</p>
-                        <p style={{textAlign:"right", marginLeft:"10%"}}>Reading time: {readingTime(post.postBody)} mins</p>
+                        <p style={{ textAlign: "right", marginLeft: "10%" }}>
+                          Posted On: {formatDate(post.createdAt)}
+                        </p>
+                        <p style={{ textAlign: "right", marginLeft: "10%" }}>
+                          Reading time: {readingTime(post.postBody)} mins
+                        </p>
                       </div>
                       <div className="card-footer bg-white border-0">
                         <Link
