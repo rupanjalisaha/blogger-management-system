@@ -274,7 +274,7 @@ export default function AddUser() {
                 ))}
               </select>
               {<p>{role}</p>}
-              <label><input type="checkbox" checked={isChecked} ref={checkboxRef} onChange={handleOnChange}/>I agree to share my credentials with UVB portal for verification links, newsletters, post notifications and latest updates</label>
+              <label><input type="checkbox" checked={isChecked} ref={checkboxRef} onChange={handleOnChange}/>I agree to share my credentials with UVB portal for verification, newsletters, post notifications and latest updates</label>
             </div>
             <button
               className="btn btn-outline-primary m-3"

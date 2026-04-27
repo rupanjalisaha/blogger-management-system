@@ -150,14 +150,18 @@ function ViewBlogById() {
     localStorage.setItem("sessionId", crypto.randomUUID());
   }
   useEffect(() => {
+    if (!post.postId) return;
     const timer = setTimeout(() => {
-      axios.post(`/api/posts/${post.postId}/view`, {
+      axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/views/${post.postId}`,
+        {
         sessionId: localStorage.getItem("sessionId"),
       });
+      loadPost(); // refresh post to update view count
     }, 5000); // user stayed 5 seconds
 
     return () => clearTimeout(timer);
-  }, [post.postId]);
+  }, [post.postId, loadPost]);
 
   const getShareUrl = (postId) => {
     return `${window.location.origin}/post/${postId}`;
@@ -338,13 +342,14 @@ function ViewBlogById() {
             <button
               className={
                 isLiked
-                  ? "btn active p-1 btn-outline-primary"
+                  ? "btn active p-1 btn-primary"
                   : "btn p-1 btn-outline-primary"
               }
               onClick={() => handleLike(post.postId)}
             >
               👍{likes}
             </button>
+            <button className="btn p-1 btn-primary">👀 {post.viewCount}</button>
             {(post.writerUsername === localStorage.getItem("username") ||
               localStorage.getItem("username") === "admin") && (
               <button
