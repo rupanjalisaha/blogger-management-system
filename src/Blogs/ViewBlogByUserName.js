@@ -327,8 +327,17 @@ function ViewBlogByUserName() {
 
         if (wordCount + words.length > wordLimit) {
           const remaining = wordLimit - wordCount;
-          node.textContent = words.slice(0, remaining).join(" ") + "..."+(words.length > remaining ? <Link to={`/viewblog/${postId}`}>Read more on Blog Page</Link>:"");
+          const truncatedText = words.slice(0, remaining).join(" ") + "...";
+          const linkHTML = `<a href="/viewblog/${postId}" style="color:blue; text-decoration:underline; margin-left:5px;">
+          Read more on Blog Page
+        </a>`;
+          const span = document.createElement("span");
+          span.innerHTML = truncatedText + linkHTML;
+
+          node.replaceWith(span);
+
           wordCount = wordLimit;
+          return;
         } else {
           wordCount += words.length;
         }
