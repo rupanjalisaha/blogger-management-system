@@ -311,20 +311,32 @@ function ViewBlogByUserName() {
   const readingTime = (postBody) => Math.ceil(countWords(postBody) / 200);
 
   const getPreviewText = (htmlContent, wordLimit, postId) => {
-  if (!htmlContent) return "";
-  const text = htmlContent.replace(/<[^>]+>/g, " ");
-  const words = text.trim().split(/\s+/);
-  const preview = words.slice(0, wordLimit).join(" ");
-  return (
-    <p>
-      {preview}
-      {words.length > wordLimit ? (
-      <span>... <Link className="btn p-1 btn-primary mx-2" to={`/viewblog/${postId}`}>Read more on Blog Page</Link></span>
-    ) : ""}
-
-    </p>
-  )
-  }
+    if (!htmlContent) return "";
+    const text = htmlContent.replace(/<[^>]+>/g, " ");
+    const words = text.trim().split(/\s+/);
+    const preview = words.slice(0, wordLimit).join(" ");
+    return (
+      <p>
+        dangerouslySetInnerHTML=
+        {{
+          __html: DOMPurify.sanitize(getPreviewText(preview) || ""),
+        }}
+        {words.length > wordLimit ? (
+          <span>
+            ...{" "}
+            <Link
+              className="btn p-1 btn-primary mx-2"
+              to={`/viewblog/${postId}`}
+            >
+              Read more on Blog Page
+            </Link>
+          </span>
+        ) : (
+          ""
+        )}
+      </p>
+    );
+  };
 
   return (
     <div>
@@ -354,10 +366,8 @@ function ViewBlogByUserName() {
                         fontFamily: "Times New Roman",
                         fontWeight: "normal",
                       }}
-                      dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(getPreviewText (post.postBody, 500, post.postId) || ""),
-                      }}
                     ></div>
+                    {getPreviewText(post.postBody, 100, post.postId)}
                   </p>
                   <p style={{ marginLeft: "80%" }}>
                     Posted on: {formatDate(post.createdAt)}
