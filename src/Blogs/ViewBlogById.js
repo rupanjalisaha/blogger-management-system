@@ -347,19 +347,20 @@ function ViewBlogById() {
             <button
               className={
                 isLiked
-                  ? "btn active p-1 btn-primary"
-                  : "btn p-1 btn-primary"
+                  ? "btn active p-1 btn-primary mx-2"
+                  : "btn p-1 btn-primary mx-2"
               }
               onClick={() => handleLike(post.postId)}
             >
               👍{likes}
             </button>
-            <button className="btn p-1 btn-primary">👀 {post.viewCount}</button>
+            <button className="btn p-1 btn-primary mx-2" style={{ marginLeft: "5px" }}>👀 {post.viewCount}</button>
             {(post.writerUsername === localStorage.getItem("username") ||
               localStorage.getItem("username") === "admin") && (
               <button
                 title="Delete Blog"
                 className="btn btn-danger mx-2"
+                style={{ marginLeft: "5px" }}
                 onClick={() => deleteBlog(post.postId)}
               >
                 🗑️ Delete
