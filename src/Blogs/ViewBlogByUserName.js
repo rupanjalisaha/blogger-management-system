@@ -329,7 +329,7 @@ function ViewBlogByUserName() {
           const remaining = wordLimit - wordCount;
           const truncatedText = words.slice(0, remaining).join(" ") + "...";
           const linkHTML = `<a href="/viewblog/${postId}" style="color:blue; text-decoration:underline; margin-left:5px;">
-          Read more on Blog Page
+          Read more
         </a>`;
           const span = document.createElement("span");
           span.innerHTML = truncatedText + linkHTML;
