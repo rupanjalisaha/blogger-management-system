@@ -396,7 +396,7 @@ function ViewBlogByUserName() {
                   <p style={{ marginLeft: "65%" }}>
                     Posted on: {formatDate(post.createdAt)}
                   </p>
-                  <p style={{ marginLeft: "80%" }}>
+                  <p style={{ marginLeft: "70%" }}>
                     Total reading time: {readingTime(post.postBody)} mins
                   </p>
                   <div className="col">
