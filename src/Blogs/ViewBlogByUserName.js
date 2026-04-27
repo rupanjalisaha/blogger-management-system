@@ -310,7 +310,7 @@ function ViewBlogByUserName() {
   };
   const readingTime = (postBody) => Math.ceil(countWords(postBody) / 200);
 
-  const truncateHTML = (html, wordLimit) => {
+  const truncateHTML = (html, wordLimit, postId) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
@@ -327,7 +327,7 @@ function ViewBlogByUserName() {
 
         if (wordCount + words.length > wordLimit) {
           const remaining = wordLimit - wordCount;
-          node.textContent = words.slice(0, remaining).join(" ") + "...";
+          node.textContent = words.slice(0, remaining).join(" ") + "..."+(words.length > remaining ? <Link to={`/viewblog/${postId}`}>Read more on Blog Page</Link>:"");
           wordCount = wordLimit;
         } else {
           wordCount += words.length;
@@ -379,7 +379,7 @@ function ViewBlogByUserName() {
                       }}
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(
-                          truncateHTML(post.postBody, 200),
+                          truncateHTML(post.postBody, 200, post.postId),
                         ),
                       }}
                     />
