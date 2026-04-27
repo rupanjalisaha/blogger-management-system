@@ -163,7 +163,7 @@ function ViewBlogById() {
         },
       );
       loadPost(); // refresh post to update view count
-    }, 5000); // user stayed 5 seconds
+    }, 3000); // user stayed 5 seconds
 
     return () => clearTimeout(timer);
   }, [post.postId, loadPost]);

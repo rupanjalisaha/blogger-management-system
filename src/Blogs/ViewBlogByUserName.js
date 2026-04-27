@@ -259,6 +259,25 @@ function ViewBlogByUserName() {
     console.log(formatted);
     return formatted;
   };
+  useEffect(() => {
+    if (!post.postId) return;
+    const timer = setTimeout(() => {
+      axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/views/${post.postId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      loadPost(); // refresh post to update view count
+    }, 3000); // user stayed 5 seconds
+
+    return () => clearTimeout(timer);
+  }, [post.postId, loadPost]);
+
   const handleDeleteComment = async (postId, commentId) => {
     const deleteConfirmed = window.confirm(
       "Are you sure you want to delete this comment?",
@@ -283,14 +302,30 @@ function ViewBlogByUserName() {
       console.error("Error deleting comment:", error);
     }
   };
-  const countWords= (char)=>{
+  const countWords = (char) => {
     if (typeof char !== "string") return 0;
     const text = char.replace(/<[^>]+>/g, "").trim();
     const words = text.split(/\s+/).filter(Boolean);
     return words.length;
+  };
+  const readingTime = (postBody) => Math.ceil(countWords(postBody) / 200);
+
+  const getPreviewText = (htmlContent, wordLimit, postId) => {
+  if (!htmlContent) return "";
+  const text = htmlContent.replace(/<[^>]+>/g, " ");
+  const words = text.trim().split(/\s+/);
+  const preview = words.slice(0, wordLimit).join(" ");
+  return (
+    <p>
+      {preview}
+      {words.length > wordLimit ? (
+      <span>... <Link className="btn p-1 btn-primary mx-2" to={`/viewblog/${postId}`}>Read more on Blog Page</Link></span>
+    ) : ""}
+
+    </p>
+  )
   }
-  const readingTime =(postBody)=> Math.ceil((countWords(postBody))/200);
-  
+
   return (
     <div>
       <Navbar />
@@ -320,12 +355,16 @@ function ViewBlogByUserName() {
                         fontWeight: "normal",
                       }}
                       dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(post.postBody || ""),
+                        __html: DOMPurify.sanitize(getPreviewText (post.postBody, 500, post.postId) || ""),
                       }}
                     ></div>
                   </p>
-                  <p style={{marginLeft:"80%"}}>Posted on: {formatDate(post.createdAt)}</p>
-                  <p style={{marginLeft:"80%"}}>Reading time: {readingTime(post.postBody)} mins</p>
+                  <p style={{ marginLeft: "80%" }}>
+                    Posted on: {formatDate(post.createdAt)}
+                  </p>
+                  <p style={{ marginLeft: "80%" }}>
+                    Reading time: {readingTime(post.postBody)} mins
+                  </p>
                   <div className="col">
                     <button
                       className={
@@ -337,6 +376,12 @@ function ViewBlogByUserName() {
                     >
                       👍{likes[post.postId] || 0}
                     </button>
+                    <button
+                      className="btn p-1 btn-primary mx-2"
+                      style={{ marginLeft: "5px" }}
+                    >
+                      👀 {post.viewCount}
+                    </button>
                     {(post.writerUsername ===
                       localStorage.getItem("username") ||
                       localStorage.getItem("username") === "admin") && (
@@ -344,6 +389,7 @@ function ViewBlogByUserName() {
                         title="Delete Blog"
                         className="btn btn-danger mx-2"
                         onClick={() => deleteBlog(post.postId)}
+                        style={{ marginLeft: "5px" }}
                       >
                         🗑️ Delete
                       </button>
@@ -483,7 +529,7 @@ function ViewBlogByUserName() {
                                     handleDeleteComment(post.postId, c.id)
                                   }
                                 >
-                                🗑️ Delete
+                                  🗑️ Delete
                                 </button>
                               )}
                             </div>
