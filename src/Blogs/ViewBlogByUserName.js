@@ -315,27 +315,7 @@ function ViewBlogByUserName() {
     const text = htmlContent.replace(/<[^>]+>/g, " ");
     const words = text.trim().split(/\s+/);
     const preview = words.slice(0, wordLimit).join(" ");
-    return (
-      <p>
-        dangerouslySetInnerHTML=
-        {{
-          __html: DOMPurify.sanitize(getPreviewText(preview) || ""),
-        }}
-        {words.length > wordLimit ? (
-          <span>
-            ...{" "}
-            <Link
-              className="btn p-1 btn-primary mx-2"
-              to={`/viewblog/${postId}`}
-            >
-              Read more on Blog Page
-            </Link>
-          </span>
-        ) : (
-          ""
-        )}
-      </p>
-    );
+    return preview;
   };
 
   return (
@@ -367,7 +347,7 @@ function ViewBlogByUserName() {
                         fontWeight: "normal",
                       }}
                     ></div>
-                    {getPreviewText(post.postBody, 100, post.postId)}
+                    {getPreviewText(post.postBody, 500, post.postId)}
                   </p>
                   <p style={{ marginLeft: "80%" }}>
                     Posted on: {formatDate(post.createdAt)}
