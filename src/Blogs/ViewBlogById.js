@@ -49,7 +49,7 @@ function ViewBlogById() {
   };
 
   const formatDate = (postCreatedAt) => {
-    const formatted = new Date(postCreatedAt).toLocaleString();
+    const formatted = new Date(postCreatedAt+"Z").toLocaleString();
 
     console.log(formatted);
     return formatted;

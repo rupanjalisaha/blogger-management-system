@@ -325,19 +325,18 @@ export default function BlogPage() {
           editor={editor}
           id="postBody"
           value={postBody}
-          role="textbox"
           aria-multiline="true"
-          className="col-md-7 offset-md-3 border rounded p-3 shadow"
+          className="border rounded p-3 shadow"
           minLength={1000}
           maxLength={5000}
           required
           aria-label="Blog content editor"
           style={{
             minHeight: "200px",
-            marginLeft: "100px",
+            margin: "10%",
+            width: "80%",
             border: "1px solid gray",
             padding: "10px",
-            margin: "20px",
           }}
         />
 
@@ -373,7 +372,6 @@ export default function BlogPage() {
           className="p-2 border rounded row"
           style={{
             whiteSpace: "break-spaces",
-            textAlign: "left",
             marginLeft: "8%",
             width: "85%",
             backgroundColor: "lightslategray",

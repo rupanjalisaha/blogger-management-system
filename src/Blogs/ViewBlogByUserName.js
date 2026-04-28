@@ -254,7 +254,7 @@ function ViewBlogByUserName() {
     return past.toLocaleDateString();
   };
   const formatDate = (postCreatedAt) => {
-    const formatted = new Date(postCreatedAt).toLocaleString();
+    const formatted = new Date(postCreatedAt + "Z").toLocaleString();
 
     console.log(formatted);
     return formatted;
@@ -546,14 +546,16 @@ function ViewBlogByUserName() {
                               >
                                 {timeAgo(c.createdAt)}
                               </p>
+                              <span title="Only for premium users">
                               <button
-                              title="only for premium users"
-                      disabled="true"
+                                title="only for premium users"
+                                disabled="true"
                                 className="btn p-1 btn-outline-primary mt-2"
                                 style={{ marginLeft: "10%" }}
                               >
                                 Reply
                               </button>
+                              </span>
                               {(post.writerUsername ===
                                 localStorage.getItem("username") ||
                                 localStorage.getItem("username") ===
