@@ -123,7 +123,29 @@ export default function BlogPage() {
       label: "Astronomy and Astrophysics",
       value: "Astronomy and Astrophysics",
     },
-    { label: "Space Agencies", value: "Space Agencies" },
+    {
+      label: "Space Agencies (ISRO, NASA, ESA)",
+      value: "Space Agencies (ISRO, NASA, ESA)",
+    },
+    {
+      label: "Emerging Space Technologies",
+      value: "Emerging Space Technologies",
+    },
+    {
+      label: "Space Startups and Innovations",
+      value: "Space Startups and Innovations",
+    },
+    { label: "Human Spaceflight", value: "Human Spaceflight" },
+    { label: "Planetary Science", value: "Planetary Science" },
+    {
+      label: "Space Research and Discoveries",
+      value: "Space Research and Discoveries",
+    },
+    { label: "AI and Space Technology", value: "AI and Space Technology" },
+    {
+      label: "Space Debates and Opinions",
+      value: "Space Debates and Opinions",
+    },
   ];
 
   return (
@@ -209,7 +231,7 @@ export default function BlogPage() {
 
         {/* 🚀 Toolbar */}
         {editor && (
-          <div style={{ margin: "10px" }}>
+          <div style={{ margin: "10px", marginTop:"30px" }}>
             <button
               type="button"
               className="btn p-1 btn-outline-primary"
@@ -312,7 +334,6 @@ export default function BlogPage() {
           aria-label="Blog content editor"
           style={{
             minHeight: "200px",
-            width: "90%",
             marginLeft: "100px",
             border: "1px solid gray",
             padding: "10px",
