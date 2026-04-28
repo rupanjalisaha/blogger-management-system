@@ -111,10 +111,7 @@ export default function BlogPage() {
     setIsFontSizeSelected(document.queryCommandState("fontSize"));
     setIsFontFamilySet(document.queryCommandState("fontFamily"));
   };
-  const applyBold = (e) => {
-    e.preventDefault();
-    applyCommand("bold");
-  };
+
   const applyJustifyContent = (e) => {
     e.preventDefault();
     applyCommand("justifySpaceBetween");
@@ -123,24 +120,65 @@ export default function BlogPage() {
     e.preventDefault();
     applyCommand("justifyCenter");
   };
-  const applySpaceTrimmer = (e) => {
-    e.preventDefault();
-    if (!selectionInsideEditor()) return;
+  const isBoldActive = () => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return false;
+
+    let node = sel.anchorNode;
+    while (node && node !== editorRef.current) {
+      if (node.nodeName === "STRONG" || node.nodeName === "B") {
+        return true;
+      }
+      node = node.parentNode;
+    }
+    return false;
+  };
+  const applyBold = () => {
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return;
+
     const range = sel.getRangeAt(0);
-    const selectedText = range.toString();
-    const trimmedText = selectedText
-      .replace(/[ \t]+/g, " ") 
-      .replace(/ *\n */g, "\n") 
-      .trim();
-    // Replace selection with trimmed text
-    document.execCommand("insertText", false, trimmedText);
-    const html = editorRef.current ? editorRef.current.innerHTML : "";
-    setPost((prev) => ({ ...prev, postBody: html }));
-    setIsSpaceTrimmed(true);
-    setTimeout(() => setIsSpaceTrimmed(false), 2000); // reset after 2 seconds
+    if (range.collapsed) return;
+
+    if (isBoldActive()) {
+      // 🔁 REMOVE bold
+      const fragment = range.extractContents();
+
+      const walker = document.createTreeWalker(
+        fragment,
+        NodeFilter.SHOW_ELEMENT,
+        null,
+      );
+
+      let node;
+      while ((node = walker.nextNode())) {
+        if (node.nodeName === "STRONG" || node.nodeName === "B") {
+          const parent = node.parentNode;
+          while (node.firstChild) {
+            parent.insertBefore(node.firstChild, node);
+          }
+          parent.removeChild(node);
+        }
+      }
+
+      range.insertNode(fragment);
+    } else {
+      // ✨ APPLY bold
+      const strong = document.createElement("strong");
+      strong.appendChild(range.extractContents());
+      range.insertNode(strong);
+    }
+
+    sel.removeAllRanges();
   };
+  useEffect(() => {
+    const handler = () => {
+      setIsBold(isBoldActive());
+    };
+
+    document.addEventListener("selectionchange", handler);
+    return () => document.removeEventListener("selectionchange", handler);
+  }, []);
   const applyUnorderedList = (e) => {
     e.preventDefault();
     applyCommand("insertUnorderedList");
@@ -561,7 +599,6 @@ export default function BlogPage() {
             >
               Center Align 📄
             </button>
-            
           </div>
         )}
 
