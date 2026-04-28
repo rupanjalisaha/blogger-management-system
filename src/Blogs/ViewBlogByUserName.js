@@ -547,6 +547,8 @@ function ViewBlogByUserName() {
                                 {timeAgo(c.createdAt)}
                               </p>
                               <button
+                              title="only for premium users"
+                      disabled="true"
                                 className="btn p-1 btn-outline-primary mt-2"
                                 style={{ marginLeft: "10%" }}
                               >
