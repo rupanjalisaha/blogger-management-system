@@ -18,6 +18,7 @@ export default function BlogPage() {
   const [isBold, setIsBold] = useState(false);
   const [isOrderedList, setIsOrderedList] = useState(false);
   const[isContentJustified, setIsContentJustified] = useState(false);
+  const[isContentJustifiedCenter, setIsContentJustifiedCenter] = useState(false);
   const [isUnorderedList, setIsUnorderedList] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderlined, setIsUnderlined] = useState(false);
@@ -99,7 +100,8 @@ export default function BlogPage() {
     setIsItalic(document.queryCommandState("italic"));
     setIsUnderlined(document.queryCommandState("underline"));
     setIsOrderedList(document.queryCommandState("insertOrderedList"));
-    setIsContentJustified(document.queryCommandState("justifyCenter"));
+    setIsContentJustified(document.queryCommandState("justifySpaceBetween"));
+    setIsContentJustifiedCenter(document.queryCommandState("justifyCenter"));
     setIsUnorderedList(document.queryCommandState("insertUnorderedList"));
     setIsHighlighted(document.queryCommandState("hiliteColor"));
     setIsFontSizeSelected(document.queryCommandState("fontSize"));
@@ -110,6 +112,10 @@ export default function BlogPage() {
     applyCommand("bold");
   };
   const applyJustifyContent = (e)=>{
+    e.preventDefault();
+    applyCommand("justifySpaceBetween");
+  }
+  const applyJustifyContentCenter = (e)=>{
     e.preventDefault();
     applyCommand("justifyCenter");
   }
@@ -430,7 +436,19 @@ export default function BlogPage() {
             onClick={applyJustifyContent}
             type="button"
           >
-            📄
+            |😀        😀        😀|
+          </button>
+          <button
+            className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyJustifyContentCenter}
+            type="button"
+          >
+            |    😀 😀 😀    |
           </button>
           <button
             className={`shadow border rounded ${isHighlighted ? "active" : ""}`}

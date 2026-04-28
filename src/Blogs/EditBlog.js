@@ -22,6 +22,8 @@ function EditBlog() {
   const editorRef = useRef(null);
  const [isBold, setIsBold] = useState(false);
    const [isOrderedList, setIsOrderedList] = useState(false);
+   const [isContentJustified, setIsContentJustified] = useState(false);
+    const [isContentJustifiedCenter, setIsContentJustifiedCenter] = useState(false);
    const [isUnorderedList, setIsUnorderedList] = useState(false);
    const [isItalic, setIsItalic] = useState(false);
    const [isUnderlined, setIsUnderlined] = useState(false);
@@ -64,6 +66,8 @@ function EditBlog() {
     setIsItalic(document.queryCommandState("italic"));
     setIsUnderlined(document.queryCommandState("underline"));
     setIsOrderedList(document.queryCommandState("insertOrderedList"));
+    setIsContentJustified(document.queryCommandState("justifySpaceBetween"));
+    setIsContentJustifiedCenter(document.queryCommandState("justifyCenter"));
     setIsUnorderedList(document.queryCommandState("insertUnorderedList"));
     setIsHighlighted(document.queryCommandState("hiliteColor"));
     setIsFontSizeSelected(document.queryCommandState("fontSize"));
@@ -73,6 +77,14 @@ function EditBlog() {
     e.preventDefault();
     applyCommand("bold");
   };
+  const applyJustifyContent = (e) => {
+    e.preventDefault();
+    applyCommand("justifySpaceBetween");
+  }
+  const applyJustifyContentCenter = (e) => {
+    e.preventDefault();
+    applyCommand("justifyCenter");
+  }
   const applyUnorderedList = (e) => {
     e.preventDefault();
     applyCommand("insertUnorderedList");
@@ -371,6 +383,30 @@ function EditBlog() {
             type="button"
           >
             1.
+          </button>
+          <button
+            className={`shadow border rounded ${isContentJustified ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyJustifyContent}
+            type="button"
+          >
+            |😀        😀        😀|
+          </button>
+          <button
+            className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyJustifyContentCenter}
+            type="button"
+          >
+            |    😀 😀 😀    |
           </button>
           <button
             className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
