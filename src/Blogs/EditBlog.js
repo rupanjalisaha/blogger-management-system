@@ -6,6 +6,11 @@ import { useEffect } from "react";
 import Navbar from "../layout/Navbar";
 import DOMPurify from "dompurify"; // optional but recommended: npm install dompurify
 import { useRef } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Highlight from "@tiptap/extension-highlight";
+import TextAlign from "@tiptap/extension-text-align";
+import Underline from "@tiptap/extension-underline";
 
 function EditBlog() {
   const [post, setPost] = useState({
@@ -15,116 +20,40 @@ function EditBlog() {
     writerUsername: "",
   });
   const { genre, postBody, postTitle, writerUsername } = post;
-
+  const [viewTextEditor, setViewTextEditor] = useState(false);
   let navigate = useNavigate();
   const { id } = useParams();
 
-  const editorRef = useRef(null);
- const [isBold, setIsBold] = useState(false);
-   const [isOrderedList, setIsOrderedList] = useState(false);
-   const [isContentJustified, setIsContentJustified] = useState(false);
-    const [isContentJustifiedCenter, setIsContentJustifiedCenter] = useState(false);
-   const [isUnorderedList, setIsUnorderedList] = useState(false);
-   const [isItalic, setIsItalic] = useState(false);
-   const [isUnderlined, setIsUnderlined] = useState(false);
-   const [isHighlighted, setIsHighlighted] = useState(false);
-   const [isFontSizeSelected, setIsFontSizeSelected] = useState(false);
-   const [IsFontFamilySet, setIsFontFamilySet] = useState(false);
-   const [viewTextEditor, setViewTextEditor] = useState(false);
+  
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Highlight.configure({ multicolor: true }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+    ],
+    content: "",
+    onUpdate: ({ editor }) => {
+      setPost((prev) => ({
+        ...prev,
+        postBody: editor.getHTML(),
+      }));
+    },
+  });
 
-  useEffect(() => {
-    if (editorRef.current && editorRef.current.innerHTML !== postBody) {
-      editorRef.current.innerHTML = postBody;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postBody]);
-  const selectionInsideEditor = () => {
-    const sel = window.getSelection();
-    if (!sel || sel.rangeCount === 0) return false;
-    const range = sel.getRangeAt(0);
-    if (!editorRef.current) return false;
-    return editorRef.current.contains(range.commonAncestorContainer);
-  };
-
-  const applyCommand = (command) => {
-    // Only apply formatting when selection is inside editor
-    if (!selectionInsideEditor()) {
-      // focus the editor so user can apply to caret (or do nothing)
-      if (editorRef.current) editorRef.current.focus();
-      return;
-    }
-    // execCommand toggles the given inline format
-    document.execCommand(command, false, null);
-
-    // after applying update state with current innerHTML
-    const html = editorRef.current ? editorRef.current.innerHTML : "";
-    setPost((prev) => ({ ...prev, postBody: html }));
-
-    // update format toggles (optional: inspect selection's computed style)
-    // Quick heuristic: check if selection contains tags
-    setIsBold(document.queryCommandState("bold"));
-    setIsItalic(document.queryCommandState("italic"));
-    setIsUnderlined(document.queryCommandState("underline"));
-    setIsOrderedList(document.queryCommandState("insertOrderedList"));
-    setIsContentJustified(document.queryCommandState("justifySpaceBetween"));
-    setIsContentJustifiedCenter(document.queryCommandState("justifyCenter"));
-    setIsUnorderedList(document.queryCommandState("insertUnorderedList"));
-    setIsHighlighted(document.queryCommandState("hiliteColor"));
-    setIsFontSizeSelected(document.queryCommandState("fontSize"));
-    setIsFontFamilySet(document.queryCommandState("fontFamily"));
-  };
-  const applyBold = (e) => {
-    e.preventDefault();
-    applyCommand("bold");
-  };
-  const applyJustifyContent = (e) => {
-    e.preventDefault();
-    applyCommand("justifySpaceBetween");
-  }
-  const applyJustifyContentCenter = (e) => {
-    e.preventDefault();
-    applyCommand("justifyCenter");
-  }
-  const applyUnorderedList = (e) => {
-    e.preventDefault();
-    applyCommand("insertUnorderedList");
-  };
-  const applyOrderedList = (e) => {
-    e.preventDefault();
-    applyCommand("insertOrderedList");
-  };
-  const applyItalic = (e) => {
-    e.preventDefault();
-    applyCommand("italic");
-  };
-  const applyUnderline = (e) => {
-    e.preventDefault();
-    applyCommand("underline");
-  };
-  const applyHighlight = (color) => {
-    if (!selectionInsideEditor()) return;
-    document.execCommand("hiliteColor", false, color);
-    const html = editorRef.current ? editorRef.current.innerHTML : "";
-    setPost((prev) => ({ ...prev, postBody: html }));
-  };
-  const applyFontSize = (size) => {
-    if (!selectionInsideEditor()) return;
-    document.execCommand("fontSize", false, size);
-
-    const html = editorRef.current ? editorRef.current.innerHTML : "";
-    setPost((prev) => ({ ...prev, postBody: html }));
-  };
-  const applyFontFamily = (font) => {
-    document.execCommand("fontName", false, font);
-
-    const html = editorRef.current ? editorRef.current.innerHTML : "";
-    setPost((prev) => ({ ...prev, postBody: html }));
-  };
-  const handleInput = () => {
-    const html = editorRef.current ? editorRef.current.innerHTML : "";
-    setPost((prev) => ({ ...prev, postBody: html }));
+  // 🧠 Word Count
+  const countWords = (html) => {
+    if (!html) return 0;
+    const text = html.replace(/<[^>]+>/g, "").trim();
+    return text.split(/\s+/).filter(Boolean).length;
   };
 
+  const wordCount = countWords(postBody);
+
+
+  
   const onInputChange = (e) => {
     setPost({ ...post, [e.target.id]: e.target.value });
   };
@@ -277,8 +206,6 @@ function EditBlog() {
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(postBody || ""),
                   }}
-                  onInput={handleInput}
-                  ref={editorRef}
                   minLength={200}
                   aria-multiline="true"
                   aria-label="Blog content editor"
@@ -292,161 +219,93 @@ function EditBlog() {
               margin: "2px",
               marginLeft:"70%"}}
         onClick={()=> setViewTextEditor(true)}>View Style Palette</button>:
-        <div style={{ marginLeft: "8%", marginTop: "8px" }}>
-          <select
-            className={`shadow border rounded ${isFontSizeSelected ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-              marginLeft:"30%",
-              marginBottom:"5%"
-            }}
-            onChange={(e) => applyFontSize(e.target.value)}
-          >
-            <option value="">Font Size</option>
-            <option value="4">Text</option>
-            <option value="5">Sub-Header</option>
-            <option value="6">Header</option>
-            <option value="7">Title</option>
-          </select>
-          <select className={`shadow border rounded ${IsFontFamilySet ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-            }}
-            onChange={(e) => applyFontFamily(e.target.value)}>
-              <option value="">Font Family</option>
-            <option value="Times New Roman">Times</option>
-            <option value="Arial">Arial</option>
-            <option value="Courier New">Courier</option>
-            <option value="Cursive">Cursive</option>
-            <option value="sans-serif">Sans-serif</option>
-            <option value="Montserrat">Montserrat</option>
-            <option value="Poppins">Poppins</option>
-          </select>
-          <button
-            className={`shadow border rounded ${isBold ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyBold}
-            type="button"
-          >
-            B
-          </button>
-          <button
-            className={`shadow border rounded ${isItalic ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontStyle: "italic",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={applyItalic}
-            type="button"
-          >
-            I
-          </button>
-          <button
-            className={`shadow border rounded ${isUnderlined ? "active" : ""}`}
-            style={{ fontFamily: "Times New Roman", textDecoration: "underline" }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={applyUnderline}
-            type="button"
-          >
-            U
-          </button>
-          <button
-            className={`shadow border rounded ${isUnorderedList ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyUnorderedList}
-            type="button"
-          >
-            •
-          </button>
-          <button
-            className={`shadow border rounded ${isOrderedList ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyOrderedList}
-            type="button"
-          >
-            1.
-          </button>
-          <button
-            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => applyHighlight("LemonChiffon")}
-            type="button"
-          >
-            🟡
-          </button>
-          <button
-            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => applyHighlight("red")}
-            type="button"
-          >
-            🟥
-          </button>
-          <button
-            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => applyHighlight("skyblue")}
-            type="button"
-          >
-            💙
-          </button>
-          <button
-            className={`shadow border rounded ${isContentJustified ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyJustifyContent}
-            type="button"
-          >
-            |😀        😀        😀|
-          </button>
-          <button
-            className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyJustifyContentCenter}
-            type="button"
-          >
-            |    😀😀😀    |
-          </button>
-        </div>
+        
+        editor && (
+          <div style={{ margin: "10px", marginTop:"30px" }}>
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              onClick={() => editor.chain().focus().toggleBold().run()}
+            >
+              B
+            </button>
+
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              style={{marginLeft: "2px"}}
+              onClick={() => editor.chain().focus().toggleItalic().run()}
+            >
+              I
+            </button>
+
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+            >
+              U
+            </button>
+
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+            >
+              •
+            </button>
+
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            >
+              1.
+            </button>
+
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleHighlight({ color: "yellow" })
+                  .run()
+              }
+            >
+              🟡
+            </button>
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              onClick={() =>
+                editor.chain().focus().toggleHighlight({ color: "red" }).run()
+              }
+            >
+              🟥
+            </button>
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              onClick={() =>
+                editor.chain().focus().setTextAlign("center").run()
+              }
+            >
+              Center
+            </button>
+
+            <button
+              type="button"
+              className="btn p-1 btn-outline-primary"
+              onClick={() =>
+                editor.chain().focus().setTextAlign("justify").run()
+              }
+            >
+              Justify
+            </button>
+          </div>
+        )
         }
               <button title="Submit" className="btn btn-outline-primary m-3" type="submit">
                 ✔ Submit
