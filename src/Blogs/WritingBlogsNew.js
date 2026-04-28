@@ -212,7 +212,7 @@ export default function BlogPage() {
           <div style={{ margin: "10px" }}>
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() => editor.chain().focus().toggleBold().run()}
             >
               B
@@ -220,7 +220,7 @@ export default function BlogPage() {
 
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() => editor.chain().focus().toggleItalic().run()}
             >
               I
@@ -228,7 +228,7 @@ export default function BlogPage() {
 
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() => editor.chain().focus().toggleUnderline().run()}
             >
               U
@@ -236,7 +236,7 @@ export default function BlogPage() {
 
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() => editor.chain().focus().toggleBulletList().run()}
             >
               •
@@ -244,7 +244,7 @@ export default function BlogPage() {
 
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
             >
               1.
@@ -252,7 +252,7 @@ export default function BlogPage() {
 
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() =>
                 editor
                   .chain()
@@ -265,7 +265,7 @@ export default function BlogPage() {
             </button>
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() =>
                 editor.chain().focus().toggleHighlight({ color: "red" }).run()
               }
@@ -274,7 +274,7 @@ export default function BlogPage() {
             </button>
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() =>
                 editor.chain().focus().setTextAlign("center").run()
               }
@@ -284,7 +284,7 @@ export default function BlogPage() {
 
             <button
               type="button"
-              className="btn p-1 btn-primary mx-2"
+              className="btn p-1 btn-primary"
               onClick={() =>
                 editor.chain().focus().setTextAlign("justify").run()
               }
