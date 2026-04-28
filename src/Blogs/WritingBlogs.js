@@ -427,30 +427,6 @@ export default function BlogPage() {
             1.
           </button>
           <button
-            className={`shadow border rounded ${isContentJustified ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyJustifyContent}
-            type="button"
-          >
-            |😀        😀        😀|
-          </button>
-          <button
-            className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyJustifyContentCenter}
-            type="button"
-          >
-            |    😀 😀 😀    |
-          </button>
-          <button
             className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
             style={{
               fontFamily: "Times New Roman",
@@ -487,6 +463,31 @@ export default function BlogPage() {
             type="button"
           >
             💙
+          </button>
+          <button
+            className={`shadow border rounded ${isContentJustified ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+              marginLeft:"80%"
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyJustifyContent}
+            type="button"
+          >
+            |😀        😀        😀|
+          </button>
+          <button
+            className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyJustifyContentCenter}
+            type="button"
+          >
+            |    😀😀😀    |
           </button>
         </div>
         }

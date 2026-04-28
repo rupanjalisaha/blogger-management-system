@@ -385,30 +385,6 @@ function EditBlog() {
             1.
           </button>
           <button
-            className={`shadow border rounded ${isContentJustified ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyJustifyContent}
-            type="button"
-          >
-            |😀        😀        😀|
-          </button>
-          <button
-            className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyJustifyContentCenter}
-            type="button"
-          >
-            |    😀 😀 😀    |
-          </button>
-          <button
             className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
             style={{
               fontFamily: "Times New Roman",
@@ -445,6 +421,30 @@ function EditBlog() {
             type="button"
           >
             💙
+          </button>
+          <button
+            className={`shadow border rounded ${isContentJustified ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyJustifyContent}
+            type="button"
+          >
+            |😀        😀        😀|
+          </button>
+          <button
+            className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
+            style={{
+              fontFamily: "Times New Roman",
+              margin: "2px",
+            }}
+            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+            onClick={applyJustifyContentCenter}
+            type="button"
+          >
+            |    😀😀😀    |
           </button>
         </div>
         }
