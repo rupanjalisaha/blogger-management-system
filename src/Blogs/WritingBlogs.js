@@ -17,8 +17,10 @@ export default function BlogPage() {
   const editorRef = useRef(null);
   const [isBold, setIsBold] = useState(false);
   const [isOrderedList, setIsOrderedList] = useState(false);
-  const[isContentJustified, setIsContentJustified] = useState(false);
-  const[isContentJustifiedCenter, setIsContentJustifiedCenter] = useState(false);
+  const [isContentJustified, setIsContentJustified] = useState(false);
+  const [isContentJustifiedCenter, setIsContentJustifiedCenter] =
+    useState(false);
+  const [isSpaceTrimmed, setIsSpaceTrimmed] = useState(false);
   const [isUnorderedList, setIsUnorderedList] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderlined, setIsUnderlined] = useState(false);
@@ -53,18 +55,20 @@ export default function BlogPage() {
     return editorRef.current.contains(range.commonAncestorContainer);
   };
 
-  const countWords= (char)=>{
+  const countWords = (char) => {
     if (typeof char !== "string") return 0;
     const text = char.replace(/<[^>]+>/g, "").trim();
     const words = text.split(/\s+/).filter(Boolean);
     return words.length;
-  }
-  
+  };
+
   const wordCount = countWords(post.postBody);
   if (wordCount < 1000) {
-    errorMessage = "* Article content must be at least 1000 words long to rank in SEO";
-  }else if (wordCount > 5000) {
-    errorMessage = "* Article content shall not exceed 5000 words for SEO rankings";
+    errorMessage =
+      "* Article content must be at least 1000 words long to rank in SEO";
+  } else if (wordCount > 5000) {
+    errorMessage =
+      "* Article content shall not exceed 5000 words for SEO rankings";
   } else if (
     postBody &&
     /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(postBody)
@@ -111,14 +115,32 @@ export default function BlogPage() {
     e.preventDefault();
     applyCommand("bold");
   };
-  const applyJustifyContent = (e)=>{
+  const applyJustifyContent = (e) => {
     e.preventDefault();
     applyCommand("justifySpaceBetween");
-  }
-  const applyJustifyContentCenter = (e)=>{
+  };
+  const applyJustifyContentCenter = (e) => {
     e.preventDefault();
     applyCommand("justifyCenter");
-  }
+  };
+  const applySpaceTrimmer = (e) => {
+    e.preventDefault();
+    if (!selectionInsideEditor()) return;
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+    const range = sel.getRangeAt(0);
+    const selectedText = range.toString();
+    const trimmedText = selectedText
+      .replace(/[ \t]+/g, " ") 
+      .replace(/ *\n */g, "\n") 
+      .trim();
+    // Replace selection with trimmed text
+    document.execCommand("insertText", false, trimmedText);
+    const html = editorRef.current ? editorRef.current.innerHTML : "";
+    setPost((prev) => ({ ...prev, postBody: html }));
+    setIsSpaceTrimmed(true);
+    setTimeout(() => setIsSpaceTrimmed(false), 2000); // reset after 2 seconds
+  };
   const applyUnorderedList = (e) => {
     e.preventDefault();
     applyCommand("insertUnorderedList");
@@ -168,12 +190,16 @@ export default function BlogPage() {
     e.preventDefault();
     try {
       if (!errorMessage) {
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/writeBlogs`, post, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/writeBlogs`,
+          post,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           },
-        });
+        );
         alert("Content submitted successfully");
         navigate("/viewBlogs");
       } else {
@@ -188,18 +214,42 @@ export default function BlogPage() {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const categoryOptions = [
     { label: "Select an option", value: "" },
-    { label: "Space Exploration Missions", value: "Space Exploration Missions" },
+    {
+      label: "Space Exploration Missions",
+      value: "Space Exploration Missions",
+    },
     { label: "Rocket Science Basics", value: "Rocket Science Basics" },
-    { label: "Satellites and Communication", value: "Satellites and Communication" },
-    { label: "Astronomy and Astrophysics", value: "Astronomy and Astrophysics" },
-    { label: "Space Agencies (ISRO, NASA, ESA)", value: "Space Agencies (ISRO, NASA, ESA)" },
-    { label: "Emerging Space Technologies", value: "Emerging Space Technologies" },
-    { label: "Space Startups and Innovations", value: "Space Startups and Innovations" },
+    {
+      label: "Satellites and Communication",
+      value: "Satellites and Communication",
+    },
+    {
+      label: "Astronomy and Astrophysics",
+      value: "Astronomy and Astrophysics",
+    },
+    {
+      label: "Space Agencies (ISRO, NASA, ESA)",
+      value: "Space Agencies (ISRO, NASA, ESA)",
+    },
+    {
+      label: "Emerging Space Technologies",
+      value: "Emerging Space Technologies",
+    },
+    {
+      label: "Space Startups and Innovations",
+      value: "Space Startups and Innovations",
+    },
     { label: "Human Spaceflight", value: "Human Spaceflight" },
     { label: "Planetary Science", value: "Planetary Science" },
-    { label: "Space Research and Discoveries", value: "Space Research and Discoveries" },
+    {
+      label: "Space Research and Discoveries",
+      value: "Space Research and Discoveries",
+    },
     { label: "AI and Space Technology", value: "AI and Space Technology" },
-    { label: "Space Debates and Opinions", value: "Space Debates and Opinions" }
+    {
+      label: "Space Debates and Opinions",
+      value: "Space Debates and Opinions",
+    },
   ];
   useEffect(() => {
     // Update the time every second
@@ -323,175 +373,198 @@ export default function BlogPage() {
             width: "85%",
             marginLeft: "8%",
             outline: "none",
-            textAlign: "justify",
             whiteSpace: "pre-wrap",
             overflowWrap: "break-word",
           }}
         />
-        <p style={{color: (countWords(post.postBody)>999 && countWords(post.postBody)<5001)?"green":"red"}}>Word Count: {countWords(post.postBody)}</p>
-        {!viewTextEditor?<button className="btn btn-primary" 
-        style={{fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-              marginLeft:"70%"}}
-        onClick={()=> setViewTextEditor(true)}>View Style Palette</button>:
-        <div style={{ marginLeft: "8%", marginTop: "8px" }}>
-          <select
-            className={`shadow border rounded ${isFontSizeSelected ? "active" : ""}`}
+        <p
+          style={{
+            color:
+              countWords(post.postBody) > 999 &&
+              countWords(post.postBody) < 5001
+                ? "green"
+                : "red",
+          }}
+        >
+          Word Count: {countWords(post.postBody)}
+        </p>
+        {!viewTextEditor ? (
+          <button
+            className="btn btn-primary"
             style={{
               fontFamily: "Times New Roman",
               fontWeight: "bold",
               margin: "2px",
-              marginLeft:"59%"
+              marginLeft: "70%",
             }}
-            onChange={(e) => applyFontSize(e.target.value)}
+            onClick={() => setViewTextEditor(true)}
           >
-            <option value="">Font Size</option>
-            <option value="4">Text</option>
-            <option value="5">Sub-Header</option>
-            <option value="6">Header</option>
-            <option value="7">Title</option>
-          </select>
-          <select className={`shadow border rounded ${IsFontFamilySet ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-            }}
-            onChange={(e) => applyFontFamily(e.target.value)}>
+            View Style Palette
+          </button>
+        ) : (
+          <div style={{ marginLeft: "8%", marginTop: "8px" }}>
+            <select
+              className={`shadow border rounded ${isFontSizeSelected ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                margin: "2px",
+                marginLeft: "59%",
+              }}
+              onChange={(e) => applyFontSize(e.target.value)}
+            >
+              <option value="">Font Size</option>
+              <option value="4">Text</option>
+              <option value="5">Sub-Header</option>
+              <option value="6">Header</option>
+              <option value="7">Title</option>
+            </select>
+            <select
+              className={`shadow border rounded ${IsFontFamilySet ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+              }}
+              onChange={(e) => applyFontFamily(e.target.value)}
+            >
               <option value="">Font Family</option>
-            <option value="Times New Roman">Times</option>
-            <option value="Arial">Arial</option>
-            <option value="Courier New">Courier</option>
-            <option value="Cursive">Cursive</option>
-            <option value="sans-serif">Sans-serif</option>
-            <option value="Montserrat">Montserrat</option>
-            <option value="Poppins">Poppins</option>
-          </select>
-          <button
-            className={`shadow border rounded ${isBold ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyBold}
-            type="button"
-          >
-            B
-          </button>
-          <button
-            className={`shadow border rounded ${isItalic ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontStyle: "italic",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={applyItalic}
-            type="button"
-          >
-            I
-          </button>
-          <button
-            className={`shadow border rounded ${isUnderlined ? "active" : ""}`}
-            style={{ fontFamily: "Times New Roman", textDecoration: "underline" }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={applyUnderline}
-            type="button"
-          >
-            U
-          </button>
-          <button
-            className={`shadow border rounded ${isUnorderedList ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyUnorderedList}
-            type="button"
-          >
-            •
-          </button>
-          <button
-            className={`shadow border rounded ${isOrderedList ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyOrderedList}
-            type="button"
-          >
-            1.
-          </button>
-          <button
-            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => applyHighlight("LemonChiffon")}
-            type="button"
-          >
-            🟡
-          </button>
-          <button
-            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => applyHighlight("red")}
-            type="button"
-          >
-            🟥
-          </button>
-          <button
-            className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => applyHighlight("skyblue")}
-            type="button"
-          >
-            💙
-          </button>
-          <button
-            className={`shadow border rounded ${isContentJustified ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-              marginLeft:"80%"
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyJustifyContent}
-            type="button"
-          >
-            |😀        😀        😀|
-          </button>
-          <button
-            className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
-            style={{
-              fontFamily: "Times New Roman",
-              margin: "2px",
-            }}
-            onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-            onClick={applyJustifyContentCenter}
-            type="button"
-          >
-            |    😀😀😀    |
-          </button>
-        </div>
-        }
-        
+              <option value="Times New Roman">Times</option>
+              <option value="Arial">Arial</option>
+              <option value="Courier New">Courier</option>
+              <option value="Cursive">Cursive</option>
+              <option value="sans-serif">Sans-serif</option>
+              <option value="Montserrat">Montserrat</option>
+              <option value="Poppins">Poppins</option>
+            </select>
+            <button
+              className={`shadow border rounded ${isBold ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                margin: "2px",
+              }}
+              onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+              onClick={applyBold}
+              type="button"
+            >
+              B
+            </button>
+            <button
+              className={`shadow border rounded ${isItalic ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                fontStyle: "italic",
+                margin: "2px",
+              }}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={applyItalic}
+              type="button"
+            >
+              I
+            </button>
+            <button
+              className={`shadow border rounded ${isUnderlined ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                textDecoration: "underline",
+              }}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={applyUnderline}
+              type="button"
+            >
+              U
+            </button>
+            <button
+              className={`shadow border rounded ${isUnorderedList ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                margin: "2px",
+              }}
+              onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+              onClick={applyUnorderedList}
+              type="button"
+            >
+              •
+            </button>
+            <button
+              className={`shadow border rounded ${isOrderedList ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                margin: "2px",
+              }}
+              onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+              onClick={applyOrderedList}
+              type="button"
+            >
+              1.
+            </button>
+            <button
+              className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                margin: "2px",
+              }}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyHighlight("LemonChiffon")}
+              type="button"
+            >
+              🟡
+            </button>
+            <button
+              className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                margin: "2px",
+              }}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyHighlight("red")}
+              type="button"
+            >
+              🟥
+            </button>
+            <button
+              className={`shadow border rounded ${isHighlighted ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                margin: "2px",
+              }}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyHighlight("skyblue")}
+              type="button"
+            >
+              💙
+            </button>
+            <button
+              className={`shadow border rounded ${isContentJustified ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                margin: "2px",
+                marginLeft: "70%",
+              }}
+              onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+              onClick={applyJustifyContent}
+              type="button"
+            >
+              Justify 📄
+            </button>
+            <button
+              className={`shadow border rounded ${isContentJustifiedCenter ? "active" : ""}`}
+              style={{
+                fontFamily: "Times New Roman",
+                margin: "2px",
+              }}
+              onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
+              onClick={applyJustifyContentCenter}
+              type="button"
+            >
+              Center Align 📄
+            </button>
+            
+          </div>
+        )}
+
         <p
           style={{
             color: "red",
@@ -570,7 +643,7 @@ export default function BlogPage() {
         </button>
       </form>
       <button
-      title="Back to previous page"
+        title="Back to previous page"
         className="btn btn-outline-secondary m-2 px-4"
         onClick={handleGoBack}
       >
