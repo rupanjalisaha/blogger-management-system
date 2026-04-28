@@ -133,52 +133,113 @@ export default function BlogPage() {
     }
     return false;
   };
-  const applyBold = () => {
-    const sel = window.getSelection();
-    if (!sel || sel.rangeCount === 0) return;
+  const isActive = (format) => {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return false;
 
-    const range = sel.getRangeAt(0);
-    if (range.collapsed) return;
+  let node = sel.anchorNode;
 
-    if (isBoldActive()) {
-      // 🔁 REMOVE bold
+  const tagMap = {
+    bold: "STRONG",
+    italic: "EM",
+    underline: "U",
+  };
+
+  while (node && node !== editorRef.current) {
+    if (node.nodeName === tagMap[format]) return true;
+    node = node.parentNode;
+  }
+
+  return false;
+};
+  const toggleFormat = (type, value = null) => {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+
+  const range = sel.getRangeAt(0);
+  if (range.collapsed && type !== "list" && type !== "align") return;
+
+  // 🔁 INLINE FORMATTING (bold, italic, underline)
+  if (type === "inline") {
+    const tagMap = {
+      bold: "STRONG",
+      italic: "EM",
+      underline: "U",
+    };
+
+    const tagName = tagMap[value];
+
+    // Check if already applied
+    let node = sel.anchorNode;
+    let isActive = false;
+
+    while (node && node !== editorRef.current) {
+      if (node.nodeName === tagName) {
+        isActive = true;
+        break;
+      }
+      node = node.parentNode;
+    }
+
+    if (isActive) {
+      // REMOVE format
       const fragment = range.extractContents();
 
       const walker = document.createTreeWalker(
         fragment,
         NodeFilter.SHOW_ELEMENT,
-        null,
+        null
       );
 
-      let node;
-      while ((node = walker.nextNode())) {
-        if (node.nodeName === "STRONG" || node.nodeName === "B") {
-          const parent = node.parentNode;
-          while (node.firstChild) {
-            parent.insertBefore(node.firstChild, node);
+      let n;
+      while ((n = walker.nextNode())) {
+        if (n.nodeName === tagName) {
+          const parent = n.parentNode;
+          while (n.firstChild) {
+            parent.insertBefore(n.firstChild, n);
           }
-          parent.removeChild(node);
+          parent.removeChild(n);
         }
       }
 
       range.insertNode(fragment);
     } else {
-      // ✨ APPLY bold
-      const strong = document.createElement("strong");
-      strong.appendChild(range.extractContents());
-      range.insertNode(strong);
+      // APPLY format
+      const el = document.createElement(tagName);
+      el.appendChild(range.extractContents());
+      range.insertNode(el);
     }
+  }
 
-    sel.removeAllRanges();
-  };
-  useEffect(() => {
-    const handler = () => {
-      setIsBold(isBoldActive());
+  // 🔁 LISTS
+  else if (type === "list") {
+    const listType = value === "ul" ? "insertUnorderedList" : "insertOrderedList";
+    document.execCommand(listType);
+  }
+
+  // 🔁 ALIGNMENT
+  else if (type === "align") {
+    const alignMap = {
+      center: "justifyCenter",
+      justify: "justifyFull",
+      left: "justifyLeft",
+      right: "justifyRight",
     };
 
-    document.addEventListener("selectionchange", handler);
-    return () => document.removeEventListener("selectionchange", handler);
-  }, []);
+    document.execCommand(alignMap[value]);
+  }
+
+  // 🔁 HIGHLIGHT
+  else if (type === "highlight") {
+    document.execCommand("hiliteColor", false, value);
+  }
+
+  // Update state
+  const html = editorRef.current.innerHTML;
+  setPost((prev) => ({ ...prev, postBody: html }));
+};
+
+
   const applyUnorderedList = (e) => {
     e.preventDefault();
     applyCommand("insertUnorderedList");
@@ -475,14 +536,14 @@ export default function BlogPage() {
               <option value="Poppins">Poppins</option>
             </select>
             <button
-              className={`shadow border rounded ${isBold ? "active" : ""}`}
+              className={`shadow border rounded ${isActive("bold") ? "active" : ""}`}
               style={{
                 fontFamily: "Times New Roman",
                 fontWeight: "bold",
                 margin: "2px",
               }}
               onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-              onClick={applyBold}
+              onClick={toggleFormat.bind(null, "inline", "bold")}
               type="button"
             >
               B
