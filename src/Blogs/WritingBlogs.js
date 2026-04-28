@@ -120,125 +120,90 @@ export default function BlogPage() {
     e.preventDefault();
     applyCommand("justifyCenter");
   };
+  
   const isBoldActive = () => {
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return false;
 
     let node = sel.anchorNode;
+
     while (node && node !== editorRef.current) {
       if (node.nodeName === "STRONG" || node.nodeName === "B") {
         return true;
       }
       node = node.parentNode;
     }
+
     return false;
   };
-  const isActive = (format) => {
-  const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0) return false;
+  const toggleBold = () => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
 
-  let node = sel.anchorNode;
+    const range = sel.getRangeAt(0);
+    if (range.collapsed) return;
 
-  const tagMap = {
-    bold: "STRONG",
-    italic: "EM",
-    underline: "U",
-  };
+    const fragment = range.extractContents();
 
-  while (node && node !== editorRef.current) {
-    if (node.nodeName === tagMap[format]) return true;
-    node = node.parentNode;
-  }
+    let hasBold = false;
 
-  return false;
-};
-  const toggleFormat = (type, value = null) => {
-  const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0) return;
+    // 🔍 Check if selection contains bold
+    const walkerCheck = document.createTreeWalker(
+      fragment,
+      NodeFilter.SHOW_ELEMENT,
+      null,
+    );
 
-  const range = sel.getRangeAt(0);
-  if (range.collapsed && type !== "list" && type !== "align") return;
-
-  // 🔁 INLINE FORMATTING (bold, italic, underline)
-  if (type === "inline") {
-    const tagMap = {
-      bold: "STRONG",
-      italic: "EM",
-      underline: "U",
-    };
-
-    const tagName = tagMap[value];
-
-    // Check if already applied
-    let node = sel.anchorNode;
-    let isActive = false;
-
-    while (node && node !== editorRef.current) {
-      if (node.nodeName === tagName) {
-        isActive = true;
+    let node;
+    while ((node = walkerCheck.nextNode())) {
+      if (node.nodeName === "STRONG" || node.nodeName === "B") {
+        hasBold = true;
         break;
       }
-      node = node.parentNode;
     }
 
-    if (isActive) {
-      // REMOVE format
-      const fragment = range.extractContents();
-
+    // 🔁 REMOVE BOLD
+    if (hasBold) {
       const walker = document.createTreeWalker(
         fragment,
         NodeFilter.SHOW_ELEMENT,
-        null
+        null,
       );
 
       let n;
       while ((n = walker.nextNode())) {
-        if (n.nodeName === tagName) {
+        if (n.nodeName === "STRONG" || n.nodeName === "B") {
           const parent = n.parentNode;
+
+          // move children out
           while (n.firstChild) {
             parent.insertBefore(n.firstChild, n);
           }
+
           parent.removeChild(n);
         }
       }
 
       range.insertNode(fragment);
-    } else {
-      // APPLY format
-      const el = document.createElement(tagName);
-      el.appendChild(range.extractContents());
-      range.insertNode(el);
     }
-  }
 
-  // 🔁 LISTS
-  else if (type === "list") {
-    const listType = value === "ul" ? "insertUnorderedList" : "insertOrderedList";
-    document.execCommand(listType);
-  }
+    // ✨ APPLY BOLD
+    else {
+      const strong = document.createElement("strong");
+      strong.appendChild(fragment);
+      range.insertNode(strong);
+    }
 
-  // 🔁 ALIGNMENT
-  else if (type === "align") {
-    const alignMap = {
-      center: "justifyCenter",
-      justify: "justifyFull",
-      left: "justifyLeft",
-      right: "justifyRight",
-    };
+    // 🔄 Restore selection
+    sel.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(range.commonAncestorContainer);
+    sel.addRange(newRange);
 
-    document.execCommand(alignMap[value]);
-  }
-
-  // 🔁 HIGHLIGHT
-  else if (type === "highlight") {
-    document.execCommand("hiliteColor", false, value);
-  }
-
-  // Update state
-  const html = editorRef.current.innerHTML;
-  setPost((prev) => ({ ...prev, postBody: html }));
-};
-
+    // 🔄 Sync state
+    const html = editorRef.current.innerHTML;
+    setPost((prev) => ({ ...prev, postBody: html }));
+  };
 
   const applyUnorderedList = (e) => {
     e.preventDefault();
@@ -536,14 +501,14 @@ export default function BlogPage() {
               <option value="Poppins">Poppins</option>
             </select>
             <button
-              className={`shadow border rounded ${isActive("bold") ? "active" : ""}`}
+              className={`shadow border rounded ${isBoldActive ? "active" : ""}`}
               style={{
                 fontFamily: "Times New Roman",
                 fontWeight: "bold",
                 margin: "2px",
               }}
               onMouseDown={(e) => e.preventDefault()} // prevent losing selection on click
-              onClick={toggleFormat.bind(null, "inline", "bold")}
+              onClick={() => toggleBold()}
               type="button"
             >
               B
