@@ -312,7 +312,7 @@ export default function BlogPage() {
           style={{
             minHeight: "200px",
             width: "85%",
-            marginLeft: "8%",
+            marginLeft: "20%",
             border: "1px solid gray",
             padding: "10px",
             margin: "20px",
