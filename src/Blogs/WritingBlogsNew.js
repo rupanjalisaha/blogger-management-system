@@ -82,7 +82,7 @@ export default function BlogPage() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       alert("Submitted successfully");
@@ -110,10 +110,19 @@ export default function BlogPage() {
 
   const categoryOptions = [
     { label: "Select an option", value: "" },
-    { label: "Space Exploration Missions", value: "Space Exploration Missions" },
+    {
+      label: "Space Exploration Missions",
+      value: "Space Exploration Missions",
+    },
     { label: "Rocket Science Basics", value: "Rocket Science Basics" },
-    { label: "Satellites and Communication", value: "Satellites and Communication" },
-    { label: "Astronomy and Astrophysics", value: "Astronomy and Astrophysics" },
+    {
+      label: "Satellites and Communication",
+      value: "Satellites and Communication",
+    },
+    {
+      label: "Astronomy and Astrophysics",
+      value: "Astronomy and Astrophysics",
+    },
     { label: "Space Agencies", value: "Space Agencies" },
   ];
 
@@ -123,80 +132,187 @@ export default function BlogPage() {
       <PostNavbar />
 
       <div className="container">
-        <h1 className="fs-2 mt-3">Write Your Blog</h1>
+        <h1 className="fs-2 mt-3" style={{ fontFamily: "monospace" }}>
+          Write Your Blogs
+        </h1>
       </div>
 
       <form onSubmit={onBlogSubmit}>
         {/* Time */}
-        <span style={{ marginLeft: "75%" }}>
+        <span
+          className="fs-6"
+          style={{
+            fontFamily: "cursive",
+            textAlign: "right",
+            marginLeft: "75%",
+          }}
+        >
           {currentDateTime.toLocaleDateString()} -{" "}
           {currentDateTime.toLocaleTimeString()}
         </span>
 
-        {/* Author */}
-        <p><b>{username}</b></p>
-
-        {/* Genre + Title */}
+        <p>
+          <b>{username}</b>
+        </p>
         <div style={{ display: "flex" }}>
-          <select id="genre" value={genre} onChange={onInputChange}>
-            {categoryOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
+          <h5 className="row" style={{ marginLeft: "10%", marginTop: "3%" }}>
+            Article Genre:
+          </h5>
+          <select
+            id="genre"
+            className="row p-2 border rounded shadow"
+            placeholder="Article Genre"
+            value={genre}
+            required
+            onChange={(e) => onInputChange(e)}
+            style={{
+              height: "40px",
+              marginLeft: "3%",
+              marginTop: "3%",
+              width: "300px",
+              textAlign: "center",
+              fontSize: "16px",
+              backgroundColor: "lightblue",
+              fontFamily: "Times New Roman",
+            }}
+          >
+            {categoryOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
-
+          <h4 className="row" style={{ marginLeft: "10%", marginTop: "3%" }}>
+            Title:
+          </h4>
           <input
             type="text"
             id="postTitle"
-            value={postTitle}
-            onChange={onInputChange}
+            className="row p-2 border rounded shadow"
             placeholder="Title"
+            value={postTitle}
+            required
+            onChange={(e) => onInputChange(e)}
+            style={{
+              height: "40px",
+              marginTop: "3%",
+              marginLeft: "3%",
+              width: "600px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              textAlign: "center",
+              fontFamily: "Times New Roman",
+              backgroundColor: "lightblue",
+            }}
           />
         </div>
 
         {/* 🚀 Toolbar */}
         {editor && (
           <div style={{ margin: "10px" }}>
-            <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() => editor.chain().focus().toggleBold().run()}
+            >
               B
             </button>
 
-            <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()}>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() => editor.chain().focus().toggleItalic().run()}
+            >
               I
             </button>
 
-            <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()}>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+            >
               U
             </button>
 
-            <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+            >
               •
             </button>
 
-            <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()}>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            >
               1.
             </button>
 
-            <button type="button" onClick={() => editor.chain().focus().toggleHighlight({ color: "yellow" }).run()}>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleHighlight({ color: "yellow" })
+                  .run()
+              }
+            >
               🟡
             </button>
-
-            <button type="button" onClick={() => editor.chain().focus().setTextAlign("center").run()}>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() =>
+                editor.chain().focus().toggleHighlight({ color: "red" }).run()
+              }
+            >
+              🟥
+            </button>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() =>
+                editor.chain().focus().setTextAlign("center").run()
+              }
+            >
               Center
             </button>
 
-            <button type="button" onClick={() => editor.chain().focus().setTextAlign("justify").run()}>
+            <button
+              type="button"
+              className="btn p-1 btn-primary mx-2"
+              onClick={() =>
+                editor.chain().focus().setTextAlign("justify").run()
+              }
+            >
               Justify
             </button>
           </div>
         )}
 
+        <h3 className="row mt-5" style={{ marginLeft: "10%" }}>
+          Article:
+        </h3>
         {/* 🚀 Editor */}
         <EditorContent
           editor={editor}
+          id="postBody"
+          value={postBody}
+          role="textbox"
+          aria-multiline="true"
+          className="col-md-7 offset-md-3 border rounded p-3 shadow"
+          minLength={1000}
+          maxLength={5000}
+          required
+          aria-label="Blog content editor"
           style={{
             minHeight: "200px",
+            width: "85%",
+            marginLeft: "8%",
             border: "1px solid gray",
             padding: "10px",
             margin: "20px",
@@ -208,26 +324,89 @@ export default function BlogPage() {
           Word Count: {wordCount}
         </p>
 
-        {/* Error */}
-        <p style={{ color: "red" }}>{errorMessage}</p>
-
-        {/* Preview */}
-        <h4>Preview</h4>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(postBody),
+        <p
+          style={{
+            color: "red",
+            fontFamily: "monospace",
+            fontWeight: "bold",
+            textAlign: "left",
+            marginLeft: "10%",
+            marginTop: "-2%",
           }}
-        />
+        >
+          {errorMessage}
+        </p>
+
+        <div
+          className="mt-2 fs-4 pb-2"
+          style={{
+            fontFamily: "cursive",
+            textDecoration: "underline",
+            marginLeft: "5%",
+          }}
+        >
+          Preview
+        </div>
+        <div
+          className="p-2 border rounded row"
+          style={{
+            whiteSpace: "break-spaces",
+            textAlign: "left",
+            marginLeft: "8%",
+            width: "85%",
+            backgroundColor: "lightslategray",
+          }}
+        >
+          <h5
+            className="shadow p-3"
+            style={{
+              fontWeight: "bold",
+              fontSize: "18px",
+              fontFamily: "monospace",
+              textAlign: "center",
+              backgroundColor: "lightblue",
+            }}
+          >
+            {postTitle}
+          </h5>
+          <div
+            style={{
+              fontSize: "16px",
+              color: "whitesmoke",
+              fontFamily: "Times New Roman",
+              fontWeight: "light",
+            }}
+            // sanitize to avoid XSS; DOMPurify is recommended
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(postBody || ""),
+            }}
+          />
+        </div>
 
         {/* Footer */}
-        <p>
+        <p
+          style={{
+            fontWeight: "bold",
+            marginLeft: "70%",
+            fontSize: "14px",
+            fontFamily: "monospace",
+            textAlign: "center",
+          }}
+        >
           {genre} <br /> @{writerUsername}
         </p>
 
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          className="btn btn-outline-primary m-3"
+          style={{ width: "100px" }}
+        >
+          ✔ Submit
+        </button>
       </form>
 
-      <button onClick={handleGoBack}>🔙</button>
+      <button title="Back to previous page"
+        className="btn btn-outline-secondary m-2 px-4" onClick={handleGoBack}>🔙</button>
     </div>
   );
 }
