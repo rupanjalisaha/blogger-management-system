@@ -13,6 +13,7 @@ import LoginUser from "./Users/LoginUser";
 import ViewBlogByUserName from "./Blogs/ViewBlogByUserName";
 import ProtectedRoute from "./ProtectedRoute";
 import ResetPasswordPage from "./layout/ResetPasswordPage";
+import WritingBlogsNew from "./Blogs/WritingBlogsNew";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { Navigate } from "react-router-dom";
@@ -72,7 +73,7 @@ function App() {
             path="/writeBlogs"
             element={
               <ProtectedRoute>
-                <WritingBlogs />
+                <WritingBlogsNew />
               </ProtectedRoute>
             }
           />
