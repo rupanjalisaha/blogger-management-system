@@ -188,8 +188,7 @@ export default function Home() {
           fostering a vibrant community of space technology enthusiasts.
         </p>
         <div>
-          <div className="plans-container">
-            <h3
+          <h3
               style={{
                 fontFamily: "monospace",
                 textDecoration: "underline",
@@ -200,10 +199,12 @@ export default function Home() {
             >
               Services We Provide
             </h3>
+
+          <div className="plans-container" style={{display:"flex"}}>
             {/* Free Tier */}
-            <div className="plan-card free">
-              <h3>Free Tier</h3>
-              <ul>
+            <div className="plan-card free" style={{border:"solid 1px black"}} >
+              <h3 style={{fontFamily: "monospace"}}>Free Tier</h3>
+              <ul style={{textAlign:"justify"}}>
                 <li>✔ Create & edit blogs</li>
                 <li>✔ View posts</li>
                 <li>✔ Like & comment</li>
@@ -218,8 +219,8 @@ export default function Home() {
             </div>
 
             {/* Premium Tier */}
-            <div className="plan-card premium">
-              <h3>Premium Tier 🚀</h3>
+            <div className="plan-card premium" style={{border:"solid 1px black"}}>
+              <h3 style={{fontFamily: "monospace"}}>Premium Tier 🚀</h3>
               <ul>
                 <li>✔ Everything in Free</li>
                 <li>✔ Follow users</li>
@@ -232,7 +233,7 @@ export default function Home() {
                 <li>✔ Membership of our Internal Community</li>
                 <li>✔ Exclusive webinars & workshops</li>
               </ul>
-              <button className="btn btn-primary">Premium Plan</button>
+              <button className="btn btn-primary">Upgrade Now❗</button>
             </div>
           </div>
           <h3>🔥Trending Blogs</h3>
