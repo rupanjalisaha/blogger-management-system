@@ -70,6 +70,24 @@ export default function Home() {
     if (token) fetchTopPosts();
   }, [token]);
 
+  const formatDate = (postCreatedAt) => {
+    const formatted = new Date(postCreatedAt+"Z").toLocaleString();
+
+    console.log(postCreatedAt);
+    return formatted;
+  };
+  const formattedPosts = topBlogs.map(post => ({
+  id: post[0],
+  title: post[1],
+  viewCount: post[2],
+  genre: post[3],
+  content: post[4],
+  author: post[5],
+  createdAt: post[6],
+  likes: post[7],
+  comments: post[8],
+  views: post[9],
+}));
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -179,16 +197,16 @@ export default function Home() {
         </p>
         <div>
           <h3>Trending Blogs</h3>
-          {topBlogs.length === 0 ? (
+          {formattedPosts.length === 0 ? (
             <p>No trending blogs available at the moment.</p>
-          ) : (topBlogs.map((blog, index) => (
-            <div key={index} className="card mb-3 shadow-sm">
+          ) : (formattedPosts.map((blog, index) => (
+            <div key={index} className="card row mb-3 h-100 shadow-sm">
               <div className="card-body">
                 <h5 className="card-title" style={{ fontWeight: "bold" }}>
-                  {blog.postTitle}
+                  {blog.title}
                 </h5>
                 <p className="card-text">
-                  <strong>👤 Author:</strong> {blog.writerUsername}
+                  <strong>👤 Author:</strong> {blog.author}
                 </p>
                 <p className="card-text">
                   <strong>📂 Genre:</strong> {blog.genre}
@@ -199,7 +217,7 @@ export default function Home() {
                     style={{
                       fontSize: "18px",
                       padding: "10px"}}
-                      >{blog.createdAt}</div>
+                      >{formatDate(blog.createdAt)}</div>
                       </p>
                    </div>
                    <button title="post views">👀 {blog.viewCount}</button>
