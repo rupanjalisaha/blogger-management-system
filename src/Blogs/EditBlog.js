@@ -116,7 +116,10 @@ function EditBlog() {
     e.preventDefault();
     try {
       if (!errorMessage) {
-        await axios.put(
+        alert(errorMessage);
+        return;
+      }
+      await axios.put(
           `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${id}`,
           post,
           {
@@ -131,7 +134,6 @@ function EditBlog() {
         );
         if (!confirmMessage) return;
         navigate("/viewBlogs");
-      }
     } catch (error) {
       alert(
         "Error! Blog could not be edited. Check console for error details.",
@@ -221,9 +223,6 @@ function EditBlog() {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="postBody" className="form-label fs-5">
-                  Blog Content
-                </label>
                 <div className="mb-3">
                   <label className="form-label fs-5">Blog Content</label>
 
