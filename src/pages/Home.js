@@ -126,8 +126,7 @@ export default function Home() {
   const filteredUsers = users.filter(
     (user) =>
       user.username !== "admin" &&
-      user.username !== localStorage.getItem("username") &&
-      user.isVerified === "true",
+      user.username !== localStorage.getItem("username")
   );
   
   return (
