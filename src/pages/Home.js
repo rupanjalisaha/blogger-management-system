@@ -71,11 +71,12 @@ export default function Home() {
   }, [token]);
 
   const formatDate = (postCreatedAt) => {
-    const formatted = new Date(postCreatedAt+"Z").toLocaleString();
-
-    console.log(postCreatedAt);
-    return formatted;
-  };
+  return new Date(postCreatedAt).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+};
   const formattedPosts = topBlogs.map(post => ({
   id: post[0],
   title: post[1],
@@ -225,7 +226,7 @@ export default function Home() {
                         <Link
                           title="View Blog"
                           className="btn btn-primary w-100"
-                          to={`/viewblog/${blog.postId}`}
+                          to={`/viewblog/${blog.id}`}
                         />
                           </div>
                     </div>
