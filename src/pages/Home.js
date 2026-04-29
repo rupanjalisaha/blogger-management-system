@@ -124,7 +124,7 @@ export default function Home() {
     }
   };
   const filteredUsers = users.filter(
-    (user) => user.username !== "admin" || user.username === localStorage.getItem("username"),
+    (user) => user.username !== "admin" && user.username !== localStorage.getItem("username") && user.isVerified === "true",
   );
   return (
     <div style={{ width: "100%" }}>
@@ -278,6 +278,7 @@ export default function Home() {
                   <td>{user.username}</td>
                   <td>{user.fullName}</td>
                   <td>{user.category}</td>
+                  <td>{user.isVerified}</td>
                   <td>
                     <Link
                       title="View User Profile"
