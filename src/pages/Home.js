@@ -254,15 +254,7 @@ export default function Home() {
                     <strong>📂 Genre:</strong> {blog.genre}
                   </p>
                   <p className="card-text">
-                    <strong>📝 Posted On:</strong>
-                    <div
-                      style={{
-                        fontSize: "18px",
-                        padding: "10px",
-                      }}
-                    >
-                      {formatDate(blog.createdAt)}
-                    </div>
+                    📝 Posted On: {formatDate(blog.createdAt)}
                   </p>
                 </div>
                 <button
