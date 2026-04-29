@@ -200,7 +200,7 @@ export default function Home() {
               Services We Provide
             </h3>
 
-          <div className="plans-container" style={{display:"flex"}}>
+          <div className="plans-container" style={{display:"flex", marginBottom:"5%"}}>
             {/* Free Tier */}
             <div className="plan-card free" style={{border:"solid 1px black", marginLeft:"30%"}} >
               <h3 style={{fontFamily: "monospace"}}>Free Tier</h3>
