@@ -133,7 +133,7 @@ function EditBlog() {
           "Blog edited! Are you sure to submit?",
         );
         if (!confirmMessage) return;
-        navigate("/viewBlogs");
+        navigate("/details");
     } catch (error) {
       alert(
         "Error! Blog could not be edited. Check console for error details.",
