@@ -215,7 +215,7 @@ export default function Home() {
                 <li>❌ Bookmarks</li>
                 <li>❌ Personalized Notifications</li>
               </ul>
-              <button className="btn btn-outline-primary">Your Plan</button>
+              <button className="btn btn-primary">Your Plan</button>
             </div>
               <hr style={{marginLeft:"15%"}}/>
             {/* Premium Tier */}
@@ -233,7 +233,7 @@ export default function Home() {
                 <li>✔ Membership of our Internal Community</li>
                 <li>✔ Exclusive webinars & workshops</li>
               </ul>
-              <button className="btn btn-outline-primary">Upgrade Now❗</button>
+              <button className="btn btn-danger">Upgrade Now❗</button>
             </div>
           </div>
           <h3>🔥Trending Blogs</h3>
