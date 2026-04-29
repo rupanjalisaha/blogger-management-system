@@ -203,8 +203,8 @@ export default function Home() {
           <div className="plans-container" style={{display:"flex", marginBottom:"5%"}}>
             {/* Free Tier */}
             <div className="plan-card free" style={{border:"solid 1px black", marginLeft:"15%"}} >
-              <h3 style={{fontFamily: "monospace"}}>Free Tier</h3>
-              <ul style={{textAlign:"justify"}}>
+              <h4 style={{fontFamily: "monospace", textDecoration:"overline", marginTop:"5%"}}>Free Tier</h4>
+              <ul style={{textAlign:"justify", padding:"5px", margin:"5%"}}>
                 <li>✔ Create & edit blogs</li>
                 <li>✔ View posts</li>
                 <li>✔ Like & comment</li>
@@ -220,8 +220,8 @@ export default function Home() {
               <hr style={{marginLeft:"15%"}}/>
             {/* Premium Tier */}
             <div className="plan-card premium" style={{border:"solid 1px black", marginLeft:"15%"}}>
-              <h3 style={{fontFamily: "monospace"}}>Premium Tier 🚀</h3>
-              <ul style={{textAlign:"justify"}}>
+              <h4 style={{fontFamily: "monospace", textDecoration:"overline", marginTop:"5%"}}>Premium Tier 🚀</h4>
+              <ul style={{textAlign:"justify", padding:"5px", margin:"5%"}}>
                 <li>✔ Everything in Free</li>
                 <li>✔ Follow users</li>
                 <li>✔ Trending & popular filters</li>
@@ -240,7 +240,8 @@ export default function Home() {
           {formattedPosts.length === 0 ? (
             <p>No trending blogs available at the moment.</p>
           ) : (
-            formattedPosts.map((blog, index) => (
+            <div className="row">
+            {formattedPosts.map((blog, index) => (
               <div key={index} className="card container mb-3 h-100 shadow-sm">
                 <div className="card-body">
                   <h5 className="card-title" style={{ fontWeight: "bold" }}>
@@ -286,7 +287,8 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-            ))
+            ))}
+            </div>
           )}
         </div>
         <h2
