@@ -124,7 +124,7 @@ export default function Home() {
     }
   };
   const filteredUsers = users.filter(
-    (user) => user.username === localStorage.getItem("username"),
+    (user) => user.username !== "admin" || user.username === localStorage.getItem("username"),
   );
   return (
     <div style={{ width: "100%" }}>
@@ -197,11 +197,12 @@ export default function Home() {
           community driven by curiosity for space and technology.
         </p>
         <div>
-          <h3>Trending Blogs</h3>
+          <h3>🔥Trending Blogs</h3>
           {formattedPosts.length === 0 ? (
             <p>No trending blogs available at the moment.</p>
           ) : (formattedPosts.map((blog, index) => (
-            <div key={index} className="card row mb-3 h-100 shadow-sm">
+            <div className="row">
+            <div key={index} className="card mb-3 h-100 shadow-sm">
               <div className="card-body">
                 <h5 className="card-title" style={{ fontWeight: "bold" }}>
                   {blog.title}
@@ -221,14 +222,16 @@ export default function Home() {
                       >{formatDate(blog.createdAt)}</div>
                       </p>
                    </div>
-                   <button title="post views">👀 {blog.viewCount}</button>
+                   <button className="btn p-1 btn-primary" title="post views">👀 {blog.viewCount}</button>
+                   <button className="btn p-1 btn-primary" title="post likes">👍 {blog.likes}</button>
                    <div className="card-footer bg-white border-0">
                         <Link
                           title="View Blog"
-                          className="btn btn-primary w-100"
+                          className="btn btn-primary"
                           to={`/viewblog/${blog.id}`}
-                        />
+                        >Read Blog 📖</Link>
                           </div>
+                    </div>
                     </div>
                       )))}
         </div>
@@ -239,7 +242,7 @@ export default function Home() {
             marginTop: "3%",
           }}
         >
-          Registered Writers List of UVB
+          Other Registered Writers of UVB
         </h2>
         {/***<p style={{ color: "red", fontWeight: "bold" }}>
           * Edit & Delete is only possible for own account

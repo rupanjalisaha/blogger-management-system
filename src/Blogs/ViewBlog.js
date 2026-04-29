@@ -30,6 +30,7 @@ export default function ViewBlog() {
       alert("Failed to load blogs. Please try again later.");
     }
   };
+  const filteredPosts = post.filter((p)=>p.writerUsername !== localStorage.getItem("username"));
   function getFirst50Words(text) {
     if (!text) return "";
 
@@ -64,7 +65,7 @@ export default function ViewBlog() {
             </p>
             <div className="py-4">
               <div className="row">
-                {post.map((post, index) => (
+                {filteredPosts.map((post, index) => (
                   <div className="col-md-4 mb-4" key={index}>
                     <div className="card h-100 shadow-sm">
                       <div className="card-body">

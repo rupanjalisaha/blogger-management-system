@@ -17,25 +17,27 @@ export default function Navbar() {
     navigate("/login");
   };
   useEffect(() => {
-      if (token) loadUsers();
-    }, [token]);
-    const loadUsers = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/UVB/bloggerDetails`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+    if (token) loadUsers();
+  }, [token]);
+  const loadUsers = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/bloggerDetails`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
-        setUsers(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+        },
+      );
+      setUsers(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const loggedInUsername = localStorage.getItem("username");
-  const loggedInUserId = users.find((user) => user.username === loggedInUsername)?.id;
+  const loggedInUserId = users.find(
+    (user) => user.username === loggedInUsername,
+  )?.id;
   return (
     <div style={{ width: "100%" }}>
       <nav
@@ -47,77 +49,70 @@ export default function Navbar() {
           style={{ marginLeft: "3%", marginRight: "1%" }}
         >
           <h3 className="navbar-brand">🌐UVB (Univeral Blog) Portal</h3>
-          <Menu as="div" className="relative inline-block text-right ms-auto" style={{ marginRight: "3%" }}>
-            <Menu.Button>☰</Menu.Button>
-            <Menu.Items>
-              <Menu.Item>
-                {({ active }) => (
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      fontFamily: "cursive",
-                      textAlign: "left",
-                      marginLeft: "30%",
-                      marginTop: "5%",
-                      color: "whitesmoke",
-                    }}
-                  >
-                    `Username: ${loggedInUsername}`
-                  </p>
-                )}
-              </Menu.Item>
+          <Menu as="div" className="relative ms-auto">
+            <Menu.Button className="btn btn-light">☰</Menu.Button>
+
+            <Menu.Items
+              className="position-absolute end-0 mt-2 bg-white text-dark rounded shadow"
+              style={{ width: "220px", zIndex: 1000 }}
+            >
+              {/* Username */}
+              <div style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
+                <strong>{loggedInUsername}</strong>
+              </div>
+
+              {/* Items */}
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    className="btn btn-outline-light ms-auto"
                     to="/details"
-                    style={{ padding: "10px 10px 10px 10px", fontSize: "18px" }}
+                    className={`dropdown-item ${active ? "bg-light" : ""}`}
                   >
-                    Home 🈴
+                    Home 🏠
                   </Link>
                 )}
               </Menu.Item>
+
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    className="btn btn-outline-light"
                     to={`/viewuser/${loggedInUserId}`}
-                    style={{ padding: "10px 10px 10px 10px", fontSize: "18px" }}
+                    className={`dropdown-item ${active ? "bg-light" : ""}`}
                   >
                     My Profile 👤
                   </Link>
                 )}
               </Menu.Item>
+
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    className="btn btn-outline-light"
                     to={`/viewBlogByUserName/${loggedInUsername}`}
-                    style={{ padding: "10px 10px 10px 10px", fontSize: "18px" }}
+                    className={`dropdown-item ${active ? "bg-light" : ""}`}
                   >
-                    My Blogs 🧑‍💻
+                    My Blogs 📝
                   </Link>
                 )}
               </Menu.Item>
+
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    className="btn btn-outline-light"
                     to="/viewBlogs"
-                    style={{ padding: "10px 10px 10px 10px", fontSize: "18px" }}
+                    className={`dropdown-item ${active ? "bg-light" : ""}`}
                   >
-                    Blogs 📑
+                    Other Blogs 📚
                   </Link>
                 )}
               </Menu.Item>
+
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    className="btn btn-outline-light"
-                    style={{ padding: "10px 10px 10px 10px", fontSize: "18px" }}
                     onClick={handleLogout}
+                    className={`dropdown-item ${active ? "bg-light" : ""}`}
                   >
-                    Log Out【﻿⏻】
+                    Logout ⏻
                   </button>
                 )}
               </Menu.Item>
