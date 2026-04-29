@@ -208,7 +208,7 @@ export default function Home() {
               gap: "20px",
               margin: "40px 0",
               flexWrap: "wrap",
-              marginLeft: "15%",
+              marginLeft: "10%",
             }}
           >
             {/* Free Tier */}
@@ -295,7 +295,7 @@ export default function Home() {
               <button className="btn btn-danger">Upgrade Now!</button>
             </div>
           </div>
-          <h3>🔥Trending Blogs</h3>
+          <h3 style={{margin:"40px 0"}}>🔥Trending Blogs</h3>
           {formattedPosts.length === 0 ? (
             <p>No trending blogs available at the moment.</p>
           ) : (
@@ -379,7 +379,6 @@ export default function Home() {
                   <td>{user.username}</td>
                   <td>{user.fullName}</td>
                   <td>{user.category}</td>
-                  <td>{user.isVerified}</td>
                   <td>
                     <Link
                       title="View User Profile"
