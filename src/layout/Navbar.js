@@ -37,6 +37,9 @@ export default function Navbar() {
           <Link className="btn btn-outline-light" to="/viewBlogs" style={{padding:"10px 10px 10px 10px", fontSize:"18px"}}>
             Blogs 📑
           </Link>
+          <Link className="btn btn-outline-light" to="/paymentPage" style={{padding:"10px 10px 10px 10px", fontSize:"18px"}}>
+            Upgrade Account 💎
+          </Link>
           <button
             className="btn btn-outline-light"
             style={{padding:"10px 10px 10px 10px", fontSize:"18px"}}

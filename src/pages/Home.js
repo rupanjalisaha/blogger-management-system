@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 export default function Home() {
   const [users, setUsers] = useState([]);
+  const [topBlogs, setTopBlogs] = useState([]);
   const { setIsAuth } = useContext(AuthContext);
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
@@ -49,6 +50,26 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [navigate]);
 
+  const fetchTopPosts = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/topPosts`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      console.log("Top Posts:", res.data);
+      setTopBlogs(res.data);
+    } catch (err) {
+      console.error("Error fetching top posts:", err);
+    }
+  };
+  useEffect(() => {
+    if (token) fetchTopPosts();
+  }, [token]);
+
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -83,7 +104,9 @@ export default function Home() {
       console.error("Error deleting user:", error);
     }
   };
-  const filteredUsers = users.filter((user) => user.username !== "admin");
+  const filteredUsers = users.filter(
+    (user) => user.username === localStorage.getItem("username"),
+  );
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
@@ -132,11 +155,12 @@ export default function Home() {
           ensuring safe access and protected user sessions. Users can
           personalize their profiles by uploading profile images, with options
           to view and remove them at any time. UVB Portal also includes a
-          rich-text blog editor that supports styled content, allowing writers
-          to structure articles with clarity and visual appeal. Writers can
-          publish blogs, explore posts from other users, and maintain full
-          control over their own content with edit and delete
-          functionalities.{" "}
+          rich-text editor that supports styled content, allowing writers to
+          structure articles with clarity and visual appeal. Writers can publish
+          blogs, explore posts from other users, and maintain full control over
+          their own content with edit and delete functionalities. They can also
+          appreciate other writers by liking and commenting on their posts,
+          fostering a vibrant community of space technology enthusiasts.
         </p>
         <p
           style={{
@@ -153,6 +177,42 @@ export default function Home() {
           aspiring writers to contribute, learn, and grow within a focused
           community driven by curiosity for space and technology.
         </p>
+        <div>
+          <h3>Trending Blogs</h3>
+          {topBlogs.length === 0 ? (
+            <p>No trending blogs available at the moment.</p>
+          ) : (topBlogs.map((blog, index) => (
+            <div key={index} className="card mb-3 shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title" style={{ fontWeight: "bold" }}>
+                  {blog.postTitle}
+                </h5>
+                <p className="card-text">
+                  <strong>👤 Author:</strong> {blog.writerUsername}
+                </p>
+                <p className="card-text">
+                  <strong>📂 Genre:</strong> {blog.genre}
+                </p>
+                <p className="card-text">
+                  <strong>📝 Posted On:</strong>
+                  <div
+                    style={{
+                      fontSize: "18px",
+                      padding: "10px"}}
+                      >{blog.createdAt}</div>
+                      </p>
+                   </div>
+                   <button title="post views">👀 {blog.viewCount}</button>
+                   <div className="card-footer bg-white border-0">
+                        <Link
+                          title="View Blog"
+                          className="btn btn-primary w-100"
+                          to={`/viewblog/${blog.postId}`}
+                        />
+                          </div>
+                    </div>
+                      )))}
+        </div>
         <h2
           style={{
             fontFamily: "monospace",
@@ -162,7 +222,7 @@ export default function Home() {
         >
           Registered Writers List of UVB
         </h2>
-        <p style={{ color: "red", fontWeight: "bold" }}>
+        {/***<p style={{ color: "red", fontWeight: "bold" }}>
           * Edit & Delete is only possible for own account
         </p>
         <p
@@ -174,7 +234,7 @@ export default function Home() {
         >
           Admin rights are managed by admins only, contact admin to request for
           admin privileges.
-        </p>
+        </p>***/}
         <div className="py-5">
           <table
             className="table border shadow"
