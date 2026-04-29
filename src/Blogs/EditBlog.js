@@ -213,14 +213,8 @@ function EditBlog() {
                   onChange={(e) => onInputChange(e)}
                 />
               </div>
-              {!viewTextEditor?<button className="btn btn-primary" 
-        style={{fontFamily: "Times New Roman",
-              fontWeight: "bold",
-              margin: "2px",
-              marginLeft:"70%"}}
-        onClick={()=> setViewTextEditor(true)}>View Style Palette</button>:
         
-        editor && (
+        {editor && (
           <div style={{ margin: "10px", marginTop:"30px" }}>
             <button
               type="button"
