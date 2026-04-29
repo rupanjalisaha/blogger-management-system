@@ -126,9 +126,9 @@ export default function Home() {
   const filteredUsers = users.filter(
     (user) =>
       user.username !== "admin" &&
-      user.username !== localStorage.getItem("username")
+      user.username !== localStorage.getItem("username"),
   );
-  
+
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
@@ -208,6 +208,7 @@ export default function Home() {
               gap: "20px",
               margin: "40px 0",
               flexWrap: "wrap",
+              marginLeft: "15%",
             }}
           >
             {/* Free Tier */}
@@ -231,7 +232,13 @@ export default function Home() {
               >
                 Free Tier
               </h4>
-              <ul style={{ textAlign: "justify", listStyle:"none", padding: "5%" }}>
+              <ul
+                style={{
+                  textAlign: "justify",
+                  listStyle: "none",
+                  padding: "5%",
+                }}
+              >
                 <li>✔ Create & edit blogs</li>
                 <li>✔ View posts</li>
                 <li>✔ Like & comment</li>
@@ -248,21 +255,32 @@ export default function Home() {
             {/* Premium Tier */}
             <div
               className="plan-card premium"
-              style={{ marginLeft: "15%" , border: "2px solid #2a5298",
-              background: "linear-gradient(180deg, #ffffff, #f5f8ff)"
-}}
+              style={{
+                marginLeft: "15%",
+                border: "2px solid #2a5298",
+                background: "linear-gradient(180deg, #ffffff, #f5f8ff)",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                transition: "transform 0.2s ease",
+              }}
             >
               <h4
                 style={{
                   fontFamily: "monospace",
                   marginTop: "5%",
                   marginLeft: "5%",
-                  color: "#2a5298"
+                  color: "#2a5298",
                 }}
               >
                 Premium Tier 🚀 <span className="badge">Best Value</span>
               </h4>
-              <ul style={{ textAlign: "justify", listStyle:"none", padding: "10px" }}>
+              <ul
+                style={{
+                  textAlign: "justify",
+                  listStyle: "none",
+                  padding: "10px",
+                }}
+              >
                 <li>✔ Everything in Free</li>
                 <li>✔ Follow users</li>
                 <li>✔ Trending & popular filters</li>
