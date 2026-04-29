@@ -209,7 +209,7 @@ export default function Home() {
               className="plan-card free"
               style={{ border: "solid 1px black", marginLeft: "15%" }}
             >
-              <h4 style={{ fontFamily: "monospace", marginTop: "5%" }}>
+              <h4 style={{ fontFamily: "monospace", marginTop: "5%", marginLeft:"5%"  }}>
                 Free Tier
               </h4>
               <ul style={{ textAlign: "justify", padding: "5%" }}>
