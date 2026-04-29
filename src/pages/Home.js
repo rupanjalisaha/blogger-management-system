@@ -188,65 +188,103 @@ export default function Home() {
           fostering a vibrant community of space technology enthusiasts.
         </p>
         <div>
-        <h3 style={{fontFamily: "monospace", textDecoration: "underline",
-            marginTop: "2%",
-            marginBottom: "3%",
-            color: "Highlight"}}>Services We Provide</h3>
-        <p
-          style={{
-            fontFamily: "monospace",
-            fontSize: "18px",
-            padding: "5px",
-            textAlign: "justify",
-            marginBottom: "1%",
-            lineHeight: "1cm",
-          }}
-        ></p>
+          <div className="plans-container">
+            <h3
+              style={{
+                fontFamily: "monospace",
+                textDecoration: "underline",
+                marginTop: "2%",
+                marginBottom: "3%",
+                color: "Highlight",
+              }}
+            >
+              Services We Provide
+            </h3>
+            {/* Free Tier */}
+            <div className="plan-card free">
+              <h3>Free Tier</h3>
+              <ul>
+                <li>✔ Create & edit blogs</li>
+                <li>✔ View posts</li>
+                <li>✔ Like & comment</li>
+                <li>✔ Basic profile</li>
+                <li>✔ Read the trending posts</li>
+                <li>✔ Search functionality</li>
+                <li>❌ Trending filters</li>
+                <li>❌ Bookmarks</li>
+                <li>❌ Notifications</li>
+              </ul>
+              <button className="btn btn-outline-primary">Your Plan</button>
+            </div>
+
+            {/* Premium Tier */}
+            <div className="plan-card premium">
+              <h3>Premium Tier 🚀</h3>
+              <ul>
+                <li>✔ Everything in Free</li>
+                <li>✔ Follow users</li>
+                <li>✔ Trending & popular filters</li>
+                <li>✔ Bookmarks</li>
+                <li>✔ Personalized notifications</li>
+                <li>✔ Advanced analytics dashboard</li>
+                <li>✔ Advanced writing tools</li>
+                <li>✔ Priority support</li>
+                <li>✔ Membership of our Internal Community</li>
+                <li>✔ Exclusive webinars & workshops</li>
+              </ul>
+              <button className="btn btn-primary">Premium Plan</button>
+            </div>
+          </div>
           <h3>🔥Trending Blogs</h3>
           {formattedPosts.length === 0 ? (
             <p>No trending blogs available at the moment.</p>
           ) : (
             formattedPosts.map((blog, index) => (
-              
-                <div key={index} className="card container mb-3 h-100 shadow-sm">
-                  <div className="card-body">
-                    <h5 className="card-title" style={{ fontWeight: "bold" }}>
-                      {blog.title}
-                    </h5>
-                    <p className="card-text">
-                      <strong>👤 Author:</strong> {blog.author}
-                    </p>
-                    <p className="card-text">
-                      <strong>📂 Genre:</strong> {blog.genre}
-                    </p>
-                    <p className="card-text">
-                      <strong>📝 Posted On:</strong>
-                      <div
-                        style={{
-                          fontSize: "18px",
-                          padding: "10px",
-                        }}
-                      >
-                        {formatDate(blog.createdAt)}
-                      </div>
-                    </p>
-                  </div>
-                  <button className="btn p-1 btn-outline-primary" title="post views">
-                    👀 {blog.viewCount}
-                  </button>
-                  <button className="btn p-1 btn-outline-primary" title="post likes">
-                    👍 {blog.likes}
-                  </button>
-                  <div className="card-footer bg-white border-0">
-                    <Link
-                      title="View Blog"
-                      className="btn btn-primary"
-                      to={`/viewblog/${blog.id}`}
+              <div key={index} className="card container mb-3 h-100 shadow-sm">
+                <div className="card-body">
+                  <h5 className="card-title" style={{ fontWeight: "bold" }}>
+                    {blog.title}
+                  </h5>
+                  <p className="card-text">
+                    <strong>👤 Author:</strong> {blog.author}
+                  </p>
+                  <p className="card-text">
+                    <strong>📂 Genre:</strong> {blog.genre}
+                  </p>
+                  <p className="card-text">
+                    <strong>📝 Posted On:</strong>
+                    <div
+                      style={{
+                        fontSize: "18px",
+                        padding: "10px",
+                      }}
                     >
-                      Read Blog 📖
-                    </Link>
-                  </div>
+                      {formatDate(blog.createdAt)}
+                    </div>
+                  </p>
                 </div>
+                <button
+                  className="btn p-1 btn-outline-primary"
+                  title="post views"
+                >
+                  👀 {blog.viewCount}
+                </button>
+                <button
+                  className="btn p-1 btn-outline-primary"
+                  title="post likes"
+                >
+                  👍 {blog.likes}
+                </button>
+                <div className="card-footer bg-white border-0">
+                  <Link
+                    title="View Blog"
+                    className="btn btn-primary"
+                    to={`/viewblog/${blog.id}`}
+                  >
+                    Read Blog 📖
+                  </Link>
+                </div>
+              </div>
             ))
           )}
         </div>
