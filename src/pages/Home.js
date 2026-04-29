@@ -189,22 +189,30 @@ export default function Home() {
         </p>
         <div>
           <h3
-              style={{
-                fontFamily: "monospace",
-                textDecoration: "underline",
-                marginTop: "2%",
-                marginBottom: "3%",
-                color: "Highlight",
-              }}
-            >
-              Services We Provide
-            </h3>
+            style={{
+              fontFamily: "monospace",
+              textDecoration: "underline",
+              marginTop: "2%",
+              marginBottom: "3%",
+              color: "Highlight",
+            }}
+          >
+            Services We Provide
+          </h3>
 
-          <div className="plans-container" style={{display:"flex", marginBottom:"5%"}}>
+          <div
+            className="plans-container"
+            style={{ display: "flex", marginBottom: "5%" }}
+          >
             {/* Free Tier */}
-            <div className="plan-card free" style={{border:"solid 1px black", marginLeft:"15%"}} >
-              <h4 style={{fontFamily: "monospace", marginTop:"5%"}}>Free Tier</h4>
-              <ul style={{textAlign:"justify", padding:"5%"}}>
+            <div
+              className="plan-card free"
+              style={{ border: "solid 1px black", marginLeft: "15%" }}
+            >
+              <h4 style={{ fontFamily: "monospace", marginTop: "5%" }}>
+                Free Tier
+              </h4>
+              <ul style={{ textAlign: "justify", padding: "5%" }}>
                 <li>✔ Create & edit blogs</li>
                 <li>✔ View posts</li>
                 <li>✔ Like & comment</li>
@@ -217,11 +225,16 @@ export default function Home() {
               </ul>
               <button className="btn btn-primary">Your Plan</button>
             </div>
-              <hr style={{marginLeft:"15%"}}/>
+            <hr style={{ marginLeft: "15%" }} />
             {/* Premium Tier */}
-            <div className="plan-card premium" style={{border:"solid 1px black", marginLeft:"15%"}}>
-              <h4 style={{fontFamily: "monospace", marginTop:"5%"}}>Premium Tier 🚀</h4>
-              <ul style={{textAlign:"justify", padding:"5%"}}>
+            <div
+              className="plan-card premium"
+              style={{ border: "solid 1px black", marginLeft: "15%" }}
+            >
+              <h4 style={{ fontFamily: "monospace", marginTop: "5%", marginLeft:"5%" }}>
+                Premium Tier 🚀
+              </h4>
+              <ul style={{ textAlign: "justify", padding: "10px" }}>
                 <li>✔ Everything in Free</li>
                 <li>✔ Follow users</li>
                 <li>✔ Trending & popular filters</li>
@@ -241,45 +254,39 @@ export default function Home() {
             <p>No trending blogs available at the moment.</p>
           ) : (
             <div className="row">
-            {formattedPosts.map((blog, index) => (
-              <div key={index} className="card mb-3 h-100 shadow-sm">
-                <div className="card-body">
-                  <h5 className="card-title" style={{ fontWeight: "bold" }}>
-                    {blog.title}
-                  </h5>
-                  <p className="card-text">
-                    <strong>👤 Author:</strong> {blog.author}
-                  </p>
-                  <p className="card-text">
-                    <strong>📂 Genre:</strong> {blog.genre}
-                  </p>
-                  <p className="card-text">
-                    📝 Posted On: {formatDate(blog.createdAt)}
-                  </p>
+              {formattedPosts.map((blog, index) => (
+                <div key={blog.id} className="col-md-4 col-sm-6 mb-4">
+                  <div className="card h-100 shadow-sm">
+                    <div className="card-body d-flex flex-column">
+                      <h5 className="card-title fw-bold mb-2">{blog.title}</h5>
+
+                      <p className="text-muted mb-1">👤 {blog.author}</p>
+
+                      <p className="text-muted mb-1">📂 {blog.genre}</p>
+
+                      <p className="text-muted mb-3">
+                        🕒 {formatDate(blog.createdAt)}
+                      </p>
+
+                      {/* Push button to bottom */}
+                      <div className="mt-auto">
+                        <Link
+                          className="btn btn-primary w-100"
+                          to={`/viewblog/${blog.id}`}
+                        >
+                          Read Blog 📖
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Stats row */}
+                    <div className="d-flex justify-content-around py-2 border-top">
+                      <span>👀 {blog.viewCount}</span>
+                      <span>👍 {blog.likes}</span>
+                    </div>
+                  </div>
                 </div>
-                <button
-                  className="btn p-1 btn-outline-primary"
-                  title="post views"
-                >
-                  👀 {blog.viewCount}
-                </button>
-                <button
-                  className="btn p-1 btn-outline-primary"
-                  title="post likes"
-                >
-                  👍 {blog.likes}
-                </button>
-                <div className="card-footer bg-white border-0">
-                  <Link
-                    title="View Blog"
-                    className="btn btn-primary"
-                    to={`/viewblog/${blog.id}`}
-                  >
-                    Read Blog 📖
-                  </Link>
-                </div>
-              </div>
-            ))}
+              ))}
             </div>
           )}
         </div>
