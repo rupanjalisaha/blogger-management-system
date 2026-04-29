@@ -129,6 +129,7 @@ export default function Home() {
       user.username !== localStorage.getItem("username") &&
       user.isVerified === "true",
   );
+  
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
@@ -202,17 +203,36 @@ export default function Home() {
 
           <div
             className="plans-container"
-            style={{ display: "flex", marginBottom: "5%" }}
+            style={{
+              display: "flex",
+              marginBottom: "5%",
+              gap: "20px",
+              margin: "40px 0",
+              flexWrap: "wrap",
+            }}
           >
             {/* Free Tier */}
             <div
               className="plan-card free"
-              style={{ border: "solid 1px black", marginLeft: "15%" }}
+              style={{
+                width: "300px",
+                padding: "20px",
+                borderRadius: "12px",
+                background: "white",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                transition: "transform 0.2s ease",
+                border: "2px solid black",
+              }}
             >
-              <h4 style={{ fontFamily: "monospace", marginTop: "5%", marginLeft:"5%"  }}>
+              <h4
+                style={{
+                  fontFamily: "monospace",
+                  marginBottom: "15px",
+                }}
+              >
                 Free Tier
               </h4>
-              <ul style={{ textAlign: "justify", padding: "5%" }}>
+              <ul style={{ textAlign: "justify", listStyle:"none", padding: "5%" }}>
                 <li>✔ Create & edit blogs</li>
                 <li>✔ View posts</li>
                 <li>✔ Like & comment</li>
@@ -229,12 +249,21 @@ export default function Home() {
             {/* Premium Tier */}
             <div
               className="plan-card premium"
-              style={{ border: "solid 1px black", marginLeft: "15%" }}
+              style={{ marginLeft: "15%" , border: "2px solid #2a5298",
+              background: "linear-gradient(180deg, #ffffff, #f5f8ff)"
+}}
             >
-              <h4 style={{ fontFamily: "monospace", marginTop: "5%", marginLeft:"5%" }}>
-                Premium Tier 🚀
+              <h4
+                style={{
+                  fontFamily: "monospace",
+                  marginTop: "5%",
+                  marginLeft: "5%",
+                  color: "#2a5298"
+                }}
+              >
+                Premium Tier 🚀 <span className="badge">Best Value</span>
               </h4>
-              <ul style={{ textAlign: "justify", padding: "10px" }}>
+              <ul style={{ textAlign: "justify", listStyle:"none", padding: "10px" }}>
                 <li>✔ Everything in Free</li>
                 <li>✔ Follow users</li>
                 <li>✔ Trending & popular filters</li>
@@ -246,7 +275,7 @@ export default function Home() {
                 <li>✔ Membership of our Internal Community</li>
                 <li>✔ Exclusive webinars & workshops</li>
               </ul>
-              <button className="btn btn-danger">Upgrade Now❗</button>
+              <button className="btn btn-danger">Upgrade Now!</button>
             </div>
           </div>
           <h3>🔥Trending Blogs</h3>
