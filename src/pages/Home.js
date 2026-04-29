@@ -202,7 +202,7 @@ export default function Home() {
 
           <div className="plans-container" style={{display:"flex"}}>
             {/* Free Tier */}
-            <div className="plan-card free" style={{border:"solid 1px black"}} >
+            <div className="plan-card free" style={{border:"solid 1px black", marginLeft:"30%"}} >
               <h3 style={{fontFamily: "monospace"}}>Free Tier</h3>
               <ul style={{textAlign:"justify"}}>
                 <li>✔ Create & edit blogs</li>
@@ -219,7 +219,7 @@ export default function Home() {
             </div>
 
             {/* Premium Tier */}
-            <div className="plan-card premium" style={{border:"solid 1px black"}}>
+            <div className="plan-card premium" style={{border:"solid 1px black", marginLeft:"30%"}}>
               <h3 style={{fontFamily: "monospace"}}>Premium Tier 🚀</h3>
               <ul>
                 <li>✔ Everything in Free</li>
@@ -233,7 +233,7 @@ export default function Home() {
                 <li>✔ Membership of our Internal Community</li>
                 <li>✔ Exclusive webinars & workshops</li>
               </ul>
-              <button className="btn btn-primary">Upgrade Now❗</button>
+              <button className="btn btn-outline-primary">Upgrade Now❗</button>
             </div>
           </div>
           <h3>🔥Trending Blogs</h3>
