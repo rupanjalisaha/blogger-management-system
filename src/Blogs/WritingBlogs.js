@@ -646,6 +646,7 @@ export default function BlogPage() {
             fontFamily: "cursive",
             textDecoration: "underline",
             marginLeft: "5%",
+            marginTop:"2%"
           }}
         >
           Preview

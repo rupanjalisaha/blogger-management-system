@@ -24,7 +24,6 @@ function EditBlog() {
   let navigate = useNavigate();
   const { id } = useParams();
 
-  
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -52,57 +51,88 @@ function EditBlog() {
 
   const wordCount = countWords(postBody);
 
-
-  
   const onInputChange = (e) => {
     setPost({ ...post, [e.target.id]: e.target.value });
   };
   useEffect(() => {
     loadPost();
-  },[]);
+  }, []);
   const categoryOptions = [
     { label: "Select an option", value: `{post.genre}` },
-    { label: "Space Exploration Missions", value: "Space Exploration Missions" },
+    {
+      label: "Space Exploration Missions",
+      value: "Space Exploration Missions",
+    },
     { label: "Rocket Science Basics", value: "Rocket Science Basics" },
-    { label: "Satellites and Communication", value: "Satellites and Communication" },
-    { label: "Astronomy and Astrophysics", value: "Astronomy and Astrophysics" },
-    { label: "Space Agencies (ISRO, NASA, ESA)", value: "Space Agencies (ISRO, NASA, ESA)" },
-    { label: "Emerging Space Technologies", value: "Emerging Space Technologies" },
-    { label: "Space Startups and Innovations", value: "Space Startups and Innovations" },
+    {
+      label: "Satellites and Communication",
+      value: "Satellites and Communication",
+    },
+    {
+      label: "Astronomy and Astrophysics",
+      value: "Astronomy and Astrophysics",
+    },
+    {
+      label: "Space Agencies (ISRO, NASA, ESA)",
+      value: "Space Agencies (ISRO, NASA, ESA)",
+    },
+    {
+      label: "Emerging Space Technologies",
+      value: "Emerging Space Technologies",
+    },
+    {
+      label: "Space Startups and Innovations",
+      value: "Space Startups and Innovations",
+    },
     { label: "Human Spaceflight", value: "Human Spaceflight" },
     { label: "Planetary Science", value: "Planetary Science" },
-    { label: "Space Research and Discoveries", value: "Space Research and Discoveries" },
+    {
+      label: "Space Research and Discoveries",
+      value: "Space Research and Discoveries",
+    },
     { label: "AI and Space Technology", value: "AI and Space Technology" },
-    { label: "Space Debates and Opinions", value: "Space Debates and Opinions" }
+    {
+      label: "Space Debates and Opinions",
+      value: "Space Debates and Opinions",
+    },
   ];
   var errorMessage = "";
   if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length < 200) {
     errorMessage = "* Article content must be at least 200 characters long";
-  }
-  else if(!genre || !postTitle || !postBody){
+  } else if (!genre || !postTitle || !postBody) {
     errorMessage = "All fields are required to submit a blog.";
-  }else if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length > 5000) {
+  } else if (
+    postBody &&
+    postBody.replace(/<[^>]+>/g, "").trim().length > 5000
+  ) {
     errorMessage = "* Article content cannot exceed 5000 characters.";
-  }else if(postTitle && postTitle.trim().length > 100){
+  } else if (postTitle && postTitle.trim().length > 100) {
     errorMessage = "* Blog title cannot exceed 100 characters.";
-  }else if(writerUsername && writerUsername.trim().length > 30){
+  } else if (writerUsername && writerUsername.trim().length > 30) {
     errorMessage = "* Author username cannot exceed 30 characters.";
   }
-  
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      if(!errorMessage){
-      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${id}`, post, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const confirmMessage= window.confirm("Blog edited! Are you sure to submit?");
-      if(!confirmMessage) return;
-      navigate("/viewBlogs");
-    }} catch (error) {
+      if (!errorMessage) {
+        await axios.put(
+          `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/${id}`,
+          post,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+        const confirmMessage = window.confirm(
+          "Blog edited! Are you sure to submit?",
+        );
+        if (!confirmMessage) return;
+        navigate("/viewBlogs");
+      }
+    } catch (error) {
       alert(
         "Error! Blog could not be edited. Check console for error details.",
       );
@@ -129,6 +159,12 @@ function EditBlog() {
       console.error("Error loading blog details:", error);
     }
   };
+
+  useEffect(() => {
+  if (editor && post.postBody) {
+    editor.commands.setContent(post.postBody);
+  }
+}, [editor, post.postBody]);
 
   return (
     <div>
@@ -188,123 +224,130 @@ function EditBlog() {
                 <label htmlFor="postBody" className="form-label fs-5">
                   Blog Content
                 </label>
-                <div
-                  rows={20}
-                  className="form-control"
-                  id="postBody"
-                  required
-                  role="textbox"
-                  contentEditable={true} // Make it editable
-                  placeholder="Blog Content"
-                  style={{
-                    fontSize: "18px",
-                    padding: "10px",
-                    textAlign: "justify",
-                    fontFamily: "Times New Roman",
-                    fontWeight: "normal",
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(postBody || ""),
-                  }}
-                  minLength={200}
-                  aria-multiline="true"
-                  aria-label="Blog content editor"
-                  value={postBody}
-                  onChange={(e) => onInputChange(e)}
-                />
+                <div className="mb-3">
+                  <label className="form-label fs-5">Blog Content</label>
+
+                  <EditorContent
+                    editor={editor}
+                    className="form-control"
+                    style={{
+                      minHeight: "300px",
+                      fontSize: "18px",
+                      padding: "10px",
+                      fontFamily: "Times New Roman",
+                    }}
+                  />
+                </div>
               </div>
-        
-        {editor && (
-          <div style={{ margin: "10px", marginTop:"30px" }}>
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              onClick={() => editor.chain().focus().toggleBold().run()}
-            >
-              B
-            </button>
 
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              style={{marginLeft: "2px"}}
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-            >
-              I
-            </button>
+              {editor && (
+                <div style={{ margin: "10px", marginTop: "30px" }}>
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    onClick={() => editor.chain().focus().toggleBold().run()}
+                  >
+                    B
+                  </button>
 
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              onClick={() => editor.chain().focus().toggleUnderline().run()}
-            >
-              U
-            </button>
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    style={{ marginLeft: "2px" }}
+                    onClick={() => editor.chain().focus().toggleItalic().run()}
+                  >
+                    I
+                  </button>
 
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
-            >
-              •
-            </button>
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    onClick={() =>
+                      editor.chain().focus().toggleUnderline().run()
+                    }
+                  >
+                    U
+                  </button>
 
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            >
-              1.
-            </button>
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    onClick={() =>
+                      editor.chain().focus().toggleBulletList().run()
+                    }
+                  >
+                    •
+                  </button>
 
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              onClick={() =>
-                editor
-                  .chain()
-                  .focus()
-                  .toggleHighlight({ color: "yellow" })
-                  .run()
-              }
-            >
-              🟡
-            </button>
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              onClick={() =>
-                editor.chain().focus().toggleHighlight({ color: "red" }).run()
-              }
-            >
-              🟥
-            </button>
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              onClick={() =>
-                editor.chain().focus().setTextAlign("center").run()
-              }
-            >
-              Center
-            </button>
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    onClick={() =>
+                      editor.chain().focus().toggleOrderedList().run()
+                    }
+                  >
+                    1.
+                  </button>
 
-            <button
-              type="button"
-              className="btn p-1 btn-outline-primary"
-              onClick={() =>
-                editor.chain().focus().setTextAlign("justify").run()
-              }
-            >
-              Justify
-            </button>
-          </div>
-        )
-        }
-              <button title="Submit" className="btn btn-outline-primary m-3" type="submit">
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    onClick={() =>
+                      editor
+                        .chain()
+                        .focus()
+                        .toggleHighlight({ color: "yellow" })
+                        .run()
+                    }
+                  >
+                    🟡
+                  </button>
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    onClick={() =>
+                      editor
+                        .chain()
+                        .focus()
+                        .toggleHighlight({ color: "red" })
+                        .run()
+                    }
+                  >
+                    🟥
+                  </button>
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    onClick={() =>
+                      editor.chain().focus().setTextAlign("center").run()
+                    }
+                  >
+                    Center
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn p-1 btn-outline-primary"
+                    onClick={() =>
+                      editor.chain().focus().setTextAlign("justify").run()
+                    }
+                  >
+                    Justify
+                  </button>
+                </div>
+              )}
+              <button
+                title="Submit"
+                className="btn btn-outline-primary m-3"
+                type="submit"
+              >
                 ✔ Submit
               </button>
-              <Link title="Cancel" className="btn btn-outline-danger" to="/viewBlogs">
+              <Link
+                title="Cancel"
+                className="btn btn-outline-danger"
+                to="/viewBlogs"
+              >
                 🗙 Cancel
               </Link>
             </form>

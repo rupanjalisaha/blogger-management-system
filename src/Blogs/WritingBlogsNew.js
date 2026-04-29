@@ -332,7 +332,7 @@ export default function BlogPage() {
           aria-label="Blog content editor"
           style={{
             minHeight: "200px",
-            margin: "5%",
+            marginLeft: "10%",
             width: "80%",
             border: "1px solid gray",
             padding: "10px",
