@@ -192,8 +192,7 @@ export default function Home() {
             style={{
               fontFamily: "monospace",
               textDecoration: "underline",
-              marginTop: "2%",
-              marginBottom: "3%",
+              margin:"100px 0",
               color: "Highlight",
             }}
           >
@@ -295,7 +294,7 @@ export default function Home() {
               <button className="btn btn-danger">Upgrade Now!</button>
             </div>
           </div>
-          <h3 style={{margin:"40px 0"}}>🔥Trending Blogs</h3>
+          <h3 style={{margin:"100px 0"}}>🔥Trending Blogs</h3>
           {formattedPosts.length === 0 ? (
             <p>No trending blogs available at the moment.</p>
           ) : (

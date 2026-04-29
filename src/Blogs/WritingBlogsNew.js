@@ -317,14 +317,13 @@ export default function BlogPage() {
           </div>
         )}
 
-        <h3 className="row mt-5" style={{ marginLeft: "10%" }}>
-          Article:
-        </h3>
+        
         {/* 🚀 Editor */}
         <EditorContent
           editor={editor}
           id="postBody"
           value={postBody}
+          placeholder="Write your article here"
           aria-multiline="true"
           className="border rounded p-3 shadow"
           minLength={1000}
@@ -333,7 +332,7 @@ export default function BlogPage() {
           aria-label="Blog content editor"
           style={{
             minHeight: "200px",
-            margin: "10%",
+            margin: "5%",
             width: "80%",
             border: "1px solid gray",
             padding: "10px",

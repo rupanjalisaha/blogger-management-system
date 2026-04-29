@@ -65,7 +65,7 @@ export default function ViewBlog() {
             </p>
             <div className="py-4">
               <div className="row">
-                {filteredPosts.length===0?<p style={{fontFamily:"cursive", color:"ActiveText"}}>"No Posts are available from other users currently"</p>:filteredPosts.map((post, index) => (
+                {filteredPosts.length===0?<p style={{fontFamily:"cursive", color:"ActiveText"}}>"There is no post from other users"</p>:filteredPosts.map((post, index) => (
                   <div className="col-md-4 mb-4" key={index}>
                     <div className="card h-100 shadow-sm">
                       <div className="card-body">
