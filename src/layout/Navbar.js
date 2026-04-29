@@ -53,12 +53,12 @@ export default function Navbar() {
             <Menu.Button className="btn btn-light">☰</Menu.Button>
 
             <Menu.Items
-              className="position-absolute end-0 mt-2 bg-white text-dark rounded shadow"
+              className="position-absolute end-0 m-2 bg-white text-dark rounded shadow"
               style={{ width: "220px", zIndex: 1000 }}
             >
               {/* Username */}
-              <div style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
-                <strong>{loggedInUsername}</strong>
+              <div style={{ padding: "10px", borderBottom: "1px solid #ddd" , fontFamily:"monospace"}}>
+                <strong>Username: {loggedInUsername}</strong>
               </div>
 
               {/* Items */}
@@ -66,7 +66,7 @@ export default function Navbar() {
                 {({ active }) => (
                   <Link
                     to="/details"
-                    className={`dropdown-item ${active ? "bg-light" : ""}`}
+                    className={`dropdown-item btn p-1 mt-2 btn-primary ${active ? "bg-light" : ""}`}
                   >
                     Home 🏠
                   </Link>
@@ -77,7 +77,7 @@ export default function Navbar() {
                 {({ active }) => (
                   <Link
                     to={`/viewuser/${loggedInUserId}`}
-                    className={`dropdown-item ${active ? "bg-light" : ""}`}
+                    className={`dropdown-item btn p-1 mt-2 btn-primary ${active ? "bg-light" : ""}`}
                   >
                     My Profile 👤
                   </Link>
@@ -88,7 +88,7 @@ export default function Navbar() {
                 {({ active }) => (
                   <Link
                     to={`/viewBlogByUserName/${loggedInUsername}`}
-                    className={`dropdown-item ${active ? "bg-light" : ""}`}
+                    className={`dropdown-item btn p-1 mt-2 btn-primary ${active ? "bg-light" : ""}`}
                   >
                     My Blogs 📝
                   </Link>
@@ -99,7 +99,7 @@ export default function Navbar() {
                 {({ active }) => (
                   <Link
                     to="/viewBlogs"
-                    className={`dropdown-item ${active ? "bg-light" : ""}`}
+                    className={`dropdown-item btn p-1 mt-2 btn-primary${active ? "bg-light" : ""}`}
                   >
                     Other Blogs 📚
                   </Link>
@@ -110,7 +110,7 @@ export default function Navbar() {
                 {({ active }) => (
                   <button
                     onClick={handleLogout}
-                    className={`dropdown-item ${active ? "bg-light" : ""}`}
+                    className={`dropdown-item btn p-1 mt-2 mb-2 btn-primary ${active ? "bg-light" : ""}`}
                   >
                     Logout ⏻
                   </button>

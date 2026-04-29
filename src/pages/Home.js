@@ -71,24 +71,24 @@ export default function Home() {
   }, [token]);
 
   const formatDate = (postCreatedAt) => {
-  return new Date(postCreatedAt).toLocaleString("en-IN", {
-    timeZone: "Asia/Kolkata",
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
-};
-  const formattedPosts = topBlogs.map(post => ({
-  id: post[0],
-  title: post[1],
-  viewCount: post[2],
-  genre: post[3],
-  content: post[4],
-  author: post[5],
-  createdAt: post[6],
-  likes: post[7],
-  comments: post[8],
-  views: post[9],
-}));
+    return new Date(postCreatedAt).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+  const formattedPosts = topBlogs.map((post) => ({
+    id: post[0],
+    title: post[1],
+    viewCount: post[2],
+    genre: post[3],
+    content: post[4],
+    author: post[5],
+    createdAt: post[6],
+    likes: post[7],
+    comments: post[8],
+    views: post[9],
+  }));
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -124,7 +124,10 @@ export default function Home() {
     }
   };
   const filteredUsers = users.filter(
-    (user) => user.username !== "admin" && user.username !== localStorage.getItem("username") && user.isVerified === "true",
+    (user) =>
+      user.username !== "admin" &&
+      user.username !== localStorage.getItem("username") &&
+      user.isVerified === "true",
   );
   return (
     <div style={{ width: "100%" }}>
@@ -153,10 +156,13 @@ export default function Home() {
             lineHeight: "1cm",
           }}
         >
-          UVB Portal is a modern blogging platform designed for beginner-level
-          writers passionate about space technology. It provides a secure and
-          intuitive environment where users can create, manage, and share
-          content while exploring ideas from fellow enthusiasts.{" "}
+          UVB Portal is a modern blogging platform that aims to empower aspiring
+          writers to contribute, learn, and grow within a focused community
+          driven by curiosity for space and technology. The platform provides a
+          secure and intuitive environment where users can create, manage, and
+          share content while exploring ideas from fellow enthusiasts. We
+          encourage knowledge sharing and continuous learning within the space
+          technology domain.{" "}
         </p>
         <p
           style={{
@@ -181,6 +187,11 @@ export default function Home() {
           appreciate other writers by liking and commenting on their posts,
           fostering a vibrant community of space technology enthusiasts.
         </p>
+        <div>
+        <h3 style={{fontFamily: "monospace", textDecoration: "underline",
+            marginTop: "2%",
+            marginBottom: "3%",
+            color: "Highlight"}}>Services We Provide</h3>
         <p
           style={{
             fontFamily: "monospace",
@@ -190,50 +201,54 @@ export default function Home() {
             marginBottom: "1%",
             lineHeight: "1cm",
           }}
-        >
-          The platform encourages knowledge sharing and continuous learning
-          within the space technology domain. UVB Portal aims to empower
-          aspiring writers to contribute, learn, and grow within a focused
-          community driven by curiosity for space and technology.
-        </p>
-        <div>
+        ></p>
           <h3>🔥Trending Blogs</h3>
           {formattedPosts.length === 0 ? (
             <p>No trending blogs available at the moment.</p>
-          ) : (formattedPosts.map((blog, index) => (
-            <div className="row">
-            <div key={index} className="card mb-3 h-100 shadow-sm">
-              <div className="card-body">
-                <h5 className="card-title" style={{ fontWeight: "bold" }}>
-                  {blog.title}
-                </h5>
-                <p className="card-text">
-                  <strong>👤 Author:</strong> {blog.author}
-                </p>
-                <p className="card-text">
-                  <strong>📂 Genre:</strong> {blog.genre}
-                </p>
-                <p className="card-text">
-                  <strong>📝 Posted On:</strong>
-                  <div
-                    style={{
-                      fontSize: "18px",
-                      padding: "10px"}}
-                      >{formatDate(blog.createdAt)}</div>
-                      </p>
-                   </div>
-                   <button className="btn p-1 btn-primary" title="post views">👀 {blog.viewCount}</button>
-                   <button className="btn p-1 btn-primary" title="post likes">👍 {blog.likes}</button>
-                   <div className="card-footer bg-white border-0">
-                        <Link
-                          title="View Blog"
-                          className="btn btn-primary"
-                          to={`/viewblog/${blog.id}`}
-                        >Read Blog 📖</Link>
-                          </div>
-                    </div>
-                    </div>
-                      )))}
+          ) : (
+            formattedPosts.map((blog, index) => (
+              
+                <div key={index} className="card container mb-3 h-100 shadow-sm">
+                  <div className="card-body">
+                    <h5 className="card-title" style={{ fontWeight: "bold" }}>
+                      {blog.title}
+                    </h5>
+                    <p className="card-text">
+                      <strong>👤 Author:</strong> {blog.author}
+                    </p>
+                    <p className="card-text">
+                      <strong>📂 Genre:</strong> {blog.genre}
+                    </p>
+                    <p className="card-text">
+                      <strong>📝 Posted On:</strong>
+                      <div
+                        style={{
+                          fontSize: "18px",
+                          padding: "10px",
+                        }}
+                      >
+                        {formatDate(blog.createdAt)}
+                      </div>
+                    </p>
+                  </div>
+                  <button className="btn p-1 btn-outline-primary" title="post views">
+                    👀 {blog.viewCount}
+                  </button>
+                  <button className="btn p-1 btn-outline-primary" title="post likes">
+                    👍 {blog.likes}
+                  </button>
+                  <div className="card-footer bg-white border-0">
+                    <Link
+                      title="View Blog"
+                      className="btn btn-primary"
+                      to={`/viewblog/${blog.id}`}
+                    >
+                      Read Blog 📖
+                    </Link>
+                  </div>
+                </div>
+            ))
+          )}
         </div>
         <h2
           style={{
