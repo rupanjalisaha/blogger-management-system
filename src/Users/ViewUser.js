@@ -126,6 +126,9 @@ export default function ViewUser() {
             <Link title="Back to Home" className="btn btn-outline-primary m-2 px-4" to="/details">
               🏠︎
             </Link>
+            <Link title="Edit Profile" className="btn btn-outline-primary m-2 px-4" to={`/edituser/${user.id}`}>
+              ✏️ Edit Profile
+            </Link>
           </div>
         </div>
       </div>
