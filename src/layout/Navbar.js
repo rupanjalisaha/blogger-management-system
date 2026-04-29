@@ -1,10 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { AuthContext } from "../AuthContext";
 import { Menu } from "@headlessui/react";
 export default function Navbar() {
   const navigate = useNavigate();
   const { setIsAuth } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
   const token = localStorage.getItem("token");
   const handleLogout = () => {
     if (token) {
@@ -13,6 +16,26 @@ export default function Navbar() {
     setIsAuth(false);
     navigate("/login");
   };
+  useEffect(() => {
+      if (token) loadUsers();
+    }, [token]);
+    const loadUsers = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/UVB/bloggerDetails`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        setUsers(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+  const loggedInUsername = localStorage.getItem("username");
+  const loggedInUserId = users.find((user) => user.username === loggedInUsername)?.id;
   return (
     <div style={{ width: "100%" }}>
       <nav
@@ -39,7 +62,7 @@ export default function Navbar() {
                       color: "whitesmoke",
                     }}
                   >
-                    Username: {localStorage.getItem("username")}
+                    `Username: ${loggedInUsername}`
                   </p>
                 )}
               </Menu.Item>
@@ -51,6 +74,28 @@ export default function Navbar() {
                     style={{ padding: "10px 10px 10px 10px", fontSize: "18px" }}
                   >
                     Home 🈴
+                  </Link>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    className="btn btn-outline-light"
+                    to={`/viewuser/${loggedInUserId}`}
+                    style={{ padding: "10px 10px 10px 10px", fontSize: "18px" }}
+                  >
+                    My Profile 👤
+                  </Link>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    className="btn btn-outline-light"
+                    to={`/viewBlogByUserName/${loggedInUsername}`}
+                    style={{ padding: "10px 10px 10px 10px", fontSize: "18px" }}
+                  >
+                    My Blogs 🧑‍💻
                   </Link>
                 )}
               </Menu.Item>
