@@ -11,7 +11,7 @@ export default function ViewBlog() {
   useEffect(() => {
     loadBlogs();
   }, []);
-
+  const [keyword, setKeyword] = useState("");
   const loadBlogs = async () => {
     try {
       const result = await axios.get(
@@ -58,7 +58,8 @@ export default function ViewBlog() {
   const goToUpgrade = () => {
     alert("Upgrade to Premium to access advanced filters and sorting options!");
     window.location.href = "/upgrade";
-  }
+  };
+
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
@@ -72,6 +73,19 @@ export default function ViewBlog() {
             </p>
             <div className="py-4">
               <div className="row">
+                <select
+                  placeholder="Sort By"
+                  onChange={(e) => setKeyword(e.target.value)}
+                >
+                  <option value="latest">Latest Blogs</option>
+                  <option value="likes">Most Liked Blogs</option>
+                  {!isPremium && (
+                    <div className="upgrade-box">
+                      🔒 Advanced filters available in Premium
+                      <button onClick={goToUpgrade}>Upgrade</button>
+                    </div>
+                  )}
+                </select>
                 {filteredPosts.length === 0 ? (
                   <p style={{ fontFamily: "cursive", color: "ActiveText" }}>
                     "There is no post from other users"
@@ -80,17 +94,6 @@ export default function ViewBlog() {
                   filteredPosts.map((post, index) => (
                     <div className="col-md-4 mb-4" key={index}>
                       <div className="card h-100 shadow-sm">
-                        <input placeholder="Search..." />
-                        <select>
-                          <option value="latest">Latest</option>
-                          <option value="likes">Most Liked</option>
-                          {!(isPremium) && (
-                            <div className="upgrade-box">
-                              🔒 Advanced filters available in Premium
-                              <button onClick={goToUpgrade}>Upgrade</button>
-                            </div>
-                          )}
-                        </select>
                         <div className="card-body">
                           <h5
                             className="card-title"
