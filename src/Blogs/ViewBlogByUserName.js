@@ -363,7 +363,7 @@ function ViewBlogByUserName() {
           >
             <h2 className="text-center m-4">Blog Details</h2>
             <div className="card shadow m-4">
-              {post.map((post, index) => (
+              {post.length===0?<p>You have not written any blog yet. Write a blog now to explore our amazing writing tool and share your knowledge with others!</p>:post.map((post, index) => (
                 <div key={index} className="card shadow mb-4">
                   <h4>Blog: {index + 1}</h4>
                   <h5>Writer_username: {post.writerUsername}</h5>
