@@ -129,9 +129,15 @@ export default function ViewBlog() {
                   onChange={(e) => setSortBy(e.target.value)}
                 >
                   <option value="latest">Latest Blogs</option>
-                  <option disabled title="Upgrade to access">🔥 Advance Filters (Premium)</option>
+                  <option disabled title="Upgrade to access">
+                    🔥 Advance Filters (Premium)
+                  </option>
                 </select>
-                <div className="premium-container">
+                <div className="premium-container" style={{margin:"50px 0"}}>
+                  <div className={!isPremium ? "blur-content" : ""}>
+                    <p>This is a premium section</p>
+                  </div>
+
                   {!isPremium && (
                     <div className="premium-overlay">
                       <div className="premium-box">
@@ -140,9 +146,8 @@ export default function ViewBlog() {
                         <button>Upgrade Now</button>
                       </div>
                     </div>
-                    
                   )}
-                  </div>
+                </div>
                 <button
                   className="search-button btn p-1 btn-outline-primary"
                   style={{ marginBottom: "5%" }}
