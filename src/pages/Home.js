@@ -129,6 +129,11 @@ export default function Home() {
       user.username !== localStorage.getItem("username"),
   );
 
+  const loggedInUserCategory = users.find(
+    (user) => user.username === localStorage.getItem("username"),
+  )?.category;
+
+  localStorage.setItem("userCategory", loggedInUserCategory || ""); // Store category in localStorage for later use
   return (
     <div style={{ width: "100%" }}>
       <Navbar />

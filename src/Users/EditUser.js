@@ -118,7 +118,7 @@ export default function EditUser() {
       fetchImage(data.imageId);
     }
   };
-  
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -133,10 +133,10 @@ export default function EditUser() {
           .then((response) => {
             if (response.status === 200) {
               alert("User details updated successfully!");
-              window.location.href="/details";
+              window.location.href = "/details";
             } else {
               alert("Failed to update user details. Please try again.");
-              window.location.href="/details";
+              window.location.href = "/details";
             }
           });
       } else if (
@@ -170,7 +170,15 @@ export default function EditUser() {
         },
       );
       setUser(result.data);
-      setDefaultRole(result.data.roles[0].name);
+      const roles = result.data.roles;
+
+      if (Array.isArray(roles)) {
+        if (typeof roles[0] === "string") {
+          setDefaultRole(roles[0]);
+        } else {
+          setDefaultRole(roles[0]?.name);
+        }
+      }
     } catch (error) {
       console.error("Error loading user details:", error);
       alert("Failed to load user details. Please try again.");
@@ -178,14 +186,23 @@ export default function EditUser() {
   };
   const categoryOptions = [
     { label: "Select an option", value: "" },
-    { label: "Technology (AI, Web Dev, Startups)", value: "Technology (AI, Web Dev, Startups)" },
+    {
+      label: "Technology (AI, Web Dev, Startups)",
+      value: "Technology (AI, Web Dev, Startups)",
+    },
     { label: "Programming", value: "Programming" },
     { label: "Space & Science", value: "Space & Science" },
     { label: "Productivity & Career", value: "Productivity & Career" },
-    { label: "Finance (personal finance, investing)", value: "Finance (personal finance, investing)" },
-    {label: "Self-improvement", value: "Self-improvement" },
+    {
+      label: "Finance (personal finance, investing)",
+      value: "Finance (personal finance, investing)",
+    },
+    { label: "Self-improvement", value: "Self-improvement" },
     { label: "Entrepreneurship", value: "Entrepreneurship" },
-    { label: "Philosophy / Deep thinking", value: "Philosophy / Deep thinking" },
+    {
+      label: "Philosophy / Deep thinking",
+      value: "Philosophy / Deep thinking",
+    },
   ];
 
   const isAdmin = localStorage.getItem("username") === "admin";
@@ -215,10 +232,12 @@ export default function EditUser() {
       alert("Failed to delete profile image", error.message);
     }
   };
-  
-if(!isAdmin){
-  user.role=defaultRole;
-}
+
+  useEffect(() => {
+    if (!isAdmin && defaultRole) {
+      setUser((prev) => ({ ...prev, role: defaultRole }));
+    }
+  }, [defaultRole, isAdmin]);
   return (
     <>
       <Navbar />
@@ -312,10 +331,11 @@ if(!isAdmin){
                   </label>
                   <select
                     id="role"
-                    value={defaultRole} // Controls the selected value
+                    value={user.role || ""} // Controls the selected value
                     onChange={(e) => {
-                      setUser({ ...user, [e.target.id]: e.target.value });
-                      setDefaultRole(user.role);
+                      const value = e.target.value;
+                      setUser({ ...user, role: value });
+                      setDefaultRole(value);
                     }} // Updates the state on change
                     className="form-control"
                   >
@@ -353,7 +373,7 @@ if(!isAdmin){
                 />
               </div>
               <button
-              title="Delete Profile Image"
+                title="Delete Profile Image"
                 className="btn btn-outline-primary m-3"
                 onClick={() => handleDeleteProfileImage(user.id)}
                 disabled={!isSameUser}
@@ -361,14 +381,18 @@ if(!isAdmin){
                 🗑️ Delete Profile Image
               </button>
               <button
-              title="Submit Changes"
+                title="Submit Changes"
                 className="btn btn-outline-primary m-3"
                 type="submit"
                 disabled={!isSameUser && !isAdmin}
               >
                 ✅️ Submit
               </button>
-              <Link title="Cancel" className="btn btn-outline-danger" to="/details">
+              <Link
+                title="Cancel"
+                className="btn btn-outline-danger"
+                to="/details"
+              >
                 🗙 Cancel
               </Link>
             </form>

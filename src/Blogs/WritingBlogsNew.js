@@ -120,6 +120,7 @@ export default function BlogPage() {
   //   { label: "Philosophy / Deep thinking", value: "Philosophy / Deep thinking" },
   // ];
 
+  const userCategory = localStorage.getItem("userCategory");
   return (
     <div style={{ overflowX: "hidden" }}>
       <Navbar />
@@ -146,7 +147,8 @@ export default function BlogPage() {
         </span>
 
         <p>
-          <b>{username}</b>
+          <b>{username}</b><br/>
+          <i>Prefers writing on "{userCategory}"</i>
         </p>
         <div style={{ display: "flex" }}>
           <h5 className="row" style={{ marginLeft: "10%", marginTop: "3%" }}>
