@@ -123,7 +123,7 @@ export default function ViewBlog() {
                   value={sortBy}
                   style={{
                     margin: "10px 0",
-                    marginBottom:"20px"
+                    marginBottom:"20px",
                     borderRadius: "5px",
                     padding: "5px",
                   }}
