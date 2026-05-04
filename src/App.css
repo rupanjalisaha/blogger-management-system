@@ -36,3 +36,50 @@
     transform: rotate(360deg);
   }
 }
+
+.premium-container {
+  position: relative;
+}
+
+.blur-content {
+  filter: blur(3px);
+  pointer-events: none; /* disables clicks */
+  user-select: none;
+}
+
+.premium-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  border-radius: 10px;
+}
+
+.premium-box {
+  background: white;
+  padding: 20px 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.premium-box h5 {
+  margin-bottom: 10px;
+}
+
+.premium-box button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: none;
+  background: #6c63ff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.premium-box button:hover {
+  background: #574fd6;
+}

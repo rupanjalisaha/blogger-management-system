@@ -61,23 +61,23 @@ export default function ViewBlog() {
   };
 
   const highlightText = (text, keyword) => {
-  if (!text || !keyword) return text;
+    if (!text || !keyword) return text;
 
-  const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // escape regex
-  const regex = new RegExp(`(${escapedKeyword})`, "gi");
+    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // escape regex
+    const regex = new RegExp(`(${escapedKeyword})`, "gi");
 
-  return text.replace(regex, `<mark>$1</mark>`);
-};
+    return text.replace(regex, `<mark>$1</mark>`);
+  };
 
-const getHighlightedHTML = (html, keyword) => {
-  if (!html) return "";
+  const getHighlightedHTML = (html, keyword) => {
+    if (!html) return "";
 
-  // Step 1: sanitize
-  const clean = DOMPurify.sanitize(html);
+    // Step 1: sanitize
+    const clean = DOMPurify.sanitize(html);
 
-  // Step 2: highlight
-  return highlightText(clean, keyword);
-};
+    // Step 2: highlight
+    return highlightText(clean, keyword);
+  };
   const handleSearch = async () => {
     try {
       const res = await axios.get(
@@ -109,9 +109,6 @@ const getHighlightedHTML = (html, keyword) => {
         <h2>Blog List</h2>
         {isPostAvailable && (
           <>
-            <p style={{ color: "red", fontWeight: "bold" }}>
-              * Edit & Delete blogs is active for user account only
-            </p>
             <div className="py-4">
               <div className="row">
                 <input
@@ -124,18 +121,32 @@ const getHighlightedHTML = (html, keyword) => {
                 <select
                   select
                   value={sortBy}
-                  style={{margin:"10px 0", borderRadius:"5px", padding:"5px"}}
+                  style={{
+                    margin: "10px 0",
+                    borderRadius: "5px",
+                    padding: "5px",
+                  }}
                   onChange={(e) => setSortBy(e.target.value)}
                 >
                   <option value="latest">Latest Blogs</option>
+                  <option disabled title="Upgrade to access">🔥 Advance Filters (Premium)</option>
                 </select>
-                {!isPremium && (
-                    <div className="upgrade-box">
-                      🔒 Advanced filters available in Premium
-                      <button onClick={goToUpgrade}>Upgrade</button>
+                  {!isPremium && (
+                    <div className="premium-overlay">
+                      <div className="premium-box">
+                        <h5>🔒 Premium Feature</h5>
+                        <p>Upgrade to unlock advanced filters & sorting</p>
+                        <button>Upgrade Now</button>
+                      </div>
                     </div>
                   )}
-                <button className="search-button btn p-1 btn-outline-primary" style={{marginBottom:"5%"}} onClick={handleSearch}>
+                </div>
+
+                <button
+                  className="search-button btn p-1 btn-outline-primary"
+                  style={{ marginBottom: "5%" }}
+                  onClick={handleSearch}
+                >
                   🔍
                 </button>
                 {filteredPosts.length === 0 ? (
@@ -150,16 +161,25 @@ const getHighlightedHTML = (html, keyword) => {
                           <h5
                             className="card-title"
                             style={{ fontWeight: "bold" }}
-                          
-                            dangerouslySetInnerHTML={{__html:getHighlightedHTML(post.postTitle,keyword)}}
+                            dangerouslySetInnerHTML={{
+                              __html: getHighlightedHTML(
+                                post.postTitle,
+                                keyword,
+                              ),
+                            }}
                           />
 
                           <p className="card-text">
                             <strong>👤 Author:</strong> {post.writerUsername}
                           </p>
-                          <p><strong>📂 Genre:</strong></p>
-                          <p className="card-text"
-                             dangerouslySetInnerHTML={{__html:getHighlightedHTML(post.genre,keyword)}}
+                          <p>
+                            <strong>📂 Genre:</strong>
+                          </p>
+                          <p
+                            className="card-text"
+                            dangerouslySetInnerHTML={{
+                              __html: getHighlightedHTML(post.genre, keyword),
+                            }}
                           />
                           <p className="card-text">
                             <strong>📝 Summary:</strong>
@@ -175,7 +195,7 @@ const getHighlightedHTML = (html, keyword) => {
                               dangerouslySetInnerHTML={{
                                 __html: getHighlightedHTML(
                                   getFirst50Words(post.postBody) || "",
-                                  keyword
+                                  keyword,
                                 ),
                               }}
                             ></div>
