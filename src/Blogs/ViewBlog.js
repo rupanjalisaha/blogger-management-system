@@ -140,7 +140,6 @@ export default function ViewBlog() {
                       </div>
                     </div>
                   )}
-                </div>
 
                 <button
                   className="search-button btn p-1 btn-outline-primary"
