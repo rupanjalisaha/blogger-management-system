@@ -128,14 +128,13 @@ const getHighlightedHTML = (html, keyword) => {
                   onChange={(e) => setSortBy(e.target.value)}
                 >
                   <option value="latest">Latest Blogs</option>
-                  <option value="likes">Most Liked Blogs</option>
-                  {!isPremium && (
+                </select>
+                {!isPremium && (
                     <div className="upgrade-box">
                       🔒 Advanced filters available in Premium
                       <button onClick={goToUpgrade}>Upgrade</button>
                     </div>
                   )}
-                </select>
                 <button className="search-button btn p-1 btn-outline-primary" style={{marginBottom:"5%"}} onClick={handleSearch}>
                   🔍
                 </button>
