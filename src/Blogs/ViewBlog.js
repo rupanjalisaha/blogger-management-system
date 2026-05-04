@@ -67,7 +67,6 @@ export default function ViewBlog() {
         {
           params: {
             keyword: keyword,
-            genre: keyword,
             sortBy: sortBy, // add this state
             page: 0,
             size: 10,
