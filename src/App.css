@@ -38,7 +38,7 @@
 }
 
 .premium-container {
-  position: relative;
+  position: fixed;
 }
 
 .blur-content {

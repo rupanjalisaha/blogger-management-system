@@ -133,7 +133,7 @@ export default function ViewBlog() {
                     🔥 Advance Filters (Premium)
                   </option>
                 </select>
-                <div className="premium-container" style={{margin:"50px 0"}}>
+                <div className="premium-container" style={{margin:"60px 0"}}>
                   <div className={!isPremium ? "blur-content" : ""}>
                     <p>This is a premium section</p>
                   </div>
