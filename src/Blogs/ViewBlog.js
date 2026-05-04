@@ -131,6 +131,7 @@ export default function ViewBlog() {
                   <option value="latest">Latest Blogs</option>
                   <option disabled title="Upgrade to access">🔥 Advance Filters (Premium)</option>
                 </select>
+                <div className="premium-container">
                   {!isPremium && (
                     <div className="premium-overlay">
                       <div className="premium-box">
@@ -139,8 +140,9 @@ export default function ViewBlog() {
                         <button>Upgrade Now</button>
                       </div>
                     </div>
+                    
                   )}
-
+                  </div>
                 <button
                   className="search-button btn p-1 btn-outline-primary"
                   style={{ marginBottom: "5%" }}
