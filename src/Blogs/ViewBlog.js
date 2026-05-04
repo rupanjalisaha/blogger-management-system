@@ -152,7 +152,7 @@ const getHighlightedHTML = (html, keyword) => {
                             className="card-title"
                             style={{ fontWeight: "bold" }}
                           >
-                            {getHighlightedHTML(post.postTitle,keyword)}
+                            dangerouslySetInnerHTML={{_html:getHighlightedHTML(post.postTitle,keyword)}}
                           </h5>
 
                           <p className="card-text">
@@ -160,7 +160,7 @@ const getHighlightedHTML = (html, keyword) => {
                           </p>
 
                           <p className="card-text">
-                            <strong>📂 Genre:</strong> {getHighlightedHTML(post.genre,keyword)}
+                            <strong>📂 Genre:</strong> dangerouslySetInnerHTML={{_html:getHighlightedHTML(post.genre,keyword)}}
                           </p>
                           <p className="card-text">
                             <strong>📝 Summary:</strong>
