@@ -101,12 +101,13 @@ export default function ViewBlog() {
                   type="text"
                   placeholder="Search blogs..."
                   value={keyword}
-                  className="search-input"
+                  className="search-input btn btn-light"
                   onChange={(e) => setKeyword(e.target.value)}
                 />
                 <select
                   select
                   value={sortBy}
+                  style={{margin:"10px 0", borderRadius:"5px", padding:"5px"}}
                   onChange={(e) => setSortBy(e.target.value)}
                 >
                   <option value="latest">Latest Blogs</option>
@@ -118,7 +119,7 @@ export default function ViewBlog() {
                     </div>
                   )}
                 </select>
-                <button className="search-button" onClick={handleSearch}>
+                <button className="search-button btn p-1 btn-outline-primary" style={{marginBottom:"5%"}} onClick={handleSearch}>
                   🔍
                 </button>
                 {filteredPosts.length === 0 ? (
