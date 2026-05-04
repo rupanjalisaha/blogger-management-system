@@ -60,6 +60,15 @@ export default function ViewBlog() {
     window.location.href = "/upgrade";
   };
 
+  const handleSearch = async()=>{
+    const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/search?keyword=${keyword}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    setPost(res.data);
+  }
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
@@ -75,8 +84,10 @@ export default function ViewBlog() {
               <div className="row">
                 <select
                   placeholder="Sort By"
+                  value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                 >
+                  <option value="Sort By">Sort By</option>
                   <option value="latest">Latest Blogs</option>
                   <option value="likes">Most Liked Blogs</option>
                   {!isPremium && (
@@ -86,6 +97,7 @@ export default function ViewBlog() {
                     </div>
                   )}
                 </select>
+                <button type="Submit" onClick={()=>handleSearch}>Search</button>
                 {filteredPosts.length === 0 ? (
                   <p style={{ fontFamily: "cursive", color: "ActiveText" }}>
                     "There is no post from other users"
