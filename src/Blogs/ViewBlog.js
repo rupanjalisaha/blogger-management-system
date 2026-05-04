@@ -52,7 +52,6 @@ export default function ViewBlog() {
   const formatDate = (postCreatedAt) => {
     const formatted = new Date(postCreatedAt + "Z").toLocaleString();
 
-    console.log(postCreatedAt);
     return formatted;
   };
   const isPremium = localStorage.getItem("userType") === "premium";
@@ -62,12 +61,16 @@ export default function ViewBlog() {
   };
 
   const handleSearch = async () => {
+    if (keyword.trim() === "") {
+      return;
+    }
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/search/free`,
         {
           params: {
             keyword: keyword,
+            genre: keyword,
             sortBy: sortBy, // add this state
             page: 0,
             size: 10,
@@ -124,7 +127,7 @@ export default function ViewBlog() {
                 </button>
                 {filteredPosts.length === 0 ? (
                   <p style={{ fontFamily: "cursive", color: "ActiveText" }}>
-                    "There is no post from other users"
+                    "No post is available currently."
                   </p>
                 ) : (
                   filteredPosts.map((post, index) => (
