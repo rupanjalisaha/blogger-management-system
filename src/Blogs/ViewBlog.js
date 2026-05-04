@@ -61,7 +61,7 @@ export default function ViewBlog() {
   };
 
   const handleSearch = async () => {
-    if (keyword.trim() === "") {
+    if (keyword.length === 0) {
       return;
     }
     try {
@@ -102,7 +102,7 @@ export default function ViewBlog() {
               <div className="row">
                 <input
                   type="text"
-                  placeholder="Search blogs..."
+                  placeholder="Search blogs by title..."
                   value={keyword}
                   className="search-input btn btn-light"
                   onChange={(e) => setKeyword(e.target.value)}
