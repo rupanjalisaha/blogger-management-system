@@ -151,7 +151,7 @@ export default function ViewBlog() {
                 </div>
                 <button
                   className="search-button btn p-1 btn-outline-primary"
-                  style={{ marginBottom: "5%" }}
+                  style={{ marginBottom: "5%" , marginTop:"5%"}}
                   onClick={handleSearch}
                 >
                   🔍
