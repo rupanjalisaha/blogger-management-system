@@ -12,6 +12,7 @@ export default function ViewBlog() {
     loadBlogs();
   }, []);
   const [keyword, setKeyword] = useState("");
+  const [sortBy, setSortBy] = useState("latest");
   const loadBlogs = async () => {
     try {
       const result = await axios.get(
@@ -60,15 +61,29 @@ export default function ViewBlog() {
     window.location.href = "/upgrade";
   };
 
-  const handleSearch = async()=>{
-    const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/search?keyword=${keyword}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    setPost(res.data);
-  }
+  const handleSearch = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/search/free`,
+        {
+          params: {
+            keyword: keyword,
+            sortBy: sortBy, // add this state
+            page: 0,
+            size: 10,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      setPost(res.data.content);
+      console.log(res.data);
+    } catch (error) {
+      console.error("Error searching blogs:", error);
+    }
+  };
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
@@ -82,12 +97,18 @@ export default function ViewBlog() {
             </p>
             <div className="py-4">
               <div className="row">
-                <select
-                  placeholder="Sort By"
+                <input
+                  type="text"
+                  placeholder="Search blogs..."
                   value={keyword}
+                  className="search-input"
                   onChange={(e) => setKeyword(e.target.value)}
+                />
+                <select
+                  select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
                 >
-                  <option value="Sort By">Sort By</option>
                   <option value="latest">Latest Blogs</option>
                   <option value="likes">Most Liked Blogs</option>
                   {!isPremium && (
@@ -97,7 +118,9 @@ export default function ViewBlog() {
                     </div>
                   )}
                 </select>
-                <button type="Submit" onClick={()=>handleSearch}>Search</button>
+                <button className="search-button" onClick={handleSearch}>
+                  🔍
+                </button>
                 {filteredPosts.length === 0 ? (
                   <p style={{ fontFamily: "cursive", color: "ActiveText" }}>
                     "There is no post from other users"
