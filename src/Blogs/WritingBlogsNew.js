@@ -108,45 +108,17 @@ export default function BlogPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const categoryOptions = [
-    { label: "Select an option", value: "" },
-    {
-      label: "Space Exploration Missions",
-      value: "Space Exploration Missions",
-    },
-    { label: "Rocket Science Basics", value: "Rocket Science Basics" },
-    {
-      label: "Satellites and Communication",
-      value: "Satellites and Communication",
-    },
-    {
-      label: "Astronomy and Astrophysics",
-      value: "Astronomy and Astrophysics",
-    },
-    {
-      label: "Space Agencies (ISRO, NASA, ESA)",
-      value: "Space Agencies (ISRO, NASA, ESA)",
-    },
-    {
-      label: "Emerging Space Technologies",
-      value: "Emerging Space Technologies",
-    },
-    {
-      label: "Space Startups and Innovations",
-      value: "Space Startups and Innovations",
-    },
-    { label: "Human Spaceflight", value: "Human Spaceflight" },
-    { label: "Planetary Science", value: "Planetary Science" },
-    {
-      label: "Space Research and Discoveries",
-      value: "Space Research and Discoveries",
-    },
-    { label: "AI and Space Technology", value: "AI and Space Technology" },
-    {
-      label: "Space Debates and Opinions",
-      value: "Space Debates and Opinions",
-    },
-  ];
+  // const categoryOptions = [
+  //   { label: "Select an option", value: "" },
+  //   { label: "Technology (AI, Web Dev, Startups)", value: "Technology (AI, Web Dev, Startups)" },
+  //   { label: "Programming", value: "Programming" },
+  //   { label: "Space & Science", value: "Space & Science" },
+  //   { label: "Productivity & Career", value: "Productivity & Career" },
+  //   { label: "Finance (personal finance, investing)", value: "Finance (personal finance, investing)" },
+  //   {label: "Self-improvement", value: "Self-improvement" },
+  //   { label: "Entrepreneurship", value: "Entrepreneurship" },
+  //   { label: "Philosophy / Deep thinking", value: "Philosophy / Deep thinking" },
+  // ];
 
   return (
     <div style={{ overflowX: "hidden" }}>
@@ -180,7 +152,7 @@ export default function BlogPage() {
           <h5 className="row" style={{ marginLeft: "10%", marginTop: "3%" }}>
             Article Genre:
           </h5>
-          <select
+          <input
             id="genre"
             className="row p-2 border rounded shadow"
             placeholder="Article Genre"
@@ -197,13 +169,7 @@ export default function BlogPage() {
               backgroundColor: "lightblue",
               fontFamily: "Times New Roman",
             }}
-          >
-            {categoryOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          />
           <h4 className="row" style={{ marginLeft: "10%", marginTop: "3%" }}>
             Title:
           </h4>

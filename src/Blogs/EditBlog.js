@@ -57,45 +57,18 @@ function EditBlog() {
   useEffect(() => {
     loadPost();
   }, []);
-  const categoryOptions = [
-    { label: "Select an option", value: `{post.genre}` },
-    {
-      label: "Space Exploration Missions",
-      value: "Space Exploration Missions",
-    },
-    { label: "Rocket Science Basics", value: "Rocket Science Basics" },
-    {
-      label: "Satellites and Communication",
-      value: "Satellites and Communication",
-    },
-    {
-      label: "Astronomy and Astrophysics",
-      value: "Astronomy and Astrophysics",
-    },
-    {
-      label: "Space Agencies (ISRO, NASA, ESA)",
-      value: "Space Agencies (ISRO, NASA, ESA)",
-    },
-    {
-      label: "Emerging Space Technologies",
-      value: "Emerging Space Technologies",
-    },
-    {
-      label: "Space Startups and Innovations",
-      value: "Space Startups and Innovations",
-    },
-    { label: "Human Spaceflight", value: "Human Spaceflight" },
-    { label: "Planetary Science", value: "Planetary Science" },
-    {
-      label: "Space Research and Discoveries",
-      value: "Space Research and Discoveries",
-    },
-    { label: "AI and Space Technology", value: "AI and Space Technology" },
-    {
-      label: "Space Debates and Opinions",
-      value: "Space Debates and Opinions",
-    },
-  ];
+  // const categoryOptions = [
+  //   { label: "Select an option", value: "" },
+  //   { label: "Technology (AI, Web Dev, Startups)", value: "Technology (AI, Web Dev, Startups)" },
+  //   { label: "Programming", value: "Programming" },
+  //   { label: "Space & Science", value: "Space & Science" },
+  //   { label: "Productivity & Career", value: "Productivity & Career" },
+  //   { label: "Finance (personal finance, investing)", value: "Finance (personal finance, investing)" },
+  //   {label: "Self-improvement", value: "Self-improvement" },
+  //   { label: "Entrepreneurship", value: "Entrepreneurship" },
+  //   { label: "Philosophy / Deep thinking", value: "Philosophy / Deep thinking" },
+  // ];
+
   var errorMessage = "";
   if (postBody && postBody.replace(/<[^>]+>/g, "").trim().length < 200) {
     errorMessage = "* Article content must be at least 200 characters long";
@@ -196,18 +169,12 @@ function EditBlog() {
                 <label htmlFor="genre" className="form-label fs-5">
                   Article Genre
                 </label>
-                <select
+                <input
                   className="form-control"
                   id="genre"
                   value={genre}
                   onChange={(e) => onInputChange(e)}
-                >
-                  {categoryOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="postTitle" className="form-label fs-5">

@@ -37,11 +37,14 @@ export default function AddUser() {
   ];
   const categoryOptions = [
     { label: "Select an option", value: "" },
-    { label: "Rocket Science", value: "Rocket Science" },
-    { label: "Astrophysics", value: "Astrophysics" },
-    { label: "Space Missions", value: "Space Missions" },
-    { label: "AI & Space", value: "AI & Space" },
-    { label: "Space Technology", value: "Space Technology" }
+    { label: "Technology (AI, Web Dev, Startups)", value: "Technology (AI, Web Dev, Startups)" },
+    { label: "Programming", value: "Programming" },
+    { label: "Space & Science", value: "Space & Science" },
+    { label: "Productivity & Career", value: "Productivity & Career" },
+    { label: "Finance (personal finance, investing)", value: "Finance (personal finance, investing)" },
+    {label: "Self-improvement", value: "Self-improvement" },
+    { label: "Entrepreneurship", value: "Entrepreneurship" },
+    { label: "Philosophy / Deep thinking", value: "Philosophy / Deep thinking" },
   ];
   const [showPassword, setShowPassword] = useState(false);
 
