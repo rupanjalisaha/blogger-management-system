@@ -60,6 +60,24 @@ export default function ViewBlog() {
     window.location.href = "/upgrade";
   };
 
+  const highlightText = (text, keyword) => {
+  if (!text || !keyword) return text;
+
+  const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // escape regex
+  const regex = new RegExp(`(${escapedKeyword})`, "gi");
+
+  return text.replace(regex, `<mark>$1</mark>`);
+};
+
+const getHighlightedHTML = (html, keyword) => {
+  if (!html) return "";
+
+  // Step 1: sanitize
+  const clean = DOMPurify.sanitize(html);
+
+  // Step 2: highlight
+  return highlightText(clean, keyword);
+};
   const handleSearch = async () => {
     try {
       const res = await axios.get(
@@ -156,8 +174,9 @@ export default function ViewBlog() {
                               }}
                               // sanitize to avoid XSS; DOMPurify is recommended
                               dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(
+                                __html: getHighlightedHTML(
                                   getFirst50Words(post.postBody) || "",
+                                  keyword
                                 ),
                               }}
                             ></div>
