@@ -61,9 +61,6 @@ export default function ViewBlog() {
   };
 
   const handleSearch = async () => {
-    if (keyword.length === 0) {
-      return;
-    }
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}/UVB/blogs/search/free`,
